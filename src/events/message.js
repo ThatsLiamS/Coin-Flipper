@@ -1,40 +1,32 @@
-const discord = require('discord.js');
-const fs = require("fs");
-const check = require("../tools/checkReturn");
-
 const quotaExceeded = false;
 
-const commands = {};
-const categories = fs.readdirSync(`${__dirname}/../commands`);
-for (let category of categories) {
-	const commandFiles = fs.readdirSync(`${__dirname}/../commands/${category}`).filter(file => file.endsWith('.js'));
-	for (let file of commandFiles) {
-		const command = require(`${__dirname}/../commands/${category}/${file}`);
-		commands[command.name] = command;
-		if (command.aliases) {
-			command.aliases.forEach(alias => {
-				commands[alias] = command;
-			});
-		}
+const check = require("../tools/checkReturn");
+const Discord = require('discord.js');
+const fs = require('fs');
+
+let commands = new Discord.Collection();
+const categories = fs.readdirSync(`${__dirname}/commands/`);
+for (const category of categories) {
+	const commandFiles = fs.readdirSync(`${__dirname}/commands/${category}`).filter(File => File.endsWith('.js'));
+	for (const file of commandFiles) {
+		const command = require(`${__dirname}/commands/${category}/${file}`);
+		commands.set(command.name, command);
 	}
-	const subCategories = fs.readdirSync(`${__dirname}/../commands/${category}`).filter(file => !file.endsWith(".js"));
-	if (subCategories) {
-		for (let subCategory of subCategories) {
-			if(!subCategory.startsWith("k_")) {
-				const innerCommandFiles = fs.readdirSync(`${__dirname}/../commands/${category}/${subCategory}`);
-				for (let innerFile of innerCommandFiles) {
-					const command = require(`${__dirname}/../commands/${category}/${subCategory}/${innerFile}`);
-					commands[command.name] = command;
-					if (command.aliases) {
-						command.aliases.forEach(alias => {
-							commands[alias] = command;
-						});
-					}
+	const subcategories = fs.readdirSync(`${__dirname}/commands/${category}`).filter(file => !file.endsWith(".js"));
+	if (subcategories) {
+		for (const subcategory of subcategories) {
+			if(!subcategory.startsWith("k_")) {
+				const CommandFiles = fs.readdirSync(`${__dirname}/commands/${category}/${subcategory}`);
+				for (const file of CommandFiles) {
+					const command = require(`${__dirname}/commands/${category}/${subcategory}/${file}`);
+					commands.set(command.name, command);
 				}
 			}
 		}
 	}
 }
+
+let cooldowns = new Discord.Collection();
 
 const commandCooldown = {};
 for (let key in commands) {
@@ -43,125 +35,126 @@ for (let key in commands) {
 
 module.exports = {
 	name: 'message',
-	execute: async function(msg, bot, firestore) {
+	execute: async function(message, client, firestore) {
+		if (message.author.bot) return;
+
+		/* Banned users */
+		let ids = ["818272959621234689", "503734990467498033", "850677330472599552"];
+		if (ids.includes(message.author.id)) return;
+
 		async function send(content) {
-			msg.channel.send(content).catch(() => {
-				msg.channel.send("Sorry, I don't have the right permissions to use that command!").catch(() => {
-					msg.author.send("Sorry, I don't have the right permissions to use that command!").catch(() => { });
+			await message.channel.send(content).catch(() => {
+				message.channel.send("Sorry, I don't have the right permissions to use that command!").catch(() => {
+					message.author.send("Sorry, I don't have the right permissions to use that command!").catch(() => { });
 				});
 			});
 		}
-		let isCommand = false;
-		let prefix = "c!";
-		if (msg.guild) {
-			bot.prefixes.ensure(msg.guild.id, {
-				prefix: "c!"
-			});
-			let guildPrefix = bot.prefixes.get(msg.guild.id, "prefix");
-			if (guildPrefix) prefix = guildPrefix;
-		}
-		else {
-			prefix = "c!";
-		}
-		let content = msg.content.toLowerCase().trim();
-		if (msg.guild || content.startsWith("c!karate choose") || content.startsWith("t!karate choose") || content.startsWith("c!addtrade") || content.startsWith("c!removetrade") || content.startsWith("c!finish") || content.startsWith("c!cancel") || content.startsWith("c!accept")) isCommand = content.startsWith(prefix);
-		else isCommand = false;
-		if (isCommand) {
 
-			if (msg.author.bot) return;
-			let args;
-			let command;
-			bot.commandsRun.ensure("commandsRun", {
-				commandsRun: 0,
-				commandStats: {}
-			});
-			let upperCase = false;
-			let clean = false;
-			for (let c of ["createaddon", "create", "renameaddon", "rename", "giveitem"]) {
-				if (content.startsWith(`${prefix}${c}`)) upperCase = true;
-			}
-			for (let c of ["createaddon", "create", "renameaddon", "rename", "setbio", "setaddress"]) {
-				if (content.startsWith(`${prefix}${c}`)) clean = true;
-			}
-			if (upperCase && clean) {
-				args = msg.cleanContent.slice(prefix.length).trim().split(/ +/g);
-				command = args.shift();
-			}
-			else if (upperCase) {
-				args = msg.content.slice(prefix.length).trim().split(/ +/g);
-				command = args.shift();
-			}
-			else if (clean) {
-				args = msg.cleanContent.toLowerCase().slice(prefix.length).trim().split(/ +/g);
-				command = args.shift();
-			}
-			else {
-				args = content.toLowerCase().slice(prefix.length).trim().split(/ +/g);
-				command = args.shift();
-			}
-			for (let property in commands) {
-				let aliases = commands[property].aliases;
-				if (aliases != undefined) {
-					for (let aliase of aliases) {
-						if (command == aliase) command = property;
+		let prefix = "c!";
+		if (message.guild) {
+			client.prefixes.ensure(message.guild.id, { prefix: "c!" });
+			let guildPrefix = client.prefixes.get(message.guild.id, "prefix");
+			if (guildPrefix) { prefix = guildPrefix; }
+		}
+		else { prefix = "c!"; }
+
+		const args = message.content.slice(prefix.length).trim().split(/ +/);
+		const commandName = args.shift().toLowerCase();
+
+		if (commandName.length !== 0) {
+			const cmd = commands.get(commandName) || commands.find(file => file.aliases && file.aliases.includes(commandName));
+			if (cmd) {
+				let allowed = true;
+
+				if (cmd.guildOnly && cmd.guildOnly == true) {
+					allowed = false;
+					await send({ content: 'Sorry, this command can only be ran inside a server.' });
+				}
+
+				if (cmd.error && cmd.error == true) {
+					allowed = false;
+					await send({ content: 'Sorry, this command is currently out of order. Please try again later!' });
+				}
+
+				if (cmd.permissions && allowed === true) {
+					for (const permission of cmd.permissions) {
+						if (allowed === false && !message.member.hasPermission(permission.trim().toUpperCase().replace(" ", "_")) && !message.member.hasPermission('ADMINISTRATOR')) {
+							await send({ content: `You do not have permission to use this command. To find out more information, do \`${prefix}help ${cmd.name}\`` });
+							allowed = false;
+						}
 					}
 				}
-			}
-			if (commands[command] == undefined) return;
-			if (typeof commands[command] === "string") {
-				command = commands[command];
-			}
 
-			let ids = ["818272959621234689", "503734990467498033", "850677330472599552"];
-			if (ids.includes(msg.author.id)) return;
+				if (cmd.arguments && allowed === true) {
+					const number = cmd.arguments;
+					if (number >= 1) {
+						if (!args[number - 1]) {
+							await send({ content: `Incorrect usage, make sure it follows the format: \`${prefix}${cmd.name} ${cmd.usage}\`` });
+							allowed = false;
+						}
+					}
+				}
 
-			if (quotaExceeded == true) {
-				send("Sorry, we're facing technical difficulties! Please hang tight until it's been sorted.\n(Join the support server for more information from the website: https://coinflipperbot.glitch.me/\n\n**This is the last time that this will happen. The bot will be available again tomorrow.**\n**In the meantime, join the support server to celebrate reaching 1000 servers! (`c!1000`)**");
-				return;
-			}
+				if (cmd.ownerOnly && allowed === true) {
+					if (message.author.id !== message.guild.ownerID) {
+						await send({ content: `You do not have permission to use this command. To find out more information, do \`${prefix}help ${cmd.name}\`` });
+						allowed = false;
+					}
+				}
 
-			if (msg.channel.type != "dm" && !msg.member.hasPermission(commands[command].permissions)) return send(`You need the ${commands[command].permissions} permission to do this command!`);
-			try {
-				if (commandCooldown[command][msg.author.id]) {
-					send(`You must wait to use that again!`);
-					return;
+				if (quotaExceeded == true && allowed === true) {
+					await send({ content: `Sorry, we're facing technical difficulties! Please hang tight until it's been sorted.\n(Join the support server for more information from the website: https://coinflipperbot.glitch.me/\n\n**This is the last time that this will happen. The bot will be available again tomorrow.` });
+					allowed = false;
 				}
-				let newData;
-				if (["1000", "sendmessage"].includes(command)) { newData = {}; }
-				else {
-					let data = await firestore.doc(`/users/${msg.author.id}`).get();
-					let userData = data.data();
-					newData = await check(firestore, data, msg.author.id);
-					userData = newData.data();
-					if (userData.banned == true) { return; }
+
+				if (!cooldowns.has(cmd.name)) {
+					cooldowns.set(cmd.name, new Discord.Collection());
 				}
-				let commandsRun = bot.commandsRun.get("commandsRun", "commandsRun");
-				if (!commandsRun) commandsRun = 0;
-				commandsRun++;
-				bot.commandsRun.set("commandsRun", commandsRun, "commandsRun");
-				let commandStats = bot.commandsRun.get("commandsRun", "commandStats");
-				if (!commandStats) commandStats = {};
-				let cmdStats = commandStats[command];
-				if (cmdStats === undefined) cmdStats = 0;
-				cmdStats++;
-				commandStats[command] = cmdStats;
-				bot.commandsRun.set("commandsRun", commandStats, "commandStats");
-				await commands[command].execute(firestore, args, command, msg, discord, newData, send, bot);
-				if (commands[command].cooldown) {
-					if (command == "flip" && msg.channel.id == 832245298969182246) return;
-					let time = commands[command].cooldown;
-					if (newData.data().donator == 1) time = Math.floor(time * 0.75);
-					if (newData.data().donator == 2) time = Math.floor(time * 0.5);
-					commandCooldown[command][msg.author.id] = 1;
-					bot.cooldowns = commandCooldown;
-					setTimeout(() => {
-						commandCooldown[command][msg.author.id] = undefined;
-						bot.cooldowns = commandCooldown;
-					}, time);
+
+				const now = Date.now();
+				const timestamps = cooldowns.get(cmd.name);
+				let cooldownAmount = (cmd.cooldown || 0) * 1000;
+
+				if (cmd.name == "flip" && message.channel.id == '832245298969182246') { cooldownAmount = 0; }
+				if (allowed == true) {
+					const data = await firestore.doc(`/users/${message.author.id}`).get();
+					const newData = await check(firestore, data, message.author.id);
+
+					if (newData.data().donator == 1) { cooldownAmount = Math.floor(cooldownAmount * 0.75); }
+					if (newData.data().donator == 2) { cooldownAmount = Math.floor(cooldownAmount * 0.5); }
 				}
-			}
-			catch (err) {
-				console.log(err);
+
+				if (timestamps.has(message.author.id)) {
+					const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+					if (now < expirationTime) {
+						const timeLeft = (expirationTime - now) / 1000;
+						await send({ content: `Sorry, you have to wait ${timeLeft.toFixed(1)} second(s) to use this command again!` });
+						allowed = false;
+					}
+				}
+
+				if (allowed == true) {
+
+					cmd.execute(message, args, prefix, client, firestore);
+
+					/* Database logs*/
+					let commandsRun = client.commandsRun.get("commandsRun", "commandsRun");
+					if (!commandsRun) { commandsRun = 0; }
+					client.commandsRun.set("commandsRun", commandsRun++, "commandsRun");
+
+					let commandStats = client.commandsRun.get("commandsRun", "commandStats");
+					if (!commandStats) { commandStats = {}; }
+					let cmdStats = commandStats[cmd.name];
+					if (cmdStats === undefined) { cmdStats = 0; }
+
+					commandStats[cmd.name] = cmdStats++;
+					client.commandsRun.set("commandsRun", commandStats, "commandStats");
+					/* Cooldowns */
+					timestamps.set(message.author.id, now);
+					setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
+				}
 			}
 		}
 	},
