@@ -1,0 +1,14 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Bower dependency directory (https://bower.io/)
+bower_components
+
+# dotenv environment variables file
+.env
+.env.test
+.env.production
+
+# database files
+src/data/

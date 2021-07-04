@@ -1,0 +1,35 @@
+{
+	"name": "coin-flipper",
+	"version": "1.10.4",
+	"description": "A simple and fun Discord economy bot, with over 200,000 users.",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Coin-Flipper/Coin-Flipper.git"
+	},
+	"author": "",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Coin-Flipper/Coin-Flipper/issues"
+	},
+	"homepage": "https://github.com/Coin-Flipper/Coin-Flipper#readme",
+	"devDependencies": {
+		"eslint": "^7.30.0"
+	},
+	"dependencies": {
+		"@superphantomuser/discordjs-minigames": "^1.2.2",
+		"bar-charts": "^1.0.3",
+		"canvas": "^2.8.0",
+		"dblapi.js": "^2.4.1",
+		"discord-buttons": "^4.0.0",
+		"discord.js": "^12.5.3",
+		"discord.js-reaction-menu": "^1.1.1",
+		"enmap": "^5.8.6",
+		"express": "^4.17.1",
+		"firebase-admin": "^9.10.0",
+		"topgg-autoposter": "^2.0.0"
+	}
+}
