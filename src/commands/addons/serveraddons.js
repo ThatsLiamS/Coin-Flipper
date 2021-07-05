@@ -1,13 +1,18 @@
-const checkGuild = require("../../tools/checkGuild");
+const Discord = require('discord.js');
+
+const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "serveraddons",
 	description: "Get a list of the server's addons!",
 	argument: "None",
 	perms: "Embed Links",
 	tips: "Custom addons have to be enabled to use this",
-	execute: async function(firestore, args, command, msg, discord, data, send) {
-		await checkGuild(firestore, msg.guild.id);
-		let guilddata = await firestore.doc(`/guilds/${msg.guild.id}`).get();
+	execute: async function(message, args, prefix, client, [firebase]) {
+
+		await checkGuild(firebase, message.guild.id);
+		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();
 		if (guilddata.data().enabled.customaddons == false) return;
 
 		let guildData = guilddata.data();
@@ -36,8 +41,8 @@ module.exports = {
 		}
 
 		let sad = guildData.serveraddons;
-		let embed = new discord.MessageEmbed()
-			.setTitle(`${msg.guild.name}'s Server Addons:`)
+		const embed = new Discord.MessageEmbed()
+			.setTitle(`${message.guild.name}'s Server Addons:`)
 			.setColor('YELLOW');
 		let noAddons = true;
 		if (sad.first.name.toLowerCase() != "none") {
@@ -62,6 +67,6 @@ module.exports = {
 			embed.addField(sad.third.name, `Description: ${sad.third.description}\nResponses: ${responses}`);
 		}
 		if (noAddons == true) embed.setDescription("This server has no server addons! Use `c!addserveraddon` to add one!");
-		send(embed);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };

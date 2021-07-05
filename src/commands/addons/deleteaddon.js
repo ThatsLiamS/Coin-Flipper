@@ -1,5 +1,7 @@
-const checkGuild = require("../../tools/checkGuild");
-const checkOnline = require("../../tools/checkOnline");
+const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
+const checkOnline = require(`${__dirname}/../../tools/checkOnline`);
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "deleteaddon",
 	description: "Delete a custom addon or bought addon!",
@@ -7,14 +9,15 @@ module.exports = {
 	perms: "",
 	tips: "Custom addons have to be enabled to use this",
 	aliases: ["delete", "destroy", "destroyaddon", "removeaddon", "remove"],
-	execute: async function(firestore, args, command, msg, discord, data, send) {
-		await checkGuild(firestore, msg.guild.id);
-		let guilddata = await firestore.doc(`/guilds/${msg.guild.id}`).get();
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
+		await checkGuild(firebase, message.guild.id);
+		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();
 		if (guilddata.data().enabled.customaddons == false) return;
 
 		let name = args[0];
-		if (!name) return send("You need to specify the name of the addon you want to delete!");
-		if (name == "none") return send("That's not a valid addon!");
+		if (!name) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need to specify the name of the addon you want to delete!" });
+		if (name == "none") return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid addon!" });
 
 		let userData = data.data();
 		let cd = userData.addons.customaddons;
@@ -31,9 +34,9 @@ module.exports = {
 			exists = cd.third;
 		}
 
-		if (exists.published == true) return send("You already published your addon! You can't delete it! If you want to scrape it from the addon shop, please contact Coin Flipper developers in the support server! (`c!support`)");
+		if (exists.published == true) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You already published your addon! You can't delete it! If you want to scrape it from the addon shop, please contact Coin Flipper developers in the support server! (`c!support`)" });
 
-		let array = await checkOnline(firestore, msg.author.id, userData);
+		let array = await checkOnline(firebase, message.author.id, userData);
 		let online = array[0];
 		userData = array[1];
 
@@ -53,17 +56,18 @@ module.exports = {
 			}
 		}
 
-		if (exists == false) return send("That's not a valid addon!");
+		if (exists == false) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid addon!" });
 
-		send(`Are you sure you want to delete the addon **${exists.name}**?\n\`yes\` or \`no\``);
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `Are you sure you want to delete the addon **${exists.name}**?\n\`yes\` or \`no\`` });
 
-		msg.channel.awaitMessages(m => m.author.id == msg.author.id, { max: 1, time: 10000 }).then(async collected => {
+		message.channel.awaitMessages(m => m.author.id == message.author.id, { max: 1, time: 10000 }).then(async collected => {
 			if (!collected.first()) {
-				return send("You didn't answer :/");
+				send.sendChannel({ channel: message.channel, author: message.author }, { content: "You didn't answer :/" });
+				return;
 			}
-			let message = collected.first().content.toLowerCase();
-			if (message != "yes" && message != "no") { return send("That's not a valid choice!"); }
-			if (message == "no") {return send("Um ok then"); }
+			message = collected.first().content.toLowerCase();
+			if (message != "yes" && message != "no") { return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid choice!" }); }
+			if (message == "no") { return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Um ok then" }); }
 			else {
 				if (type == "custom") {
 					if (cd.first.name == exists.name) {
@@ -124,8 +128,9 @@ module.exports = {
 					}
 				}
 				userData.addons.customaddons = cd;
-				await firestore.doc(`/users/${msg.author.id}`).set(userData);
-				send(`You deleted your addon **${exists.name}**!`);
+				await firebase.doc(`/users/${message.author.id}`).set(userData);
+
+				send.sendChannel({ channel: message.channel, author: message.author }, { content: `You deleted your addon **${exists.name}**!` });
 			}
 		});
 	}
