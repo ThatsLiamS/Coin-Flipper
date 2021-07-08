@@ -1,5 +1,9 @@
-const badgeEmotes = require("../../../tools/badgeEmotes");
-const achievementAdd = require("../../../tools/achievementAdd");
+const Discord = require('discord.js');
+
+const badgeEmotes = require(`${__dirname}/../../../tools/badgeEmotes`);
+const achievementAdd = require(`${__dirname}/../../../tools/achievementAdd`);
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "badges",
 	description: "Get a list of badges that you can get!",
@@ -7,7 +11,8 @@ module.exports = {
 	perms: "Embed Links, Use External Emojis",
 	tips: "Different badges will show depending on which badges you have. For example, if you have the wealthy badge, it'll show the millionaire badge in it's place.",
 	aliases: ["badgelist"],
-	execute: async function(firestore, args, command, msg, discord, data, send) {
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
 		let badgeData = data.data().badges;
 		let badgeList = ["support", "flip", "minigame", "register", "collector", "rich", "niceness"];
 		let oldBadges = [`${badgeEmotes.supporter} Supporter`, `${badgeEmotes.flipper} Flipper`, `${badgeEmotes.gamer} Gamer`, `${badgeEmotes.registered} Registered`, `${badgeEmotes.collector} Collector`, `${badgeEmotes.wealthy} Wealthy`, `${badgeEmotes.niceness} Niceness`];
@@ -29,7 +34,7 @@ module.exports = {
 				});
 			}
 		}
-		let embed = new discord.MessageEmbed()
+		const embed = new Discord.MessageEmbed()
 			.setTitle("Badges:")
 			.setDescription("Important Note: none of these badges do anything lol")
 			.addFields(
@@ -44,14 +49,14 @@ module.exports = {
 			.addField("Exclusive Badges", `${badgeEmotes.developer} Developer: Be on the Coin Flipper Development Team\n${badgeEmotes.partnered_dev} Partnered Dev: Partner your botwith Coin Flipper (you need at least 350 servers)\n${badgeEmotes.bug_hunter} Bug Hunter: Find a bug in the bot and report it\n${badgeEmotes.bug_poacher} Bug Poacher: Find 5 bugs in the bot and report them\n\n${badgeEmotes.gold_tier} Gold Tier: Purchase **Coin Flipper Gold**\n${badgeEmotes.platinum_tier} Platinum Tier: Purchase **Coin Flipper Platinum**`)
 			.setColor("#54fff1")
 			.setFooter("Use c!claim <badge> to claim a badge!\nThanks to X-Boy742#8981 for making these badges!");
-		send(embed);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 
 		let userData = data.data();
 		if (userData.badges.support && userData.badges.flip && userData.badges.flip_plus && userData.badges.minigame && userData.badges.minigame_plus && userData.badges.register && userData.badges.collector && userData.badges.collector_plus && userData.badges.rich && userData.badges.rich_plus && userData.badges.niceness) {
 			let localData = await achievementAdd(userData, "badgeCollection", true);
 			if (localData) {
 				userData = localData;
-				await firestore.doc(`/users/${msg.author.id}`).set(userData);
+				await firebase.doc(`/users/${message.author.id}`).set(userData);
 			}
 		}
 	}

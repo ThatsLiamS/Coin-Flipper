@@ -1,3 +1,7 @@
+const Discord = require('discord.js');
+
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "trophy",
 	description: "Flex your trophy on everyone!",
@@ -5,12 +9,15 @@ module.exports = {
 	perms: "Embed Links, Attach Files",
 	tips: "",
 	aliases: ["flex"],
-	execute: async function(firestore, args, command, msg, discord, data, send) {
-		if (data.data().inv.goldtrophy < 1) return send("You can't flex a trophy that you don't have :/");
-		let embed = new discord.MessageEmbed()
-			.setTitle(`${msg.author.username} flexes on all of you!`)
+	execute: async function(message, args, prefix, client, [, data]) {
+
+		if (data.data().inv.goldtrophy < 1) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You can't flex a trophy that you don't have :/" });
+
+		const embed = new Discord.MessageEmbed()
+			.setTitle(`${message.author.username} flexes on all of you!`)
 			.setImage("https://imgur.com/iqooiDn.jpg")
 			.setColor("YELLOW");
-		send(embed);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };

@@ -1,5 +1,7 @@
-const checkMining = require("../../../tools/checkMining");
-const achievementAdd = require("../../../tools/achievementAdd");
+const checkMining = require(`${__dirname}/../../../tools/checkMining`);
+const achievementAdd = require(`${__dirname}/../../../tools/achievementAdd`);
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "upgrade",
 	description: "Upgrade your pickaxe!",
@@ -7,10 +9,12 @@ module.exports = {
 	perms: "",
 	aliases: ["upgradepick", "upgradepickaxe", "increase", "levelup"],
 	tips: "You can only use this if you have a pickaxe, and you can only upgrade to the next pickaxe that you have access to",
-	execute: async function(firestore, args, command, msg, discord, data, send) {
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
 		let userData = data.data();
-		if (userData.inv.pickaxe < 1 || userData.inv.pickaxe === undefined) return send("You need a pickaxe to use this!");
-		userData = await checkMining(firestore, msg.author, userData);
+		if (userData.inv.pickaxe < 1 || userData.inv.pickaxe === undefined) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need a pickaxe to use this!" });
+		userData = await checkMining(firebase, message.author, userData);
+
 		let miningData = userData.mining;
 		let pickaxeCosts = {
 			stone: {
@@ -74,10 +78,12 @@ module.exports = {
 				emote: "<:infinity_pickaxe:844297732348313620>"
 			}
 		};
+
 		let pickaxeOrder = ["standard", "stone", "shiny", "lava", "destructive", "diamond", "banana", "steel", "infinity", "none"];
 		let myPick = miningData.pickaxe;
 		let nextPick = pickaxeOrder[pickaxeOrder.indexOf(myPick) + 1];
-		if (nextPick == "none") return send("You can't upgrade your pickaxe anymore!");
+		if (nextPick == "none") return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You can't upgrade your pickaxe anymore!" });
+
 		let can = true;
 		let needs = [];
 		for (let property in pickaxeCosts[nextPick]) {
@@ -86,7 +92,8 @@ module.exports = {
 				if (miningData[property] < pickaxeCosts[nextPick][property]) can = false;
 			}
 		}
-		if (can == false) return send(`You don't have enough materials to upgrade!\n\n**You need:**\n${needs.join("\n")}`);
+
+		if (can == false) return send.sendChannel({ channel: message.channel, author: message.author }, { content: `You don't have enough materials to upgrade!\n\n**You need:**\n${needs.join("\n")}` });
 		for (let property in pickaxeCosts[nextPick]) {
 			if (property != "emote") {
 				let has = miningData[property];
@@ -94,12 +101,14 @@ module.exports = {
 				miningData[property] = has;
 			}
 		}
+
 		let emote = pickaxeCosts[nextPick].emote;
 		miningData.pickaxe = nextPick;
-		send(`You upgraded to the **${nextPick}** pickaxe! ${emote} You used:\n${needs.join("\n")}`);
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You upgraded to the **${nextPick}** pickaxe! ${emote} You used:\n${needs.join("\n")}` });
+
 		userData.mining = miningData;
 		if (nextPick == "diamond") userData = await achievementAdd(userData, "creeperAwMan");
 		if (nextPick == "banana") userData = await achievementAdd(userData, "fruitMining");
-		await firestore.doc(`/users/${msg.author.id}`).set(userData);
+		await firebase.doc(`/users/${message.author.id}`).set(userData);
 	}
 };

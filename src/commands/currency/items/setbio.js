@@ -1,4 +1,5 @@
-const profanityCheck = require("../../../tools/profanities").profanityCheck;
+const profanityCheck = require(`${__dirname}/../../../tools/profanities`).profanityCheck;
+const send = require(`${__dirname}/../../../tools/send`);
 
 module.exports = {
 	name: "setbio",
@@ -7,16 +8,22 @@ module.exports = {
 	perms: "",
 	tips: "",
 	aliases: ["bio", "setbal", "setmessage"],
-	execute: async function(firestore, args, command, msg, discord, data, send) {
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
 		let userData = data.data();
-		if (userData.inv.paper === undefined || userData.inv.paper == 0) return send("You need to have a piece of paper to set your bio!\nBuy one in the 1000 servers shop! (`c!limited`)");
-		if (!args[0]) return send("You have to specify the bio you want!");
+		if (userData.inv.paper === undefined || userData.inv.paper == 0) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, you don't have a piece of paper." });
+		if (!args[0]) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You have to specify the bio you want!" });
+
 		let bio = args.slice(0).join(" ");
 		bio = bio.charAt(0).toUpperCase() + bio.slice(1);
-		if (profanityCheck(bio) == true) return send("You can't have profanities!");
-		if (bio.length > 150) return send("That bio is too long!");
+
+		if (profanityCheck(bio) == true) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You can't have profanities!" });
+		if (bio.length > 150) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That bio is too long!" });
+
 		userData.stats.bio = bio;
-		send(`You set your bio to: \`${bio}\``);
-		await firestore.doc(`/users/${msg.author.id}`).set(userData);
+		await firebase.doc(`/users/${message.author.id}`).set(userData);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You set your bio to: \`${bio}\`` });
+
 	}
 };

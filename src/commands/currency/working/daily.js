@@ -1,3 +1,7 @@
+const Discord = require('discord.js');
+
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "daily",
 	description: "Get your daily cents!",
@@ -5,7 +9,8 @@ module.exports = {
 	perms: "Embed Links",
 	cooldowny: "1 day",
 	tips: "",
-	execute: async function(firestore, args, command, msg, discord, data, send) {
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
 		let userData = data.data();
 		let date = new Date();
 		let thisDate = date.getDate();
@@ -24,19 +29,23 @@ module.exports = {
 			}
 		}
 
-		if (thisDate == lastDate && pass == false) return send("You can only claim your daily reward once per day!");
+		if (thisDate == lastDate && pass == false) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You can only claim your daily reward once per day!" });
 		userData.cooldowns.daily = thisDate;
 
 		let randomAmt = Math.floor(Math.random() * (6000 - 4000 + 1)) + 4000;
 		if (userData.donator > 0) randomAmt = Math.ceil(randomAmt * 1.5);
+
 		let bal = userData.currencies.cents;
 		bal = Number(bal) + Number(randomAmt);
 		userData.currencies.cents = bal;
-		await firestore.doc(`/users/${msg.author.id}`).set(userData);
-		let embed = new discord.MessageEmbed()
+
+		await firebase.doc(`/users/${message.author.id}`).set(userData);
+
+		const embed = new Discord.MessageEmbed()
 			.setTitle(`You claimed your daily reward!`)
 			.setDescription(`You got \`${randomAmt}\` cents!\nMake sure to come back tomorrow to claim your next one!\nIf you want 1000 more cents, vote for the bot with \`c!vote\`!`)
 			.setColor("GREEN");
-		send(embed);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };

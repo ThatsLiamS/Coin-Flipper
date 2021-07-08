@@ -1,6 +1,10 @@
-const checkMining = require("../../../tools/checkMining");
-const achievementAdd = require("../../../tools/achievementAdd");
-const check = require("../../../tools/check");
+const Discord = require('discord.js');
+
+const checkMining = require(`${__dirname}/../../../tools/checkMining`);
+const achievementAdd = require(`${__dirname}/../../../tools/achievementAdd`);
+const check = require(`${__dirname}/../../../tools/check`);
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "mining",
 	description: "View your mining stats!",
@@ -8,19 +12,21 @@ module.exports = {
 	perms: "Embed Links",
 	aliases: ["miningdata", "mininginv", "mineinv", "mininginventory", "geminventory", "geminv", "crystalinv", "crystalinventory", "minedata", "mineinventory", "miningstats", "minestats"],
 	tips: "You can only use this if you have a pickaxe!",
-	execute: async function(firestore, args, command, msg, discord, data, send) {
-		let user = msg.mentions.users.first();
-		if (!user) user = msg.author;
-		if (user.bot) return send("How can bots mine");
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
+		let user = message.mentions.users.first();
+		if (!user) user = message.author;
+		if (user.bot) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "How can bots mine?" });
 		let userData;
-		if (user.id != msg.author.id) {
-			await check(firestore, user.id);
-			let Data = await firestore.doc(`/users/${user.id}`).get();
+		if (user.id != message.author.id) {
+			await check(firebase, user.id);
+			let Data = await firebase.doc(`/users/${user.id}`).get();
 			userData = Data.data();
 		}
 		else { userData = data.data(); }
-		if (data.data().inv.pickaxe < 1 || data.data().inv.pickaxe === undefined) return send("You need a pickaxe to use this!");
-		userData = await checkMining(firestore, msg.author, userData);
+		if (data.data().inv.pickaxe < 1 || data.data().inv.pickaxe === undefined) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need a pickaxe to use this!" });
+
+		userData = await checkMining(firebase, message.author, userData);
 		let miningData = userData.mining;
 		let stuff = [];
 		let properties = ["rock", "sapphire", "ruby", "opal", "diamond"];
@@ -42,28 +48,29 @@ module.exports = {
 			infinity: "<:infinity_pickaxe:844297732348313620>"
 		};
 		let emote = emotes[miningData.pickaxe];
-		let embed = new discord.MessageEmbed()
+		const embed = new Discord.MessageEmbed()
 			.setTitle(`${user.username}'s Mining Data`)
 			.addField("Pickaxe", `${miningData.pickaxe} pickaxe ${emote}`)
 			.addField("Inventory", stuff)
 			.setColor("#ababab")
 			.setFooter("Thanks to Mr Spooky#6088 for making the pickaxe emojis!");
+
 		if (miningData.pickaxe == "diamond" || miningData.pickaxe == "banana") {
 			if (miningData.pickaxe == "diamond") {
 				let localData = await achievementAdd(userData, "creeperAwMan", true);
 				if (localData) {
 					userData = localData;
-					await firestore.doc(`/users/${msg.author.id}`).set(userData);
+					await firebase.doc(`/users/${message.author.id}`).set(userData);
 				}
 			}
 			else {
 				let localData = await achievementAdd(userData, "fruitMining", true);
 				if (localData) {
 					userData = localData;
-					await firestore.doc(`/users/${msg.author.id}`).set(userData);
+					await firebase.doc(`/users/${message.author.id}`).set(userData);
 				}
 			}
 		}
-		send(embed);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };

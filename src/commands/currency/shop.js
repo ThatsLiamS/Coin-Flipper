@@ -1,4 +1,8 @@
-const itemlist = require("../../tools/constants").itemlist;
+const Discord = require('discord.js');
+
+const itemlist = require(`${__dirname}/../../tools/constants`).itemlist;
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "shop",
 	description: "View the shop and all the items in it!",
@@ -6,9 +10,10 @@ module.exports = {
 	perms: "Embed Links, Manage Messages",
 	tips: "If the bot has the Manage Messages permission, it will create a cool reaction-based page system",
 	aliases: ["store", "item", "items"],
-	execute: async function(firestore, args, command, msg, discord, data, send) {
+	execute: async function(message, args) {
+
 		if (!args[0] || !isNaN(args[0])) {
-			let embed1 = new discord.MessageEmbed()
+			const embed1 = new Discord.MessageEmbed()
 				.setTitle("Shop - Page 1/2")
 				.setDescription("Use `c!buy <item>` to buy something!")
 				.addField("🥉 Bronze Coin", "`Cost:` 50 cents `Usage:` can use the PENNY add-on\n`Description:` a cool bronze coin")
@@ -24,7 +29,7 @@ module.exports = {
 				.setFooter("Ultra Donators get everything 25% off!\nUse \"c!shop <page>\" to switch to a different page")
 				.setColor('YELLOW');
 
-			let embed2 = new discord.MessageEmbed()
+			const embed2 = new Discord.MessageEmbed()
 				.setTitle("Shop - Page 2/2")
 				.setDescription("Use `c!buy <item>` to buy something!")
 				.addField("📅 Calendar", "`Cost:` 5000 cents `Usage:` Can use the monthly command\n`Description:` a normal calendar that helps you keep track of the months")
@@ -43,10 +48,10 @@ module.exports = {
 				.setColor('YELLOW');
 
 			if (args[0] == 2) {
-				send(embed2);
+				send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed2] });
 			}
 			else {
-				send(embed1);
+				send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed1] });
 			}
 		}
 		else {
@@ -59,7 +64,7 @@ module.exports = {
 				}
 			}
 			if (!item) return send("That's not a valid item!");
-			let embed = new discord.MessageEmbed()
+			const embed = new Discord.MessageEmbed()
 				.setTitle(item.prof.slice(0, 2) + " " + item.prof.charAt(3).toUpperCase() + item.prof.slice(4))
 				.setDescription(item.description);
 
@@ -69,7 +74,8 @@ module.exports = {
 
 			embed.addField("Found in:", `${item.found}`);
 			embed.setColor("YELLOW");
-			send(embed);
+
+			send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 		}
 	}
 };

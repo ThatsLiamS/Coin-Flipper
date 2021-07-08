@@ -1,4 +1,8 @@
-const checkMining = require("../../../tools/checkMining");
+const Discord = require('discord.js');
+
+const checkMining = require(`${__dirname}/../../../tools/checkMining`);
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "mine",
 	description: "Mine and get some stone or gems!",
@@ -7,10 +11,11 @@ module.exports = {
 	tips: "You can only use this if you have a pickaxe!",
 	cooldowny: "1 minute (45 seconds for gold tier, 30 seconds for platinum tier)",
 	cooldown: 60000,
-	execute: async function(firestore, args, command, msg, discord, data, send) {
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
 		let userData = data.data();
-		if (userData.inv.pickaxe < 1 || userData.inv.pickaxe === undefined) return send("You need a pickaxe to use this!");
-		userData = await checkMining(firestore, msg.author, userData);
+		if (userData.inv.pickaxe < 1 || userData.inv.pickaxe === undefined) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need a pickaxe to use this!" });
+		userData = await checkMining(firebase, message.author, userData);
 		let miningData = userData.mining;
 		let pickaxes = {
 			standard: {
@@ -236,13 +241,15 @@ module.exports = {
 				foundList.push(`${sapphiresFound} infinity stones`);
 			}
 		}
-		let embed = new discord.MessageEmbed()
+		const embed = new Discord.MessageEmbed()
 			.setTitle(`Mining time! ⛏️`)
 			.setDescription("Good loot woo\n[Mine more crystals](https://top.gg/bot/791660709246271509)")
 			.addField("You got:", foundList)
 			.setColor("#cccccc");
-		send(embed);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
+
 		userData.mining = miningData;
-		await firestore.doc(`/users/${msg.author.id}`).set(userData);
+		await firebase.doc(`/users/${message.author.id}`).set(userData);
 	}
 };

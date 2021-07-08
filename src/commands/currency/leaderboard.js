@@ -1,3 +1,7 @@
+const Discord = require('discord.js');
+
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "leaderboard",
 	description: "Look at the leaderboard and view the top 10 users in your server!",
@@ -5,17 +9,18 @@ module.exports = {
 	perms: "Embed Links",
 	aliases: ["lb", "lbd", "ldb", "richest"],
 	error: true,
-	execute: async function(firestore, args, command, msg, discord, data, send) {
+	execute: async function(message, args, prefix, client, [firebase]) {
 
-		if (!msg.guild.me.hasPermission("SEND_MESSAGES") || !msg.guild.me.hasPermission("EMBED_LINKS")) return send("Sorry, I don't have the right permissions for that command!");
-		let message = await msg.channel.send("Getting data...").catch(() => {});
+		if (!message.guild.me.hasPermission("SEND_MESSAGES") || !message.guild.me.hasPermission("EMBED_LINKS")) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, I don't have the right permissions for that command!" });
+		let msg = await message.channel.send("Getting data...").catch(() => {});
+
 		let usersArray = [];
-		let users = await firestore.collection("users");
+		let users = await firebase.collection("users");
 		await users.get().then(async (querySnapshot) => {
 			await querySnapshot.forEach(async (doc) => {
 				let member;
 				try {
-					member = await msg.guild.members.fetch(doc.id);
+					member = await message.guild.members.fetch(doc.id);
 				}
 				catch {
 					member = "not found";
@@ -29,23 +34,29 @@ module.exports = {
 			});
 		});
 		setTimeout(async () => {
-			await message.edit("Sorting data...");
+			await msg.edit("Sorting data...");
 			usersArray = usersArray.sort((a, b) => b.cents - a.cents);
+
 			setTimeout(async () => {
-				await message.edit("Creating leaderboard...");
-				let embed = new discord.MessageEmbed()
-					.setTitle(`The Top 10 Users in ${msg.guild.name}!`)
+				await msg.edit("Creating leaderboard...");
+
+				const embed = new Discord.MessageEmbed()
+					.setTitle(`The Top 10 Users in ${message.guild.name}!`)
 					.setDescription("Note: this is a combination of both cents and register")
 					.setColor("GREEN");
-				for (let profile of usersArray) {
-					let user = await msg.guild.members.fetch(profile.id);
+
+				for (const profile of usersArray) {
+					let user = await message.guild.members.fetch(profile.id);
 					let tag;
+
 					if (user) tag = user.user.tag;
 					else tag = "Unknown User";
+
 					embed.addField(tag, `${profile.cents} total cents`);
 				}
+
 				setTimeout(async () => {
-					await message.edit(embed);
+					await msg.edit(embed);
 				}, 750);
 			}, 1000);
 		}, 1000);
