@@ -1,20 +1,31 @@
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "toolbox",
-	execute: async function(firestore, args, command, msg, discord, data, send) {
-		if (msg.author.id != 821512062999199795) return send("Only the owner can use this >:)");
-		let user = msg.mentions.users.first();
+	developerOnly: true,
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
+		let user = message.mentions.users.first();
 		if (user) {
-			let Data = await firestore.doc(`/users/${user.id}`).get();
+
+			let Data = await firebase.doc(`/users/${user.id}`).get();
 			let userData = Data.data();
+
 			let bool = (args[0] == "true");
 			userData.inv.toolbox = bool;
-			await firestore.doc(`/users/${user.id}`).set(userData);
+
+			await firebase.doc(`/users/${user.id}`).set(userData);
 		}
 		else {
+
 			let userData = data.data();
 			let bool = (args[0] == "true");
+
 			userData.inv.toolbox = bool;
-			await firestore.doc(`/users/${msg.author.id}`).set(userData);
+
+			await firebase.doc(`/users/${message.author.id}`).set(userData);
 		}
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `I have changed ${user ? user : message.author}'s tookbox status` });
 	}
 };

@@ -1,14 +1,20 @@
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "sendmessage",
-	execute: async function(firestore, args, command, msg, discord, data, send, bot) {
-		//if (data.data().inv.toolbox == false) return send("Sorry, only Coin Flipper developers can use this command!");
-		if (msg.author.id != 821512062999199795) return send("Sorry, only Coin Flipper developers can use this command! (right now only soup because im too lazy to add the other devs manually)");
-		let user = await bot.users.fetch(`${args[0]}`);
-		let message = args.slice(1).join(" ");
-		message = message.charAt(0).toUpperCase() + message.slice(1);
-		user.send(message).catch(err => {
+	developerOnly: true,
+	execute: async function(message, args, prefix, client) {
+
+		let user = await client.users.fetch(`${args[0]}`);
+
+		let msg = args.slice(1).join(" ");
+		msg = msg.charAt(0).toUpperCase() + msg.slice(1);
+
+		user.send(msg).catch(err => {
 			send("An error occured:\n```\n" + err + "\n```");
 		});
-		send("Sent it!");
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: 'I have sent it.' });
+
 	}
 };
