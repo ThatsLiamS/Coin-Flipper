@@ -1,4 +1,6 @@
-const checkGuild = require("../../tools/checkGuild");
+const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "disable",
 	description: "Disable a feature in your server!",
@@ -6,18 +8,25 @@ module.exports = {
 	perms: "",
 	tips: "you need the Manage Server permission to use this",
 	aliases: ["disablefeature"],
-	execute: async function(firestore, args, command, msg, discord, data, send) {
-		if (!msg.member.hasPermission('MANAGE_GUILD')) return send("Sorry, only users with the Manage Server permission can use this command!");
-		if (!args[0]) return send("Sorry, you need to specify something that you want to disable.\nList: `flipping`, `minigames`, `publiccreate`, `trash`, `karate`, `customaddons`, `online`");
+	execute: async function(message, args, prefix, client, [firebase]) {
+
+		if (!message.member.hasPermission('MANAGE_GUILD')) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, only users with the Manage Server permission can use this command!" });
+		if (!args[0]) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, you need to specify something that you want to disable.\nList: `flipping`, `minigames`, `publiccreate`, `trash`, `karate`, `customaddons`, `online`" });
+
 		let feature = args[0];
 		let featureList = ["flipping", "minigames", "publiccreate", "trash", "karate", "customaddons", "online", "trading"];
-		if (!featureList.includes(feature)) return send("That's not a valid feature! (use `c!help customization` for more info");
-		await checkGuild(firestore, msg.guild.id);
-		let guilddata = await firestore.doc(`/guilds/${msg.guild.id}`).get();
+
+		if (!featureList.includes(feature)) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid feature! (use `c!help customization` for more info" });
+		await checkGuild(firebase, message.guild.id);
+
+		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();
 		let guildData = guilddata.data();
+
 		// if (guildData["enabled"][feature] == false) return send("That feature is already disabled!");
+
 		guildData["enabled"][feature] = false;
-		await firestore.doc(`/guilds/${msg.guild.id}`).set(guildData);
-		send(`You disabled **${feature}**!`);
+		await firebase.doc(`/guilds/${message.guild.id}`).set(guildData);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You disabled **${feature}**!` });
 	}
 };

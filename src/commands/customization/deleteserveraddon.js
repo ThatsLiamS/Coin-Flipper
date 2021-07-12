@@ -1,4 +1,5 @@
-const checkGuild = require("../../tools/checkGuild");
+const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
+const send = require(`${__dirname}/../../tools/send`);
 
 module.exports = {
 	name: "deleteserveraddon",
@@ -7,11 +8,12 @@ module.exports = {
 	perms: "",
 	aliases: ["removeserveraddon"],
 	tips: "Custom addons have to be enabled to use this",
-	execute: async function(firestore, args, command, msg, discord, data, send) {
-		if (!msg.member.hasPermission('MANAGE_GUILD')) return send("Sorry, only users with the Manage Server permission can use this command!");
+	execute: async function(message, args, prefix, client, [firebase, data]) {
 
-		await checkGuild(firestore, msg.guild.id);
-		let guilddata = await firestore.doc(`/guilds/${msg.guild.id}`).get();
+		if (!message.member.hasPermission('MANAGE_GUILD')) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, only users with the Manage Server permission can use this command!" });
+
+		await checkGuild(firebase, message.guild.id);
+		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();
 		if (guilddata.data().enabled.customaddons == false) return;
 
 		let guildData = guilddata.data();
@@ -39,8 +41,8 @@ module.exports = {
 		}
 
 		let name = args[0];
-		if (!name) return send("You need to specify the name of the addon you want to delete! (it has to be one of your server addons)");
-		if (name == "none") return send("That's not a valid addon!");
+		if (!name) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need to specify the name of the addon you want to delete! (it has to be one of your server addons)" });
+		if (name == "none") return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid addon!" });
 
 		let sad = guildData.serveraddons;
 
@@ -59,7 +61,7 @@ module.exports = {
 			path = "third";
 		}
 
-		if (exists == false) return send("That's not a valid addon!");
+		if (exists == false) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid addon!" });
 
 		exists.serveraddon = false;
 		sad[path] = {
@@ -92,8 +94,10 @@ module.exports = {
 		cd[uPath] = uExists;
 		userData.addons.customaddons = cd;
 
-		await firestore.doc(`/guilds/${msg.guild.id}`).set(guildData);
-		await firestore.doc(`/users/${msg.author.id}`).set(userData);
-		send(`You deleted the server addon \`${exists.name}\`!`);
+		await firebase.doc(`/guilds/${message.guild.id}`).set(guildData);
+		await firebase.doc(`/users/${message.author.id}`).set(userData);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You deleted the server addon \`${exists.name}\`!` });
+
 	}
 };

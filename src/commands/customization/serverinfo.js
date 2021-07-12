@@ -1,5 +1,9 @@
-const checkGuild = require("../../tools/checkGuild");
-const convertToEmote = require("../../tools/convertToEmote");
+const Discord = require('discord.js');
+
+const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
+const convertToEmote = require(`${__dirname}/../../tools/convertToEmote`);
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "serverinfo",
 	description: "Get some info about the server!",
@@ -7,29 +11,33 @@ module.exports = {
 	perms: "Embed Links, Use External Emojis",
 	tips: "You can change your server's settings using `c!enable` and `c!disable`",
 	aliases: ["server", "guildinfo", "guild", "serversettings", "guildsettings"],
-	execute: async function(firestore, args, command, msg, discord, data, send, bot) {
-		await checkGuild(firestore, msg.guild.id);
-		let guildata = await firestore.doc(`/guilds/${msg.guild.id}`).get();
-		let guildData = guildata.data();
+	execute: async function(message, args, prefix, client, [firebase]) {
+
+		await checkGuild(firebase, message.guild.id);
+		const guildata = await firebase.doc(`/guilds/${message.guild.id}`).get();
+		const guildData = guildata.data();
+
 		let fE = guildData.enabled.flipping;
 		if (fE === undefined) fE = true;
 		let oE = guildData.enabled.online;
 		if (oE === undefined) oE = true;
 		let dE = guildData.enabled.trading;
 		if (dE === undefined) dE = true;
+
 		fE = await convertToEmote(fE);
 		oE = await convertToEmote(oE);
 		dE = await convertToEmote(dE);
-		let mE = await convertToEmote(guildData.enabled.minigames);
-		let pcE = await convertToEmote(guildData.enabled.publiccreate);
-		let tE = await convertToEmote(guildData.enabled.trash);
-		let kE = await convertToEmote(guildData.enabled.karate);
-		let cE = await convertToEmote(guildData.enabled.customaddons);
-		let gprefix = bot.prefixes.get(msg.guild.id, "prefix");
-		if (!gprefix) gprefix = "t!";
-		let embed = new discord.MessageEmbed()
-			.setTitle(`${msg.guild.name}'s Info:`)
-			.setDescription(`Prefix: \`${gprefix}\``)
+
+		const mE = await convertToEmote(guildData.enabled.minigames);
+		const pcE = await convertToEmote(guildData.enabled.publiccreate);
+		const tE = await convertToEmote(guildData.enabled.trash);
+		const kE = await convertToEmote(guildData.enabled.karate);
+		const cE = await convertToEmote(guildData.enabled.customaddons);
+
+
+		const embed = new Discord.MessageEmbed()
+			.setTitle(`${message.guild.name}'s Info:`)
+			.setDescription(`Prefix: \`${prefix}\``)
 			.addField("Flipping", fE)
 			.addField("Minigames", mE)
 			.addField("Public Minigame Creation", pcE)
@@ -40,6 +48,7 @@ module.exports = {
 			.addField("Trading", dE)
 			.setColor("#cd7f32")
 			.setFooter("Mods and admins! Use c!enable and c!disable to change these settings!");
-		send(embed);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };
