@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 module.exports = {
 	name: "flipboard",
 	description: "See the top 10 coin flippers that use the bot!",
@@ -5,15 +7,19 @@ module.exports = {
 	perms: "Embed Links",
 	aliases: ["fliplb", "superleaderboard", "flb", "fleaderboard", "flipleaderboard"],
 	error: true,
-	execute: async function(firestore, args, command, msg, discord, data, send, bot) {
+	execute: async function(message, args, prefix, client, [firebase]) {
 
-		if (!msg.guild.me.hasPermission("SEND_MESSAGES") || !msg.guild.me.hasPermission("EMBED_LINKS")) return send("Sorry, I don't have the right permissions for that command!");
-		let message = await msg.channel.send("Getting data...").catch(() => {});
+		let error = false;
+		let msg = await message.channel.send("Getting data...").catch(() => { error = true; });
+		if(error == true) { return; }
+
 		let usersArray = [];
-		let users = await firestore.collection("users");
+		let users = await firebase.collection("users");
+
 		await users.get().then((querySnapshot) => {
 			querySnapshot.forEach(async (doc) => {
 				try {
+
 					if (!doc.data().stats) doc.data().stats = { flipped: 0 };
 					await usersArray.push({
 						id: doc.id,
@@ -21,6 +27,7 @@ module.exports = {
 					});
 				}
 				catch {
+
 					await usersArray.push({
 						id: doc.id,
 						flips: 0
@@ -28,28 +35,40 @@ module.exports = {
 				}
 			});
 		});
+
 		setTimeout(async () => {
-			await message.edit("Sorting data...");
+
+			await msg.edit("Sorting data...");
+
 			usersArray = usersArray.sort((a, b) => b.flips - a.flips);
 			usersArray = usersArray.slice(0, 10);
+
 			setTimeout(async () => {
-				await message.edit("Creating flipboard...");
-				let embed = new discord.MessageEmbed()
+
+				await msg.edit("Creating flipboard...");
+				const embed = new Discord.MessageEmbed()
 					.setTitle(`The Top 10 Coin Flippers ever!`)
 					.setColor("#e08c38");
-				for (let profile of usersArray) {
+
+				for (const profile of usersArray) {
 					if (!profile.id.startsWith("<")) {
-						let user = await bot.users.fetch(profile.id);
+						let user = await client.users.fetch(profile.id);
 						let tag;
 						if (user) tag = user.tag;
 						else tag = "Unknown User";
 						embed.addField(tag, `${profile.flips} coins flipped`);
 					}
 				}
+
 				setTimeout(async () => {
-					await message.edit(embed);
+
+					await msg.edit(embed);
+
 				}, 750);
+
 			}, 1000);
+
 		}, 1000);
+
 	}
 };

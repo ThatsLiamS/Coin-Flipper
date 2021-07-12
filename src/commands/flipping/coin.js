@@ -1,4 +1,7 @@
 const canvas = require("canvas");
+
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "coin",
 	description: "Add your or someone else's profile picture to a coin!",
@@ -6,20 +9,21 @@ module.exports = {
 	perms: "Embed Links, Attach Files",
 	tips: "",
 	aliases: ["coinme"],
-	execute: async function(firestore, args, command, msg, discord, data, send, bot) {
-		let user = msg.mentions.users.first();
+	execute: async function(message, args, prefix, client) {
+
+		let user = message.mentions.users.first();
 		if (!user) {
 			if (args[0]) {
 				if (!isNaN(args[0])) {
-					user = bot.users.cache.get(args[0]);
-					if (!user) user = msg.author;
+					user = client.users.cache.get(args[0]);
+					if (!user) user = message.author;
 				}
 				else{
-					user = msg.author;
+					user = message.author;
 				}
 			}
 			else{
-				user = msg.author;
+				user = message.author;
 			}
 		}
 		const mycanvas = canvas.createCanvas(500, 500);
@@ -38,7 +42,7 @@ module.exports = {
 		// let attachment = new discord.MessageAttachment(mycanvas.toBuffer(), `${user.id}-coin-image.png`);
 		//send(`**The coin landed on ${user.username}**`, attachment);
 
-		send({
+		const msg = {
 			embed: {
 				title: `The coin landed on ${user.username}`,
 				color: "YELLOW",
@@ -50,6 +54,8 @@ module.exports = {
 				attachment: mycanvas.toBuffer(),
 				name: "coin-image.png"
 			}]
-		});
+		};
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { msg });
 	}
 };
