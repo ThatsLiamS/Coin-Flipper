@@ -1,19 +1,24 @@
+const Discord = require('discord.js');
+
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "botinfo",
 	description: "View some info about the bot!",
 	argument: "None",
 	perms: "Embed Links",
 	tips: "",
-	aliases: ["info", "botstats"],
-	execute: async function(firestore, args, command, msg, discord, data, send, bot) {
-		let guilds = bot.guilds.cache.size;
-		let members = 0;
-		bot.guilds.cache.forEach(guild => {
-			members += guild.memberCount;
-		});
+	aliases: ["info", "botstats", 'about'],
+	execute: async function(message, args, prefix, client) {
+
+		const guilds = client.guilds.cache.size;
+		const members = await client.guilds.cache.reduce((acc, g) => acc + g.memberCount, 0);
+
+		const uptime = `${Math.floor(client.uptime / 86400000)}d ${Math.floor(client.uptime / 3600000) % 24}h ${Math.floor(client.uptime / 60000) % 60}m ${Math.floor(client.uptime / 1000) % 60}s`;
+
 		let mostPopular = { times: 0 };
-		let commandStats = bot.commandsRun.get("commandsRun", "commandStats");
-		for (let property in commandStats) {
+		let commandStats = client.commandsRun.get("commandsRun", "commandStats");
+		for (const property in commandStats) {
 			if (commandStats[property] > mostPopular.times) {
 				mostPopular = {
 					name: property,
@@ -21,15 +26,25 @@ module.exports = {
 				};
 			}
 		}
-		let embed = new discord.MessageEmbed()
-			.setTitle(`${bot.user.username}'s Info:`)
-			.setURL('')
-			.addField("Servers", guilds)
-			.addField("Users", members)
-			.addField("Team", "[SuperPhantomUser](): Developer\n[ThatsLiamS](https://discord.gg/2je9aJynqt): Developer, CFO\n[AsyncBanana](): Web developer")
-			.addField("Commands", `Since May 4 2021:\nCommands run: ${bot.commandsRun.get("commandsRun", "commandsRun")}\nMost popular command: ${mostPopular.name}`)
+
+
+		const embed = new Discord.MessageEmbed()
+			.setTitle(`${client.user.username}'s Info:`)
 			.setColor("#cd7f32")
-			.setFooter("Use c!serverinfo to view server info!");
-		send(embed);
+			.addFields(
+				{ name: `**Total Servers**`, value: `${guilds}`, inline: true },
+				{ name: `**Total Users**`, value: `${members}`, inline: true },
+				{ name: `**Total Commands**`, value: `116`, inline: true },
+
+				{ name: `**Ping:**`, value: `\`${client.ws.ping} ms\``, inline: true },
+				{ name: `**Uptime:**`, value: `\`${uptime}\``, inline: true },
+				{ name: `**Shard**`, value: `\`#1 of out 1\``, inline: true },
+
+				{ name: `**Commands run:**`, value: `\`${client.commandsRun.get("commandsRun", "commandsRun")}\``, inline: true },
+				{ name: `**Most Popular Command:**`, value: `\`${mostPopular.name}\``, inline: true },
+				{ name: `**Developers:**`, value: `[ThatsLiamS#6950](https://discord.gg/2je9aJynqt)\n[SuperPhantomUser#0441]()\n[AsyncBanana#4612]()`, inline: false },
+			);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };

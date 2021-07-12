@@ -1,3 +1,7 @@
+const Discord = require('discord.js');
+
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "cooldowns",
 	description: "See what cooldowns you have currently!",
@@ -5,15 +9,18 @@ module.exports = {
 	perms: "Embed Links",
 	tips: "Some cooldowns have precise ",
 	aliases: ["cd"],
-	execute: async function(firestore, args, command, msg, discord, data, send, bot) {
+	execute: async function(message, args, prefix, client, [, data]) {
+
 		let userData = data.data();
-		let embed = new discord.MessageEmbed()
-			.setTitle(`${msg.author.username}'s Cooldowns:`)
+		const embed = new Discord.MessageEmbed()
+			.setTitle(`${message.author.username}'s Cooldowns:`)
 			.setColor("ORANGE");
+
 		let myCooldowns = {};
-		let cooldowns = bot.cooldowns;
-		let i = msg.author.id;
+		let cooldowns = client.cooldowns;
+		let i = message.author.id;
 		let d = userData.donator;
+
 		let l = {
 			click: ["1.5 seconds", "1.125 seconds", "0.75 seconds"],
 			dynamite: ["1 second", "0.75 seconds", "0.5 seconds"],
@@ -29,7 +36,8 @@ module.exports = {
 			flip: ["1 second", "0.75 seconds", "0.5 seconds"],
 			weekly: ["1 week"]
 		};
-		for (let c in cooldowns) {
+
+		for (const c in cooldowns) {
 			let v = cooldowns[c];
 			if (v[i] == true && c != "ticket") {
 				let n = l[c];
@@ -73,12 +81,13 @@ module.exports = {
 
 		if (thisMonth == lastMonth) myCooldowns["monthly"] = l["monthly"];
 
-		for (let c in myCooldowns) {
+		for (const c in myCooldowns) {
 			let v = myCooldowns[c];
 			embed.addField(c.charAt(0).toUpperCase() + c.slice(1), v);
 		}
 
 		if (embed.fields.length == 0) embed.setDescription("No current cooldowns.");
-		send(embed);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };

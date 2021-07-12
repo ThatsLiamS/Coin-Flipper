@@ -1,3 +1,7 @@
+const Discord = require('discord.js');
+
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: `links`,
 	description: "Get some helpful links for the bot!",
@@ -5,8 +9,9 @@ module.exports = {
 	perms: "Embed Links",
 	tips: "",
 	aliases: ["website", "web", "link", "channel", "youtube", "yt", "topgg", "legal", "support", "server", "servers", "invite"],
-	execute: async function(firestore, args, command, msg, discord, data, send) {
-		let embed = new discord.MessageEmbed()
+	execute: async function(message) {
+
+		const embed = new Discord.MessageEmbed()
 			.setTitle(`Coin Flipper Links`)
 			.setColor(`#CD7F32`)
 			.addFields(
@@ -17,6 +22,7 @@ module.exports = {
 				{ name: `__Terms of Service__`, value:`[Click Here](https://docs.google.com/document/d/1EiK8197uLgdKiE4bhvT2BRQKpKmxmXMtwwKg3OA90l8/edit?usp=sharing)`, inline: true },
 				{ name: `__Privacy Policy__`, value:`[Click Here](https://docs.google.com/document/d/1TmIRFgKyp9ynlduYRjjEp77PCBTmYUzipcgFaDSTmns)`, inline: true }
 			);
-		send(embed);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };
