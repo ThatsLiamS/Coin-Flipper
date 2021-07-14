@@ -1,5 +1,9 @@
-const checkGuild = require("../../tools/checkGuild");
-const checkOnline = require("../../tools/checkOnline");
+const Discord = require('discord.js');
+
+const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
+const checkOnline = require(`${__dirname}/../../tools/checkOnline`);
+const send = require(`${__dirname}/../../tools/send`);
+
 module.exports = {
 	name: "market",
 	description: "View the CoinTopia Market!",
@@ -7,19 +11,20 @@ module.exports = {
 	perms: "Embed Links",
 	tips: "Online has to be enabled to use this",
 	aliases: ["onlinemarket", "onlineshop", "cointopiamarket", "cointopiashop", "specialshop"],
-	execute: async function(firestore, args, command, msg, discord, data, send) {
-		await checkGuild(firestore, msg.guild.id);
-		let guilddata = await firestore.doc(`/guilds/${msg.guild.id}`).get();
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
+		await checkGuild(firebase, message.guild.id);
+		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();
 		if (guilddata.data().enabled.online === false) return;
 
 		let userData = data.data();
 
-		let array = await checkOnline(firestore, msg.author.id, userData);
+		let array = await checkOnline(firebase, message.author.id, userData);
 		userData = array[1];
 		let online = array[0];
 		if (online == false) return;
 
-		let embed = new discord.MessageEmbed()
+		const embed = new Discord.MessageEmbed()
 			.setTitle("CoinTopia Market")
 			.setDescription("Use `c!buy <item>` to buy something!")
 			.addField("🏷️ Label", "`Cost:` 2000 cents `Usage:` increase your register percent by 10%!\n`Description:` a nice label that can convince people to give more money")
@@ -29,6 +34,6 @@ module.exports = {
 			.setFooter("Ultra Donators get everything 25% off!")
 			.setColor("#ad61ff");
 
-		send(embed);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };

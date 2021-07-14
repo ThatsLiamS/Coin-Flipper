@@ -1,5 +1,9 @@
-const checkGuild = require("../../../tools/checkGuild");
-const checkOnline = require("../../../tools/checkOnline");
+const Discord = require('discord.js');
+
+const checkGuild = require(`${__dirname}/../../../tools/checkGuild`);
+const checkOnline = require(`${__dirname}/../../../tools/checkOnline`);
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "tower",
 	description: "View the CoinTopia Tower!",
@@ -7,18 +11,19 @@ module.exports = {
 	perms: "Embed Links, Attach Files",
 	tips: "Online has to be enabled to use this",
 	aliases: ["cointower"],
-	execute: async function(firestore, args, command, msg, discord, data, send, bot) {
-		await checkGuild(firestore, msg.guild.id);
-		let guilddata = await firestore.doc(`/guilds/${msg.guild.id}`).get();
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
+		await checkGuild(firebase, message.guild.id);
+		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();
 		if (guilddata.data().enabled.online === false) return;
 
 		let userData = data.data();
-		let array = await checkOnline(firestore, msg.author.id, userData);
+		let array = await checkOnline(firebase, message.author.id, userData);
 		let online = array[0];
 		userData = array[1];
 		if (online == false) return;
 
-		let onlinedata = await firestore.doc(`/online/tower`).get();
+		let onlinedata = await firebase.doc(`/online/tower`).get();
 		let onlineData = onlinedata.data();
 		let highestAmt = 0;
 		let highestUsers = [];
@@ -36,8 +41,8 @@ module.exports = {
 
 		let coinStackers = [];
 
-		for (let user of highestUsers) {
-			let localUser = bot.users.cache.get(user.toString());
+		for (const user of highestUsers) {
+			let localUser = client.users.cache.get(user.toString());
 			let tag;
 			try {
 				tag = localUser.tag;
@@ -49,10 +54,10 @@ module.exports = {
 		}
 
 		let coins = onlineData.coins;
-		let yours = users[msg.author.id];
+		let yours = users[message.author.id];
 		if (yours == undefined) yours = 0;
 
-		let embed = new discord.MessageEmbed()
+		const embed = new Discord.MessageEmbed()
 			.setTitle("The Coin Tower")
 			.setDescription("How big can it get?")
 			.addField("Tower", `The tower currently has ${coins} coins!`)
@@ -61,6 +66,6 @@ module.exports = {
 			.setColor("#5500ff")
 			.setThumbnail("https://imgur.com/ClVbaOe.png");
 
-		send(embed);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };

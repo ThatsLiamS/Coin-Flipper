@@ -1,6 +1,10 @@
-const check = require("../../../tools/check");
-const checkGuild = require("../../../tools/checkGuild");
-const checkOnline = require("../../../tools/checkOnline");
+const Discord = require('discord.js');
+
+const check = require(`${__dirname}/../../../tools/check`);
+const checkGuild = require(`${__dirname}/../../../tools/checkGuild`);
+const checkOnline = require(`${__dirname}/../../../tools/checkOnline`);
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "address",
 	description: "View your or someone else's address!",
@@ -8,42 +12,51 @@ module.exports = {
 	perms: "Embed Links",
 	tips: "Online has to be enabled to use this",
 	aliases: ["adress", "getaddress", "getadress"],
-	execute: async function(firestore, args, command, msg, discord, data, send) {
+	execute: async function(message, args, prefix, client, [firebase, data]) {
 
-		await checkGuild(firestore, msg.guild.id);
-		let guilddata = await firestore.doc(`/guilds/${msg.guild.id}`).get();
+		await checkGuild(firebase, message.guild.id);
+
+		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();
 		if (guilddata.data().enabled.online === false) return;
 
-		let user = msg.mentions.users.first();
+		let user = message.mentions.users.first();
 		let userData;
 		let username;
 		let extra = "";
+
 		if (user) {
-			await check(firestore, user.id);
-			let userdata = await firestore.doc(`/users/${user.id}`).get();
+
+			await check(firebase, user.id);
+
+			let userdata = await firebase.doc(`/users/${user.id}`).get();
 			userData = userdata.data();
-			let array = await checkOnline(firestore, user.id, userData);
+			let array = await checkOnline(firebase, user.id, userData);
 			let online = array[0];
 			userData = array[1];
+
 			if (online == false) return;
+
 			username = user.username;
 			let addressLocal = userData.online.friendCode;
 			extra = `\nSend a letter to them using \`c!sendletter ${addressLocal} <content>\`!`;
 		}
 		else {
+
 			userData = data.data();
-			let array = await checkOnline(firestore, msg.author.id, userData);
+			let array = await checkOnline(firebase, message.author.id, userData);
 			let online = array[0];
 			userData = array[1];
-			if (online == false) return;
-			username = msg.author.username;
-		}
 
+			if (online == false) return;
+			username = message.author.username;
+		}
 		let address = userData.online.friendCode;
-		let embed = new discord.MessageEmbed()
+
+		const embed = new Discord.MessageEmbed()
 			.setTitle(`🏡 ${username}'s address:`)
 			.setDescription(`address ID: ${address}${extra}`)
 			.setColor("#c09cff");
-		send(embed);
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };
