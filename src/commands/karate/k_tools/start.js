@@ -1,15 +1,21 @@
-const turn = require("./turn");
-module.exports = async function start(user, other, data, otherdata, firestore, bot) {
+const turn = require(`${__dirname}/turn`);
+
+module.exports = async function start(user, other, data, otherdata, firebase, client) {
+
 	let kd = data.karate;
 	let ok = otherdata.karate;
+
 	kd.battles.in_battle = true;
 	ok.battles.in_battle = true;
-	let channel = bot.channels.cache.get(kd.battles.channel.toString());
+
+	let channel = client.channels.cache.get(kd.battles.channel.toString());
 	channel.send(`The battle has started! <@${other.id}> will go first!`, channel).catch(() => {});
+
 	let hp1 = Math.floor(5 * kd.level);
 	let hp2 = Math.floor(5 * ok.level);
 	let st1 = Math.floor(3.5 * kd.level);
 	let st2 = Math.floor(3.5 * ok.level);
+
 	kd.battles.hp = hp1;
 	kd.battles.mhp = hp1;
 	kd.battles.st = st1;
@@ -20,7 +26,9 @@ module.exports = async function start(user, other, data, otherdata, firestore, b
 	ok.battles.mst = st2;
 	data.karate = kd;
 	otherdata.karate = ok;
-	await firestore.doc(`/users/${user.id}`).set(data);
-	await firestore.doc(`/users/${other.id}`).set(otherdata);
-	turn(user.id, other.id, data, firestore, bot);
+
+	await firebase.doc(`/users/${user.id}`).set(data);
+	await firebase.doc(`/users/${other.id}`).set(otherdata);
+
+	turn(user.id, other.id, data, firebase, client);
 };

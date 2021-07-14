@@ -1,17 +1,25 @@
-const achievementAdd = require("../../../tools/achievementAdd");
+const Discord = require('discord.js');
+
+const achievementAdd = require(`${__dirname}/../../../tools/achievementAdd`);
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "karate",
 	aliases: ["stats"],
-	execute: async function(firestore, args, command, msg, discord, data, send, kd) {
+	execute: async function(message, args, prefix, client, kd, [firebase, data]) {
+
 		let userData = data.data();
 		let beltColor = kd.belt;
 		let embedColor = beltColor.toUpperCase();
+
 		if (beltColor == "white") embedColor = "#C0C0C0";
 		if (beltColor == "brown") embedColor = "#785200";
+
 		let myAbilities = kd.abilities;
-		let abilityList = ["flip", "spin", "slide", "dive", "swipe", "slice"];
+		const abilityList = ["flip", "spin", "slide", "dive", "swipe", "slice"];
 		let abilities = "";
-		for (let item of abilityList) {
+
+		for (const item of abilityList) {
 			if (myAbilities[item] == true) {
 				if (abilities == "") {
 					abilities = item.charAt(0).toUpperCase() + item.slice(1);
@@ -21,8 +29,9 @@ module.exports = {
 				}
 			}
 		}
+
 		if (abilities == "") abilities = "You have no abilities!";
-		let embed = new discord.MessageEmbed()
+		const embed = new Discord.MessageEmbed()
 			.setTitle(kd.name)
 			.addField("Type", kd.type)
 			.addFields(
@@ -38,18 +47,18 @@ module.exports = {
 				let localData = await achievementAdd(userData, "blackBelt", true);
 				if (localData) {
 					userData = localData;
-					await firestore.doc(`/users/${msg.author.id}`).set(userData);
+					await firebase.doc(`/users/${message.author.id}`).set(userData);
 				}
 			}
 			else {
 				let localData = await achievementAdd(userData, "theMaster", true);
 				if (localData) {
 					userData = localData;
-					await firestore.doc(`/users/${msg.author.id}`).set(userData);
+					await firebase.doc(`/users/${message.author.id}`).set(userData);
 				}
 			}
 		}
 
-		send(embed);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };

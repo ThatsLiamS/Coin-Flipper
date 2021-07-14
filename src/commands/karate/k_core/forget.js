@@ -1,23 +1,36 @@
+const send = require(`${__dirname}/../../../tools/send`);
+
 module.exports = {
 	name: "forget",
 	aliases: ["disown"],
-	execute: async function(firestore, args, command, msg, discord, data, send, kd) {
-		send("Are you sure you want to forget your karate coin? This cannot be undone.\n\nReply with `yes` or `no`");
-		msg.channel.awaitMessages(m => m.author.id == msg.author.id, { max: 1, time: 30000 }).then(async collected => {
+	execute: async function(message, args, prefix, client, kd, [firebase]) {
+
+		let userData = {};
+
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: "Are you sure you want to forget your karate coin? This cannot be undone.\n\nReply with `yes` or `no`" });
+
+		message.channel.awaitMessages(m => m.author.id == message.author.id, { max: 1, time: 30000 }).then(async collected => {
 			if (!collected.first()) {
-				send("You didn't answer :/");
+				send.sendChannel({ channel: message.channel, author: message.author }, { content: "You didn't answer :/" });
 				return;
 			}
-			let message = collected.first().content.toLowerCase();
-			if (message == "yes") {
+
+			let msg = collected.first().content.toLowerCase();
+			if (msg == "yes") {
+
 				kd.name = "NA";
 				userData.karate = kd;
-				await firestore.doc(`/users/${msg.author.id}`).set(userData);
-				send(`You forgot your karate coin! What was it's name again?\nAnyway, use \`c!karate setup\` to make a new one!`);
+
+				await firebase.doc(`/users/${message.author.id}`).set(userData);
+
+				send.sendChannel({ channel: message.channel, author: message.author }, { content: `You forgot your karate coin! What was it's name again?\nAnyway, use \`c!karate setup\` to make a new one!` });
+
 			}
 			else {
-				send("Phew, crisis averted");
+				send.sendChannel({ channel: message.channel, author: message.author }, { content: "Phew, crisis averted" });
+
 			}
+
 		});
 	}
 };
