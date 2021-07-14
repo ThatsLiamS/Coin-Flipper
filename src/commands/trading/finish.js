@@ -1,7 +1,10 @@
-const checkTrading = require("../../tools/checkTrading");
-const convertToEmote = require("../../tools/convertToEmote");
-const achievementAdd = require("../../tools/achievementAdd");
-const gotItem = require("../../tools/gotItem");
+const Discord = require('discord.js');
+
+const checkTrading = require(`${__dirname}/../../tools/checkTrading`);
+const convertToEmote = require(`${__dirname}/../../tools/convertToEmote`);
+const achievementAdd = require(`${__dirname}/../../tools/achievementAdd`);
+const gotItem = require(`${__dirname}/../../tools/gotItem`);
+const send = require(`${__dirname}/../../tools/send`);
 
 module.exports = {
 	name: "finish",
@@ -10,13 +13,14 @@ module.exports = {
 	perms: "",
 	tips: "If the other user adds or removes any items/cents, you will automatically unaccept",
 	aliases: ["accept"],
-	execute: async function(firestore, args, command, msg, discord, data, send, bot) {
-		let userData = data.data();
-		userData = await checkTrading(firestore, msg.author.id, userData);
-		if (userData.trading.session === null) return send("You're not in a trading session!");
-		if (msg.guild) return send("Do this in a DM!");
+	execute: async function(msg, args, prefix, client, [firebase, data]) {
 
-		if (userData.trading.session.loading) return send("The trades are final! You can't unaccept!");
+		let userData = data.data();
+		userData = await checkTrading(firebase, msg.author.id, userData);
+		if (userData.trading.session === null) return send.sendChannel({ channel: msg.channel, author: msg.author }, { content: "You're not in a trading session!" });
+		if (msg.guild) return send.sendChannel({ channel: msg.channel, author: msg.author }, { content: "Do this in a DM!" });
+
+		if (userData.trading.session.loading) return send.sendChannel({ channel: msg.channel, author: msg.author }, { content: "The trades are final! You can't unaccept!" });
 
 		let yep;
 
@@ -24,9 +28,9 @@ module.exports = {
 		else yep = true;
 
 		let other = userData.trading.session.other;
-		let otherdata = await firestore.doc(`/users/${other}`).get();
+		let otherdata = await firebase.doc(`/users/${other}`).get();
 		let otherData = otherdata.data();
-		let otherUser = bot.users.cache.get(other);
+		let otherUser = client.users.cache.get(other);
 		let dmChannel = otherUser.dmChannel;
 
 		let message1 = msg.channel.messages.cache.get(userData.trading.session.message.toString());
@@ -51,7 +55,7 @@ module.exports = {
 		if (yourTradesO.length === 0) yourTradesO = "none";
 		if (theirTradesO.length === 0) theirTradesO = "none";
 
-		let e1 = new discord.MessageEmbed()
+		const e1 = new Discord.MessageEmbed()
 			.setTitle("Trading Menu")
 			.setDescription("Use `c!addtrade` to add items to your trades, and `c!removetrade` to remove them!\nWhen you're done, use `c!finish` to accept the trades!")
 			.setColor("#33dce8")
@@ -64,7 +68,7 @@ module.exports = {
 			.setFooter("Use c!cancel to cancel the session");
 
 		if (yourTradesO.length === 0) yourTradesO = "none";
-		let e2 = new discord.MessageEmbed()
+		const e2 = new Discord.MessageEmbed()
 			.setTitle("Trading Menu")
 			.setDescription("Use `c!addtrade` to add items to your trades, and `c!removetrade` to remove them!\nWhen you're done, use `c!finish` to accept the trades!")
 			.setColor("#33dce8")
@@ -79,14 +83,14 @@ module.exports = {
 		await message1.edit(e1);
 		await message2.edit(e2);
 
-		await firestore.doc(`/users/${msg.author.id}`).set(userData);
-		await firestore.doc(`/users/${other}`).set(otherData);
+		await firebase.doc(`/users/${msg.author.id}`).set(userData);
+		await firebase.doc(`/users/${other}`).set(otherData);
 
 		if (yourDoneY.includes("true") && theirDoneY.includes("true")) {
 			userData.trading.session.loading = true;
 			otherData.trading.session.loading = true;
-			await firestore.doc(`/users/${msg.author.id}`).set(userData);
-			await firestore.doc(`/users/${other}`).set(otherData);
+			await firebase.doc(`/users/${msg.author.id}`).set(userData);
+			await firebase.doc(`/users/${other}`).set(otherData);
 
 			message1.channel.send("The trading session is ending!");
 			message2.channel.send("The trading session is ending!");
@@ -132,16 +136,16 @@ module.exports = {
 			otherData = await gotItem(otherData);
 
 			setTimeout(async () => {
-				await firestore.doc(`/users/${msg.author.id}`).set(userData);
-				await firestore.doc(`/users/${other}`).set(otherData);
+				await firebase.doc(`/users/${msg.author.id}`).set(userData);
+				await firebase.doc(`/users/${other}`).set(otherData);
 				message1.channel.send("The trading session is complete!");
 				message2.channel.send("The trading session is complete!");
 			}, 5000);
 		}
 		else {
-			msg.channel.send("You finished your trades! You must wait until the other user finishes...\nNote: if you or the other user adds or removes any items you will be unaccepted again").then(async message => {
+			msg.channel.send("You finished your trades! You must wait until the other user finishes...\nNote: if you or the other user adds or removes any items you will be unaccepted again").then(async message3 => {
 				setTimeout(async () => {
-					await message.delete();
+					await message3.delete();
 				}, 10000);
 			});
 		}

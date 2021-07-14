@@ -7,7 +7,8 @@ module.exports = {
 	perms: "",
 	cooldowny: "1 week",
 	tips: "Only donators can use this - different tiers get different amounts of cents, and all of them get at least 25,000",
-	execute: async function(firebase, args, command, message, discord, data) {
+	execute: async function(message, args, prefix, client, [firebase, data]) {
+
 		let userData = data.data();
 
 		let now = new Date();
