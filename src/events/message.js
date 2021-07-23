@@ -1,31 +1,10 @@
 const quotaExceeded = false;
 
-const check = require("../tools/checkReturn");
-const send = require(`${__dirname}/../tools/send`);
 const Discord = require('discord.js');
 const fs = require('fs');
 
-let commands = new Discord.Collection();
-const categories = fs.readdirSync(`${__dirname}/../commands/`);
-for (const category of categories) {
-	const commandFiles = fs.readdirSync(`${__dirname}/../commands/${category}`).filter(File => File.endsWith('.js'));
-	for (const file of commandFiles) {
-		const command = require(`${__dirname}/../commands/${category}/${file}`);
-		commands.set(command.name, command);
-	}
-	const subcategories = fs.readdirSync(`${__dirname}/../commands/${category}`).filter(file => !file.endsWith(".js"));
-	if (subcategories) {
-		for (const subcategory of subcategories) {
-			if(!subcategory.startsWith("k_")) {
-				const CommandFiles = fs.readdirSync(`${__dirname}/../commands/${category}/${subcategory}`);
-				for (const file of CommandFiles) {
-					const command = require(`${__dirname}/../commands/${category}/${subcategory}/${file}`);
-					commands.set(command.name, command);
-				}
-			}
-		}
-	}
-}
+const check = require(`${__dirname}/../tools/checkReturn`);
+const send = require(`${__dirname}/../tools/send`);
 
 let cooldowns = new Discord.Collection();
 
@@ -33,8 +12,6 @@ module.exports = {
 	name: 'message',
 	execute: async function(message, client, firestore) {
 		if (message.author.bot) return;
-
-		let newData;
 
 		/* Banned users */
 		let ids = ["818272959621234689", "503734990467498033", "850677330472599552"];
@@ -52,7 +29,7 @@ module.exports = {
 		const commandName = args.shift().toLowerCase();
 
 		if (commandName.length !== 0) {
-			const cmd = commands.get(commandName) || commands.find(file => file.aliases && file.aliases.includes(commandName));
+			const cmd = client.commands.get(commandName) || client.commands.find(file => file.aliases && file.aliases.includes(commandName));
 			if (cmd) {
 				let allowed = true;
 
@@ -106,12 +83,19 @@ module.exports = {
 				let cooldownAmount = (cmd.cooldown || 0) * 1000;
 
 				if (cmd.name == "flip" && message.channel.id == '832245298969182246') { cooldownAmount = 0; }
-				if (allowed == true) {
-					const data = await firestore.doc(`/users/${message.author.id}`).get();
-					newData = await check(firestore, data, message.author.id);
 
-					if (newData.data().donator == 1) { cooldownAmount = Math.floor(cooldownAmount * 0.75); }
-					if (newData.data().donator == 2) { cooldownAmount = Math.floor(cooldownAmount * 0.5); }
+				let data;
+				if (allowed == true) {
+					const checkingData = await firestore.doc(`/users/${message.author.id}`).get();
+					data = await check(firestore, checkingData, message.author.id);
+
+					if (data.data().donator == 1) { cooldownAmount = Math.floor(cooldownAmount * 0.75); }
+					if (data.data().donator == 2) { cooldownAmount = Math.floor(cooldownAmount * 0.5); }
+				}
+
+				if (data.data().inv.toolbox == false && allowed == true) {
+					send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, only Coin Flipper developers can use this command!" });
+					allowed = true;
 				}
 
 				if (timestamps.has(message.author.id)) {
@@ -126,10 +110,8 @@ module.exports = {
 
 				if (allowed == true) {
 
-					// cmd.execute(message, args, prefix, client, [firebase, newData]);
-					cmd.execute(firestore, args, commandName, message, Discord, newData, send, client);
+					cmd.execute(message, args, prefix, client, [firestore, data]);
 
-					/* Database logs*/
 					let commandsRun = client.commandsRun.get("commandsRun", "commandsRun");
 					if (!commandsRun) { commandsRun = 0; }
 					client.commandsRun.set("commandsRun", commandsRun++, "commandsRun");
@@ -141,7 +123,7 @@ module.exports = {
 
 					commandStats[cmd.name] = cmdStats++;
 					client.commandsRun.set("commandsRun", commandStats, "commandStats");
-					/* Cooldowns */
+
 					timestamps.set(message.author.id, now);
 					setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 

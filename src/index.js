@@ -21,6 +21,29 @@ const ap = autoposter(`${process.env['API_TOKEN']}`, client);
 ap.on('posted', () => {});
 
 const fs = require('fs');
+
+client.commands = new Discord.Collection();
+const categories = fs.readdirSync(`${__dirname}/commands/`);
+for (const category of categories) {
+	const commandFiles = fs.readdirSync(`${__dirname}/commands/${category}`).filter(File => File.endsWith('.js'));
+	for (const file of commandFiles) {
+		const command = require(`${__dirname}/commands/${category}/${file}`);
+		client.commands.set(command.name, command);
+	}
+	const subcategories = fs.readdirSync(`${__dirname}/commands/${category}`).filter(file => !file.endsWith(".js"));
+	if (subcategories) {
+		for (const subcategory of subcategories) {
+			if(!subcategory.startsWith("k_")) {
+				const CommandFiles = fs.readdirSync(`${__dirname}/commands/${category}/${subcategory}`);
+				for (const file of CommandFiles) {
+					const command = require(`${__dirname}/commands/${category}/${subcategory}/${file}`);
+					client.commands.set(command.name, command);
+				}
+			}
+		}
+	}
+}
+
 const eventFiles = fs.readdirSync(`${__dirname}/events`).filter(file => file.endsWith(".js"));
 for (const file of eventFiles) {
 	const event = require(`${__dirname}/events/${file}`);

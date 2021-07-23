@@ -3,37 +3,6 @@ const Discord = require('discord.js');
 
 const send = require(`${__dirname}/../../tools/send`);
 
-let commands = new Discord.Collection();
-const categories = fs.readdirSync(`${__dirname}/../commands/`);
-for (const category of categories) {
-	const commandFiles = fs.readdirSync(`${__dirname}/../commands/${category}`).filter(File => File.endsWith('.js'));
-	for (const file of commandFiles) {
-		const command = require(`${__dirname}/../commands/${category}/${file}`);
-		commands.set(command.name, command);
-	}
-	const subcategories = fs.readdirSync(`${__dirname}/../commands/${category}`).filter(file => !file.endsWith(".js"));
-	if (subcategories) {
-		for (const subcategory of subcategories) {
-			if(!subcategory.startsWith("k_")) {
-				const CommandFiles = fs.readdirSync(`${__dirname}/../commands/${category}/${subcategory}`);
-				for (const file of CommandFiles) {
-					const command = require(`${__dirname}/../commands/${category}/${subcategory}/${file}`);
-					commands.set(command.name, command);
-				}
-			}
-		}
-	}
-}
-
-commands.help = {
-	name: "help",
-	description: "Get a list of all commands, or specify one in particular!",
-	argument: "Optional: aa command category (ex. currency or info), or a specific command (ex. flip or bal)",
-	perms: "Embed Links",
-	tips: "",
-	aliases: ["commands", "commandlist"]
-};
-
 module.exports = {
 	name: "help",
 	description: "Get a list of all commands, or specify one in particular!",
@@ -41,7 +10,7 @@ module.exports = {
 	perms: "Embed Links",
 	tips: "",
 	aliases: ["commands", "commandlist"],
-	execute: async function(message, args) {
+	execute: async function(message, args, prefix, client) {
 
 		if (!args[0]) {
 			let initialEmbed = new Discord.MessageEmbed()
@@ -133,7 +102,7 @@ module.exports = {
 		}
 		else {
 			let cmdArgs = args.slice(0).join(" ");
-			const cmd = commands.get(cmdArgs) || commands.find(file => file.aliases && file.aliases.includes(cmdArgs));
+			const cmd = client.commands.get(cmdArgs) || client.commands.find(file => file.aliases && file.aliases.includes(cmdArgs));
 
 			if (cmd == undefined) return send("That's not a valid command!");
 			let title = cmdArgs.charAt(0).toUpperCase() + cmdArgs.slice(1);

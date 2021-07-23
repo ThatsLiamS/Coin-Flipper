@@ -1,6 +1,6 @@
-const checkGuild = require(`${__dirname}../../../tools/checkGuild`);
-const checkOnline = require(`${__dirname}../../../tools/checkOnline`);
-const achievementAdd = require(`${__dirname}../../../tools/achievementAdd`);
+const checkGuild = require(`${__dirname}/../../../tools/checkGuild`);
+const checkOnline = require(`${__dirname}/../../../tools/checkOnline`);
+const achievementAdd = require(`${__dirname}/../../../tools/achievementAdd`);
 const send = require(`${__dirname}/../../../tools/send`);
 
 module.exports = {

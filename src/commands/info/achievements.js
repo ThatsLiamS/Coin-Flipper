@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
-const achievements = require(`${__dirname}../../tools/constants`).achievements;
-const convertToEmote = require(`${__dirname}../../tools/convertToEmote`);
+const achievements = require(`${__dirname}/../../tools/constants`).achievements;
+const convertToEmote = require(`${__dirname}/../../tools/convertToEmote`);
 const send = require(`${__dirname}/../../tools/send`);
 
 module.exports = {
