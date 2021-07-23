@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 const profanityCheck = require(`${__dirname}/../../../tools/profanities`).profanityCheck;
 const send = require(`${__dirname}/../../../tools/send`);
 
@@ -59,7 +61,11 @@ module.exports = {
 				userData.karate = kd;
 				await firebase.doc(`/users/${message.author.id}`).set(userData);
 
-				send.sendChannel({ channel: message.channel, author: message.author }, { content: `You sucessfully set up your katate coin!\n**Name:** ${kd.name}\n**Type:** ${kd.type}\nUse \`c!karate\` to view it!` });
+				const embed = new Discord.MessageEmbed()
+					.setTitle('Created Karate Coin')
+					.setDescription(`You sucessfully set up your katate coin!\n**Name:** ${kd.name}\n**Type:** ${kd.type}\nUse \`c!karate\` to view it!`);
+				send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
+
 
 			});
 		});

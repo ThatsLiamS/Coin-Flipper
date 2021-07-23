@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
 const checkOnline = require(`${__dirname}/../../tools/checkOnline`);
 const send = require(`${__dirname}/../../tools/send`);
@@ -100,6 +102,10 @@ module.exports = {
 		userData.addons.customaddons = cd;
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You changed your addon's name from \`${name}\` to \`${newName}\`!` });
+		const embed = new Discord.MessageEmbed()
+			.setTitle('Updated addon')
+			.setDescription(`You changed your addon's name from \`${name}\` to \`${newName}\`!`);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
+
 	}
 };

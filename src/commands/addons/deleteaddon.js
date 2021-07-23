@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
 const checkOnline = require(`${__dirname}/../../tools/checkOnline`);
 const send = require(`${__dirname}/../../tools/send`);
@@ -130,7 +132,11 @@ module.exports = {
 				userData.addons.customaddons = cd;
 				await firebase.doc(`/users/${message.author.id}`).set(userData);
 
-				send.sendChannel({ channel: message.channel, author: message.author }, { content: `You deleted your addon **${exists.name}**!` });
+				const embed = new Discord.MessageEmbed()
+					.setTitle('Deleted addon')
+					.setDescription(`You deleted your addon **${exists.name}**!`);
+				send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
+
 			}
 		});
 	}

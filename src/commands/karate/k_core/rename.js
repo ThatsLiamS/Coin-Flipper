@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 const send = require(`${__dirname}/../../../tools/send`);
 
 module.exports = {
@@ -23,7 +25,11 @@ module.exports = {
 		kd.name = newName.charAt(0).toUpperCase() + newName.slice(1);
 		userData.karate = kd;
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You renamed your karate coin ${newName}!` });
+
+		const embed = new Discord.MessageEmbed()
+			.setTitle('Updated Karate Coin')
+			.setDescription(`You renamed your karate coin ${newName}!`);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 
 	}
 };

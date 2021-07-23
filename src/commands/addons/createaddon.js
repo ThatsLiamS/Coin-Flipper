@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
 const checkOnline = require(`${__dirname}/../../tools/checkOnline`);
 const achievementAdd = require(`${__dirname}/../../tools/achievementAdd`);
@@ -72,7 +74,12 @@ module.exports = {
 				author: message.author.id
 			};
 		}
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You created your addon **${name}**! To view it, do \`c!viewaddon ${name}\`!` });
+
+		const embed = new Discord.MessageEmbed()
+			.setTitle('Created addon')
+			.setDescription(`You created your addon **${name}**! To view it, do \`c!viewaddon ${name}\`!`);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
+
 		userData.addons.customaddons = cd;
 
 		userData = await achievementAdd(userData, "builder");

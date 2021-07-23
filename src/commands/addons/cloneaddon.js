@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 const checkGuild = require(`${__dirname}/../../tools/checkGuild`);
 const checkOnline = require(`${__dirname}/../../tools/checkOnline`);
 const send = require(`${__dirname}/../../tools/send`);
@@ -82,7 +84,11 @@ module.exports = {
 				author: message.author.id
 			};
 		}
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You cloned your addon **${exists.name}**! To view your new addon, do \`c!viewaddon ${name}\`!` });
+
+		const embed = new Discord.MessageEmbed()
+			.setTitle('Cloned addon')
+			.setDescription(`You cloned your addon **${exists.name}**! To view your new addon, do \`c!viewaddon ${name}\`!`);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 
 		userData.addons.customaddons = cd;
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
