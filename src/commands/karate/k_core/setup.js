@@ -23,7 +23,7 @@ module.exports = {
 				send.sendChannel({ channel: message.channel, author: message.author }, { content: "You can't name your karate coin `NA` for technical reasons ||also why would you want to||" });
 				return;
 			}
-			let hasProfanity = await profanityCheck(message);
+			let hasProfanity = await profanityCheck(message.content);
 			if (hasProfanity == true) {
 				send.sendChannel({ channel: message.channel, author: message.author }, { content: "That name has a nasty word in it! :0" });
 				return;

@@ -132,4 +132,5 @@ module.exports = async function check(firestore, userId) {
 			donator: 0
 		});
 	}
+	return Ref;
 };

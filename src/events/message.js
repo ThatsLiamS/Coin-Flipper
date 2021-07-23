@@ -93,9 +93,11 @@ module.exports = {
 					if (data.data().donator == 2) { cooldownAmount = Math.floor(cooldownAmount * 0.5); }
 				}
 
-				if (data.data().inv.toolbox == false && allowed == true) {
-					send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, only Coin Flipper developers can use this command!" });
-					allowed = true;
+				if(cmd.developerOnly && allowed == true) {
+					if (data.data().inv.toolbox == false) {
+						send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, only Coin Flipper developers can use this command!" });
+						allowed = false;
+					}
 				}
 
 				if (timestamps.has(message.author.id)) {

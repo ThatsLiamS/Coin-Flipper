@@ -16,8 +16,8 @@ const enmap = require("enmap");
 client.prefixes = new enmap({ name: "prefixes" });
 client.commandsRun = new enmap({ name: "commandsRun" });
 
-const autoposter = require("topgg-autoposter");
-const ap = autoposter(`${process.env['API_TOKEN']}`, client);
+const { AutoPoster } = require("topgg-autoposter");
+const ap = AutoPoster(`${process.env['API_TOKEN']}`, client);
 ap.on('posted', () => {});
 
 const fs = require('fs');
