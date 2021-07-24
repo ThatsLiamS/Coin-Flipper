@@ -104,7 +104,7 @@ module.exports = {
 			let cmdArgs = args.slice(0).join(" ");
 			const cmd = client.commands.get(cmdArgs) || client.commands.find(file => file.aliases && file.aliases.includes(cmdArgs));
 
-			if (cmd == undefined) return send("That's not a valid command!");
+			if (cmd == undefined) return send.sendChannel({ channel: message.channel, author: message.author }, { content: 'That is not a valid command.' });
 			let title = cmdArgs.charAt(0).toUpperCase() + cmdArgs.slice(1);
 			const embed = new Discord.MessageEmbed()
 				.setTitle(title)

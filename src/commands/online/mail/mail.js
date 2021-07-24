@@ -30,6 +30,6 @@ module.exports = {
 		}
 
 
-		send(embed);
+		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
 };
