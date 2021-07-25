@@ -26,6 +26,6 @@ module.exports = {
 			await firebase.doc(`/users/${message.author.id}`).set(userData);
 		}
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `I have changed ${user ? user : message.author}'s tookbox status` });
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `I have changed ${user ? user : message.author}'s toolbox status` });
 	}
 };

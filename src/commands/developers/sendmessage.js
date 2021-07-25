@@ -11,7 +11,7 @@ module.exports = {
 		msg = msg.charAt(0).toUpperCase() + msg.slice(1);
 
 		user.send(msg).catch(err => {
-			send("An error occured:\n```\n" + err + "\n```");
+			send("An error occurred:\n```\n" + err + "\n```");
 		});
 
 		send.sendChannel({ channel: message.channel, author: message.author }, { content: 'I have sent it.' });
