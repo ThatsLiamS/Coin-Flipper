@@ -63,7 +63,7 @@ module.exports = {
 
 				const embed = new Discord.MessageEmbed()
 					.setTitle('Created Karate Coin')
-					.setDescription(`You sucessfully set up your katate coin!\n**Name:** ${kd.name}\n**Type:** ${kd.type}\nUse \`c!karate\` to view it!`);
+					.setDescription(`You successfully set up your katate coin!\n**Name:** ${kd.name}\n**Type:** ${kd.type}\nUse \`c!karate\` to view it!`);
 				send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 
 

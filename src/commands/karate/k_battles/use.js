@@ -12,7 +12,7 @@ module.exports = {
 		let userData = data.data();
 
 		if (kd.battles.in_battle == false) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You're not in a battle!" });
-		if (kd.battles.turn == false) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "It's not your turn! Dont cheat" });
+		if (kd.battles.turn == false) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "It's not your turn! Don't cheat" });
 		if (!args[1]) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need to specify an item to use!" });
 
 		let item = args[1];
