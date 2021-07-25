@@ -33,7 +33,7 @@ module.exports = {
 			otherUser.send("The trading session was cancelled!");
 		}
 		catch {
-			send.sendChannel({ channel: message.channel, author: message.author }, { content: "An error occured. The other user has to cancel the trading session as well." });
+			send.sendChannel({ channel: message.channel, author: message.author }, { content: "An error occurred. The other user has to cancel the trading session as well." });
 		}
 	}
 };
