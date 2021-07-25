@@ -7,7 +7,7 @@ const send = require(`${__dirname}/../../../tools/send`);
 
 module.exports = {
 	name: "address",
-	description: "View your or someone else's address!",
+	description: "View your or someone elses address!",
 	argument: "Optional: a user mention",
 	perms: "Embed Links",
 	tips: "Online has to be enabled to use this",
