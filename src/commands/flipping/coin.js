@@ -4,7 +4,7 @@ const send = require(`${__dirname}/../../tools/send`);
 
 module.exports = {
 	name: "coin",
-	description: "Add your or someone else's profile picture to a coin!",
+	description: "Add your or someone elses profile picture to a coin!",
 	argument: "Optional: a user mention or user ID",
 	perms: "Embed Links, Attach Files",
 	tips: "",
