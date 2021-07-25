@@ -30,7 +30,7 @@ module.exports = {
 
 		if (cd.first.name.toLowerCase() != "none" && cd.second.name.toLowerCase() != "none" && cd.third.name.toLowerCase() != "none") return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You already have a maximum of 3 custom addons! You can delete one using `c!deleteaddon`" });
 
-		if (cd.first.name.toLowerCase() == name || cd.second.name.toLowerCase() == name || cd.third.name.toLowerCase() == name) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You alraedy have a custom addon named that!" });
+		if (cd.first.name.toLowerCase() == name || cd.second.name.toLowerCase() == name || cd.third.name.toLowerCase() == name) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You already have a custom addon named that!" });
 		let array = await checkOnline(firebase, message.author.id, userData);
 		userData = array[1];
 		let online = array[0];
