@@ -25,6 +25,6 @@ module.exports = {
 		guildData["enabled"][feature] = true;
 		await firebase.doc(`/guilds/${message.guild.id}`).set(guildData);
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You disabled **${feature}**!` });
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You enabled **${feature}**!` });
 	}
 };

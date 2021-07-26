@@ -11,4 +11,4 @@ bower_components
 .env.production
 
 # database files
-src/data/
+data/

@@ -1,7 +1,6 @@
 const quotaExceeded = false;
 
 const Discord = require('discord.js');
-const fs = require('fs');
 
 const check = require(`${__dirname}/../tools/checkReturn`);
 const send = require(`${__dirname}/../tools/send`);
@@ -114,7 +113,7 @@ module.exports = {
 
 					cmd.execute(message, args, prefix, client, [firestore, data]);
 
-					let commandsRun = client.commandsRun.get("commandsRun", "commandsRun");
+					/*let commandsRun = client.commandsRun.get("commandsRun", "commandsRun");
 					if (!commandsRun) { commandsRun = 0; }
 					client.commandsRun.set("commandsRun", commandsRun++, "commandsRun");
 
@@ -124,7 +123,7 @@ module.exports = {
 					if (cmdStats === undefined) { cmdStats = 0; }
 
 					commandStats[cmd.name] = cmdStats++;
-					client.commandsRun.set("commandsRun", commandStats, "commandStats");
+					client.commandsRun.set("commandsRun", commandStats, "commandStats");*/
 
 					timestamps.set(message.author.id, now);
 					setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);

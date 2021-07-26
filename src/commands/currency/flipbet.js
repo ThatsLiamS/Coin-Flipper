@@ -102,7 +102,7 @@ module.exports = {
 			winnerBal = Number(winnerBal) + Number(cents);
 			ld.currencies.cents = winnerBal;
 
-			send(`A total of ${users.length} users participated in this flip bet, and <@${userId}> won!\nThey won ${cents} cents!`);
+			send.sendChannel({ channel: message.channel, author: message.author }, { content: `A total of ${users.length} users participated in this flip bet, and <@${userId}> won!\nThey won ${cents} cents!` });
 
 			await firebase.doc(`/users/${userId}`).set(ld);
 		}, 60000);

@@ -67,9 +67,9 @@ module.exports = {
 				send.sendChannel({ channel: message.channel, author: message.author }, { content: "You didn't answer :/" });
 				return;
 			}
-			message = collected.first().content.toLowerCase();
-			if (message != "yes" && message != "no") { return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid choice!" }); }
-			if (message == "no") { return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Um ok then" }); }
+			let msg = collected.first().content.toLowerCase();
+			if (msg != "yes" && msg != "no") { return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid choice!" }); }
+			if (msg == "no") { return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Um ok then" }); }
 			else {
 				if (type == "custom") {
 					if (cd.first.name == exists.name) {

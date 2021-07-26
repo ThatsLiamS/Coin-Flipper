@@ -55,7 +55,7 @@ module.exports = {
 		userData.priceList = fullPriceList;
 
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
-		send(`What do you want to dropship? (One of them may do really well)\n\`${sell1}\`\n\`${sell2}\`\n\`${sell3}\``);
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `What do you want to dropship? (One of them may do really well)\n\`${sell1}\`\n\`${sell2}\`\n\`${sell3}\`` });
 
 		message.channel.awaitMessages(m => m.author.id == message.author.id, { max: 1, time: 20000 }).then(async collected => {
 			if (!collected.first()) {

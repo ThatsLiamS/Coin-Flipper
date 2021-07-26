@@ -1,7 +1,7 @@
 const admin = require("firebase-admin");
 const Discord = require('discord.js');
 
-const send = require(`${__dirname}/../../tools/send`);
+const send = require(`${__dirname}/../../../tools/send`);
 
 module.exports = {
 	name: "mail",

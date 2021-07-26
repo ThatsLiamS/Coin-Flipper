@@ -1,4 +1,3 @@
-const D_Buttons = require('discord-buttons');
 const Discord = require('discord.js');
 
 const check = require(`${__dirname}/../../tools/check`);
@@ -43,9 +42,8 @@ module.exports = {
 		let type = ["repeat", "unscramble", "send", "buttons"];
 		let random = Math.random() * 10;
 
-		if (random < 2.5) type = "repeat";
-		else if (random < 5) type = "unscramble";
-		else if (random < 7.5) type = "buttons";
+		if (random < 3.3) type = "repeat";
+		else if (random < 6.6) type = "unscramble";
 		else type = "send";
 
 		const embed = new Discord.MessageEmbed()
@@ -231,94 +229,6 @@ module.exports = {
 
 					});
 				});
-			}
-			else {
-				guildData.minigames.looking_for = "";
-				guildData.minigames.in_game = true;
-
-				let message = await msg.channel.send("When I say go, click the button that matches the word!\n\n`???`\n\nNot time yet!");
-
-				setTimeout(async () => {
-					let word1 = minigameWords[Math.floor(Math.random() * minigameWords.length)];
-					let word2 = minigameWords[Math.floor(Math.random() * minigameWords.length)];
-					let word3 = minigameWords[Math.floor(Math.random() * minigameWords.length)];
-					let word4 = minigameWords[Math.floor(Math.random() * minigameWords.length)];
-
-					let wordList = [word1, word2, word3, word4];
-					let wordFirst = wordList[Math.floor(Math.random() * wordList.length)];
-					wordList.splice(wordList.indexOf(wordFirst), 1);
-					let wordSecond = wordList[Math.floor(Math.random() * 		wordList.length)];
-					wordList.splice(wordList.indexOf(wordSecond), 1);
-					let wordThird = wordList[Math.floor(Math.random() * wordList.length)];
-					wordList.splice(wordList.indexOf(wordThird), 1);
-					let wordFourth = wordList[Math.floor(Math.random() * wordList.length)];
-					wordList.splice(wordList.indexOf(wordFourth), 1);
-					let newWordList = [wordFirst, wordSecond, wordThird, wordFourth];
-					let wordChosen = newWordList[Math.floor(Math.random() * newWordList.length)];
-
-					let button1 = new D_Buttons.MessageButton()
-						.setStyle("blurple")
-						.setLabel(wordFirst)
-						.setID(`button_${wordFirst}`);
-					let button2 = new D_Buttons.MessageButton()
-						.setStyle("blurple")
-						.setLabel(wordSecond)
-						.setID(`button_${wordSecond}`);
-					let button3 = new D_Buttons.MessageButton()
-						.setStyle("blurple")
-						.setLabel(wordThird)
-						.setID(`button_${wordThird}`);
-					let button4 = new D_Buttons.MessageButton()
-						.setStyle("blurple")
-						.setLabel(wordFourth)
-						.setID(`button_${wordFourth}`);
-
-					await message.edit(`When I say go, click the button that matches the word!\n\n\`${wordChosen}\`\n\n**GO!**`, {
-						buttons: [button1, button2, button3, button4]
-					});
-					await message.awaitButtons(button => button.id == `button_${wordChosen}`, { time: 15000, max: 1 }).then(async collected => {
-
-						let button = collected.first();
-						if (!button) {
-							send.sendChannel({ channel: msg.channel, author: msg.author }, { content: "No one clicked it in time!" });
-
-							guildData.minigames.in_game = false;
-							guildData.minigames.starting = false;
-							await firebase.doc(`/guilds/${msg.guild.id}`).set(guildData);
-							return;
-						}
-
-						await check(firebase, button.clicker.user.id);
-						let userdata = await firebase.doc(`/users/${button.clicker.user.id}`).get();
-						let userData = userdata.data();
-						let centAmt = 10;
-						if (userData.inv.controller > 0) centAmt = 50;
-
-						let bal = userData.currencies.cents;
-						bal = Number(bal) + Number(centAmt);
-						userData.currencies.cents = bal;
-
-						let wins = userData.stats.minigames_won;
-						wins = Number(wins) + Number(1);
-
-						userData.stats.minigames_won = wins;
-						guildData.minigames.in_game = false;
-						guildData.minigames.starting = false;
-
-						await firebase.doc(`/users/${button.clicker.user.id}`).set(userData);
-						await firebase.doc(`/guilds/${msg.guild.id}`).set(guildData);
-
-						button.reply.send("You won!", true);
-
-						await button1.setDisabled();
-						await button2.setDisabled();
-						await button3.setDisabled();
-						await button4.setDisabled();
-
-						send.sendChannel({ channel: msg.channel, author: msg.author }, { content: `${button.clicker.user} answered first and got 10 cents!` });
-
-					});
-				}, 3000);
 			}
 		}, 5000);
 	}

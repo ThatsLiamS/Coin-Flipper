@@ -51,4 +51,23 @@ for (const file of eventFiles) {
 	else { client.on(event.name, (...args) => event.execute(...args, client, firestore));}
 }
 
+async function sendError(error) {
+
+	const channel = client.channels.cache.get('851193749983723551');
+	const embed = new Discord.MessageEmbed()
+		.setDescription(error);
+
+	await channel.send(embed);
+}
+
+process.on('uncaughtException', async (err) => {
+	await sendError(err);
+});
+process.on('warning', async (err) => {
+	await sendError(err);
+});
+process.on('uncaughtExceptionMonitor', async (err) => {
+	await sendError(err);
+});
+
 client.login(process.env['BotToken']);

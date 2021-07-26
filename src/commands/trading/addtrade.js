@@ -1,3 +1,5 @@
+const Discord = require('discord.js');
+
 const checkTrading = require(`${__dirname}/../../tools/checkTrading`);
 const convertToEmote = require(`${__dirname}/../../tools/convertToEmote`);
 const itemList = require(`${__dirname}/../../tools/constants`).itemlist;
@@ -9,7 +11,7 @@ module.exports = {
 	argument: "The item you want to add",
 	perms: "",
 	tips: "",
-	execute: async function(firebase, args, command, msg, Discord, data, f, client) {
+	execute: async function(msg, args, prefix, client, [firebase, data]) {
 
 		let userData = data.data();
 		userData = await checkTrading(firebase, msg.author.id, userData);
