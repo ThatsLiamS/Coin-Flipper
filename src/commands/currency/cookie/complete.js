@@ -25,7 +25,7 @@ module.exports = {
 				await firebase.doc(`/users/${message.author.id}`).set(userData);
 			}
 			catch {
-				send.sendChannel({ channel: message.channel, author: message.author }, { content: "please enable DMs so I can send you the code!" });
+				send.sendChannel({ channel: message.channel, author: message.author }, { content: "please enable your DMs so I can send you the code!" });
 			}
 		}
 		return;

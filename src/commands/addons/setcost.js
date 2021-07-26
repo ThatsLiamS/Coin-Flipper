@@ -52,6 +52,6 @@ module.exports = {
 		userData.addons.customaddons = cd;
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You set your addons cost to \`${cost}\` cents!` });
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `Successfully set it to: \`${cost}\` cents!` });
 	}
 };

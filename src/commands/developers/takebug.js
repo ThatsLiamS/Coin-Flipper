@@ -35,7 +35,7 @@ module.exports = {
 			send.sendChannel({ channel: message.channel, author: message.author }, { content: `You took a bug from <@${message.author.id}>! You now have ${userData.bugs} bugs!` });
 
 			const channel = client.channels.cache.get("832245299409846307");
-			channel.send(`${message.author.tag} with ID ${message.author.id} took a bug from them self!`).catch(() => {});
+			channel.send(`${message.author.tag} with ID ${message.author.id} took a bug from themself!`).catch(() => {});
 		}
 	}
 };

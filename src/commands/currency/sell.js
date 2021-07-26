@@ -53,7 +53,7 @@ module.exports = {
 		userData.currencies.cents = bal;
 
 		let extra = "";
-		if (userData.donator == 2 && !item.id.startsWith("gift")) extra = "\nSince you're Platinum, you got 15% more!";
+		if (userData.donator == 2 && !item.id.startsWith("gift")) extra = "\nSince you're a Platinum supporter, you got 15% more!";
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`Congrats, ${message.author.username}!`)

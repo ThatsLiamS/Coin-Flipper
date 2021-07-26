@@ -16,7 +16,7 @@ module.exports = {
 		let userData = data.data();
 		let dynamite = userData.inv.dynamite;
 		if (dynamite === undefined) dynamite = 0;
-		if (dynamite < 1) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Uhh idk if you noticed but you don't have dynamite" });
+		if (dynamite < 1) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "I'm sorry, you do not have that item." });
 
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`KABOOM`)

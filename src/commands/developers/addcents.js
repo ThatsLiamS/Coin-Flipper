@@ -34,7 +34,7 @@ module.exports = {
 			await firebase.doc(`/users/${message.author.id}`).set(userData);
 
 			const channel = client.channels.cache.get("832245299409846307");
-			send.sendChannel({ channel: channel, author: message.author }, { content: `${message.author.tag} with ID ${message.author.id} used \`c!addcents\` on themselves! They added ${args[0]} cents!` });
+			send.sendChannel({ channel: channel, author: message.author }, { content: `${message.author.tag} with ID ${message.author.id} used \`c!addcents\` on themself! They added ${args[0]} cents!` });
 
 		}
 	}

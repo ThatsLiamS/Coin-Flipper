@@ -35,7 +35,7 @@ module.exports = {
 		if (all) userData = await achievementAdd(userData, "secured");
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You deposited ${amt} cents into the register!` });
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You deposited \`${amt}\` cents into your register!` });
 
 	}
 };

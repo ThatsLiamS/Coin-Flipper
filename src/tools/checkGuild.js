@@ -40,4 +40,5 @@ module.exports = async function checkGuild(firestore, guildId) {
 			}
 		});
 	}
+	return Ref;
 };

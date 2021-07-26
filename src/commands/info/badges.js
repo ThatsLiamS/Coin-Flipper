@@ -35,7 +35,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle("Badges:")
 			.setDescription("Important Note: none of these badges do anything lol")
-			.addField("Exclusive Badges", `${badgeEmotes.developer} Developer: Be on the Coin Flipper Development Team\n${badgeEmotes.partnered_dev} Partnered Dev: Partner your botwith Coin Flipper (you need at least 350 servers)\n${badgeEmotes.bug_hunter} Bug Hunter: Find a bug in the bot and report it\n${badgeEmotes.bug_poacher} Bug Poacher: Find 5 bugs in the bot and report them\n\n${badgeEmotes.gold_tier} Gold Tier: Purchase **Coin Flipper Gold**\n${badgeEmotes.platinum_tier} Platinum Tier: Purchase **Coin Flipper Platinum**`)
+			.addField("Exclusive Badges", `${badgeEmotes.developer} Developer: Be on the Coin Flipper Development Team\n${badgeEmotes.partnered_dev} Partnered Dev: Partner your bot with Coin Flipper (you need at least 350 servers)\n${badgeEmotes.bug_hunter} Bug Hunter: Find a bug in the bot and report it\n${badgeEmotes.bug_poacher} Bug Poacher: Find 5 bugs in the bot and report them\n\n${badgeEmotes.gold_tier} Gold Tier: Purchase **Coin Flipper Gold**\n${badgeEmotes.platinum_tier} Platinum Tier: Purchase **Coin Flipper Platinum**`)
 			.setColor("#54fff1")
 			.setFooter("Use c!claim <badge> to claim a badge!");
 

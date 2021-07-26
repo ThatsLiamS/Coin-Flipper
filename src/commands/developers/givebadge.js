@@ -31,7 +31,7 @@ module.exports = {
 			send.sendChannel({ channel: message.channel, author: message.author }, { content: `You gave <@${message.author.id}> the badge!` });
 
 			const channel = client.channels.cache.get("832245299409846307");
-			send.sendChannel({ channel: channel, author: message.author }, { content: `${message.author.tag} with ID ${message.author.id} gave themselves the ${args[0]} badge!` });
+			send.sendChannel({ channel: channel, author: message.author }, { content: `${message.author.tag} with ID ${message.author.id} gave themself the ${args[0]} badge!` });
 
 		}
 

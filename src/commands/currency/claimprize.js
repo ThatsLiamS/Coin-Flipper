@@ -11,7 +11,7 @@ module.exports = {
 	execute: async function(message, args, prefix, client, [firebase, data]) {
 
 		let userData = data.data();
-		if (userData.lottery.id == 0) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need to play a lottery game using `c!lottery`" });
+		if (userData.lottery.id == 0) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need to enter the lottery: `c!lottery`" });
 		if (userData.lottery.won == false) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, you didn't win" });
 
 		let lotteryPrize = userData.lottery.prize;
