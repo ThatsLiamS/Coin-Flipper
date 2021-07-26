@@ -10,7 +10,7 @@ module.exports = {
 		const embed1 = new Discord.MessageEmbed()
 			.setTitle("Welcome to Karate Coins! - Page 1/3")
 			.setDescription("Karate Coins are coins that do karate! Finally, the thing you never knew you wanted! Using Karate Coins is simple - you train them, level them up, give them abilities, and fight with other players!")
-			.addField("To Start", "Use the command `c!karate setup` to set up your coin! (choose their name and type - don't worry, you can always rename it using `c!karate rename`). Once you do that, you'll be able to use `c!karate` to view your coin! The color on the side of the embed is your karate coin's belt! You always start with a white belt and gradualy make your way up to a black belt!")
+			.addField("To Start", "Use the command `c!karate setup` to set up your coin! (choose their name and type - don't worry, you can always rename it using `c!karate rename`). Once you do that, you'll be able to use `c!karate` to view your coin! The color on the side of the embed is your karate coin's belt! You always start with a white belt and gradually make your way up to a black belt!")
 			.addField("Getting abilities", "You can see a full list of abilities using `c!karate abilities`! Then use `c!karate gain <ability>` to gain that ability! Remember that you have to be at the required skill level to gain an ability! The **flip** ability can be gained from the start!")
 			.addField("Training", "To train your coin, you have to do 2 things. First, get the **flip** ability! (look above if you don't know how). Then use the flip addon: `c!flip train` to train your coin!")
 			.setFooter("Use \"c!karate tutorial <page>\" to switch to a different page")

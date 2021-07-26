@@ -42,7 +42,7 @@ module.exports = {
 		userData.mining = miningData;
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `**You rebirthed!**\n\nYou now have a ${easier + 10}% greater chance to get gems!` });
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `**You rebirth!**\n\nYou now have a ${easier + 10}% greater chance to get gems!` });
 
 	}
 };

@@ -9,7 +9,7 @@ module.exports = {
 	description: "Vote for the bot and get cents!",
 	argument: "None",
 	perms: "",
-	tips: "You'll have to do the command again after voting to get your reward. It may not register immediately depending on how many people are voting on Topgg",
+	tips: "You'll have to do the command again after voting to get your reward. It may not register immediately depending on how many people are voting on Top.gg",
 	aliases: ["voterewards", "voting", "topgg"],
 	execute: async function(message, args, prefix, client, [firebase, data]) {
 

@@ -51,7 +51,7 @@ const extraflips = [
 	"The coin broke apart and rearranged itself into a statue ||of a coin||",
 	"The coin coded a coin bot that got more famous than this one",
 	"The coin bought Breath Of The Wild",
-	"The coin had a battle royale",
+	"The coin had a battle royal",
 	"The coin used an uno reverse card and flipped you",
 	"The coin got a pet and killed it",
 	"The coin broke down your door",
@@ -346,7 +346,7 @@ module.exports = {
 		else if (args[0] == "dime" && userData.inv.silvercoin > 0) { flip(["The dime landed on heads", "The dime landed on tails", "The dime flexed on the penny for being 10x more useful", "The dime got 9 friends and became a dollar", "The dime realized it was the smallest coin to exist", "The dime slid across the floor", "The dime learned karate", "The dime became the CEO of a huge dime-making company", "The dime read memes for the rest of its life", `The dime sold some smoothies`]); }
 		else if (args[0] == "dollar" && userData.inv.goldcoin > 0) { flip(["The dollar landed on heads", "The dollar landed on tails", "The dollar slowly floated down", "The dollar started to flip but then remembered that it wasn't a coin and stopped", "The dollar flew out the window - you didn't care until you remembered that it was an $100 bill", "The dollar wondered why you are a flipping a dollar after buying a gold coin", "The dollar wooshed into your piggy bank", "The dollar smacked you in the face and gave you several paper cuts", "The dollar wanted to go back to its family ;-;", "The dollar spent itself on a candy"], 1.5); }
 		else if (args[0] == "24" && userData.inv.kcoin > 0) { flip(twentyfourflips, 1, 90); }
-		else if (args[0] == "train" && userData.karate.abilities.flip == true) { flip(["The coin punced", "The coin kicked", "The coin did a shuriken", "The coin attacked so fast that time slowed down for them", "The coin won a battle"], 1, 150, "karate"); }
+		else if (args[0] == "train" && userData.karate.abilities.flip == true) { flip(["The coin punched", "The coin kicked", "The coin did a shrunken", "The coin attacked so fast that time slowed down for them", "The coin won a battle"], 1, 150, "karate"); }
 		else if (args[0]) {
 
 			if (userData.addons.customaddons.first.name.toLowerCase() == args[0] && args[0] != "none") {

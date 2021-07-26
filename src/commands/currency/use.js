@@ -91,7 +91,7 @@ module.exports = {
 		}
 
 		async function function1() {
-			let responses = ["Ask again later", "Idk", "Sorry I dont know", "Why would I know", "Yes... or no... yeah idk", "Signs point to nowhere", "As I see it... i forgot", "Better not tell you now", "Cannot predict now", "Concentrate and ask again", "Don't count on me knowing", "It is uncertain", "My reply is maybe", "My sources are not credible so idk", "Outlook blank", "Reply hazy, try again", "Without a doubt I have no idea", "50% yes, 50% no"];
+			let responses = ["Ask again later", "Idk", "Sorry I don't know", "Why would I know", "Yes... or no... yeah idk", "Signs point to nowhere", "As I see it... i forgot", "Better not tell you now", "Cannot predict now", "Concentrate and ask again", "Don't count on me knowing", "It is uncertain", "My reply is maybe", "My sources are not credible so idk", "Outlook blank", "Reply hazy, try again", "Without a doubt I have no idea", "50% yes, 50% no"];
 			let response = responses[Math.floor(Math.random() * responses.length)];
 			const embed = new Discord.MessageEmbed()
 				.setTitle("The magic 8ball says....")

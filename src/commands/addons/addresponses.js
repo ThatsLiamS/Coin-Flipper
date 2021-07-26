@@ -11,8 +11,8 @@ module.exports = {
 	execute: async function(message, args, prefix, client, [firebase, data]) {
 
 		await checkGuild(firebase, message.guild.id);
-		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();
-		if (guilddata.data().enabled.customaddons == false) return;
+		let guildData = await firebase.doc(`/guilds/${message.guild.id}`).get();
+		if (guildData.data().enabled.customaddons == false) return;
 
 		let userData = data.data();
 		let cd = userData.addons.customaddons;
@@ -61,7 +61,7 @@ module.exports = {
 
 		if (exists.serveraddon === true) {
 			let sPath = false;
-			let guildData = guilddata.data();
+			let guildData = guildData.data();
 			let sad = guildData.serveraddons;
 			if (sad.first.name.toLowerCase() == name) {
 				sPath = "first";

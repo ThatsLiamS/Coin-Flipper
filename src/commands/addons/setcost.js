@@ -25,7 +25,7 @@ module.exports = {
 		let cost = args[1];
 		if (isNaN(cost)) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "The cost has to be a number!" });
 		if (cost < 0 || cost % 1 != 0) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "The cost has to be a valid number!" });
-		if (cost > 500 && userData.donator == 0) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "The max cost is 500 cents.\nDont be greedy (unless you're a donator - then be greedy and make it 1500 cents)" });
+		if (cost > 500 && userData.donator == 0) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "The max cost is 500 cents.\nDon't be greedy (unless you're a donator - then be greedy and make it 1500 cents)" });
 		if (cost > 1500) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "The max cost is 1500 cents" });
 
 		let exists = false;
@@ -52,6 +52,6 @@ module.exports = {
 		userData.addons.customaddons = cd;
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You set your addon's cost to \`${cost}\` cents!` });
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You set your addons cost to \`${cost}\` cents!` });
 	}
 };

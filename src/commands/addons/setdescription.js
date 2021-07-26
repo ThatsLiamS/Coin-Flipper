@@ -52,7 +52,7 @@ module.exports = {
 
 		userData.addons.customaddons = cd;
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You changed your addon's description from \`${oldDesc}\` to \`${description}\`!` });
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You changed your addons description from \`${oldDesc}\` to \`${description}\`!` });
 
 	}
 };

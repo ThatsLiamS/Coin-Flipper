@@ -27,7 +27,7 @@ module.exports = {
 		if (data.data().inv.silvercoin > 0) embed.addField("dime", "Has 10 silver and dime related outputs");
 		if (data.data().inv.goldcoin > 0) embed.addField("dollar", "Has 10 dollar-related outputs AND gives you 1.5x more cents");
 		if (data.data().inv.kcoin > 0) embed.addField("24", "Has 24 mining (some are minecraft) related outputs due to the medal having 24 karat gold AND has a 5% greater chance of getting a briefcase");
-		if (data.data().karate.abilities.flip == true) embed.addField("train", "Punces and kicks - train your karate coin and level it up!");
+		if (data.data().karate.abilities.flip == true) embed.addField("train", "Punches and kicks - train your karate coin and level it up!");
 
 		if (data.data().addons.customaddons.first.name.toLowerCase() != "none") {
 			let desc = data.data().addons.customaddons.first.description;
