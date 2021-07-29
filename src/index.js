@@ -53,7 +53,7 @@ for (const file of eventFiles) {
 
 async function sendError(error) {
 
-	const channel = client.channels.cache.get('851193749983723551');
+	const channel = client.channels.cache.get('868455901659541565');
 	const embed = new Discord.MessageEmbed()
 		.setDescription(error);
 

@@ -159,7 +159,7 @@ module.exports = {
 	tips: "If flipping is disabled, this won't work. If you're trying to use an addon you don't have, it'll always either land on heads or tails. To view the addons you have, do `c!addons`",
 	aliases: ["coinflip"],
 	cooldowny: "1 second",
-	cooldown: 1000,
+	cooldown: 1,
 	execute: async function(message, args, prefix, client, [firebase, data]) {
 
 		let userData = data.data();

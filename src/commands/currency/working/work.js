@@ -7,7 +7,7 @@ module.exports = {
 	description: "Work at your job and get some cents!",
 	argument: "None",
 	perms: "",
-	cooldowny: "1 hour",
+	cooldown: 3600,
 	tips: "You can only use this if you have a job! (use `c!jobs` to get a list of jobs)",
 	aliases: ["hourly"],
 	execute: async function(message, args, prefix, client, [firebase, data]) {
@@ -18,12 +18,6 @@ module.exports = {
 		if (job == "none") return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need a job to do work! Get a job using `c!jobs`" });
 		let jobFound = joblist.find(ite => ite.name.toLowerCase() == job);
 
-		let date = new Date();
-		let thisHour = date.getHours();
-		let lastHour = userData.cooldowns.work;
-		if (thisHour == lastHour) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You can only work once per hour!" });
-
-		userData.cooldowns.work = thisHour;
 		let work = jobFound.working;
 
 		let reason = work[Math.floor(Math.random() * work.length)];

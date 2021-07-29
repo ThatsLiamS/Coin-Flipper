@@ -16,13 +16,16 @@ module.exports = {
 		let ids = ["818272959621234689", "503734990467498033", "850677330472599552"];
 		if (ids.includes(message.author.id)) return;
 
-		let prefix = "c!";
+
+		let prefix = 'c!';
 		if (message.guild) {
 			client.prefixes.ensure(message.guild.id, { prefix: "c!" });
 			let guildPrefix = client.prefixes.get(message.guild.id, "prefix");
-			if (guildPrefix) { prefix = guildPrefix; }
+
+			prefix = guildPrefix ? guildPrefix : 'c!';
 		}
-		else { prefix = "c!"; }
+
+		if(!message.content.startsWith(prefix)) { return; }
 
 		const args = message.content.slice(prefix.length).trim().split(/ +/);
 		const commandName = args.shift().toLowerCase();

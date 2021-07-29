@@ -63,7 +63,7 @@ module.exports = {
 					if (i.aliases.includes(itemName)) item = i;
 				}
 			}
-			if (!item) return send("That's not a valid item!");
+			if (!item) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid item!" });
 			const embed = new Discord.MessageEmbed()
 				.setTitle(item.prof.slice(0, 2) + " " + item.prof.charAt(3).toUpperCase() + item.prof.slice(4))
 				.setDescription(item.description);

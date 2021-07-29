@@ -8,7 +8,7 @@ module.exports = {
 	description: "Blow up the chat with your dynamite!",
 	argument: "None",
 	perms: "Embed Links, Attach Files",
-	cooldown: 1000,
+	cooldown: 1,
 	cooldowny: "1 second",
 	tips: "",
 	execute: async function(message, args, prefix, client, [firebase, data]) {

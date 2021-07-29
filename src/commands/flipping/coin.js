@@ -56,6 +56,6 @@ module.exports = {
 			}]
 		};
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { msg });
+		send.sendChannel({ channel: message.channel, author: message.author }, { content: msg });
 	}
 };

@@ -8,7 +8,7 @@ module.exports = {
 	perms: "",
 	tips: "Two items will have a semi-small value, while one of them will have a huge value",
 	cooldowny: "10 seconds",
-	cooldown: 10000,
+	cooldown: 10,
 	execute: async function(message, args, prefix, client, [firebase, data]) {
 
 		let userData = data.data();
