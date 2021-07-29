@@ -20,13 +20,10 @@
 		"eslint": "^7.30.0"
 	},
 	"dependencies": {
-		"@superphantomuser/discordjs-minigames": "^1.2.2",
 		"bar-charts": "^1.0.3",
 		"canvas": "^2.8.0",
 		"dblapi.js": "^2.4.1",
-		"discord-buttons": "^4.0.0",
-		"discord.js": "^12.5.3",
-		"discord.js-reaction-menu": "^1.1.1",
+		"discord.js": "^13.0.0-dev.d310e4f.1627560163",
 		"enmap": "^5.8.6",
 		"express": "^4.17.1",
 		"firebase-admin": "^9.10.0",

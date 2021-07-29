@@ -8,7 +8,7 @@ const send = require(`${__dirname}/../tools/send`);
 let cooldowns = new Discord.Collection();
 
 module.exports = {
-	name: 'message',
+	name: 'messageCreate',
 	execute: async function(message, client, firestore) {
 		if (message.author.bot) return;
 
@@ -47,7 +47,7 @@ module.exports = {
 
 				if (cmd.permissions && allowed === true) {
 					for (const permission of cmd.permissions) {
-						if (allowed === false && !message.member.hasPermission(permission.trim().toUpperCase().replace(" ", "_")) && !message.member.hasPermission('ADMINISTRATOR')) {
+						if (allowed === false && !message.member.permissions.has(permission.trim().toUpperCase().replace(" ", "_")) && !message.member.permissions.has('ADMINISTRATOR')) {
 							await send.sendChannel({ channel: message.channel, author: message.author }, { content: `You do not have permission to use this command. To find out more information, do \`${prefix}help ${cmd.name}\`` });
 							allowed = false;
 						}

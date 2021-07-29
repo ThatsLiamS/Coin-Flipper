@@ -14,7 +14,10 @@ module.exports = {
 		const time = new Date();
 		const startTime = `${time.getHours()}:${time.getMinutes()}, ${time.getDate()}/${monthTranslating[time.getMonth()]} ${time.getFullYear()} UTC`;
 
-		await client.user.setPresence({ status: "online", activity:{ name: `coins flip in ${serverCount} servers`, type: `WATCHING` } });
+		client.user.setPresence({
+			status: "online",
+			activities: [{ type: `WATCHING`, name: `coins flip in ${serverCount} servers` }]
+		});
 
 		const channel = client.channels.cache.get('859562190758608956');
 

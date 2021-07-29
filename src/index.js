@@ -5,12 +5,15 @@ app.get('/', (req, res) => res.send('Hello World!'));
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
 
 const admin = require("firebase-admin");
-const serviceAccount = JSON.parse(process.env.FirebaseJson);
+const serviceAccount = JSON.parse(process.env['FirebaseJson']);
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 const firestore = admin.firestore();
 
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const client = new Discord.Client({
+	intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_EMOJIS', 'GUILD_WEBHOOKS'],
+	repliedUser: false
+});
 
 const enmap = require("enmap");
 client.prefixes = new enmap({ name: "prefixes" });
