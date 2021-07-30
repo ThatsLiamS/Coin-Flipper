@@ -12,6 +12,8 @@ module.exports = {
 	execute: async function(message, client, firestore) {
 		if (message.author.bot) return;
 
+		if(message.partial) { await message.fetch(); }
+
 		/* Banned users */
 		let ids = ["818272959621234689", "503734990467498033", "850677330472599552"];
 		if (ids.includes(message.author.id)) return;

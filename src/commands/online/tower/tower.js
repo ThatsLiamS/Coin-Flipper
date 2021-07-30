@@ -62,8 +62,7 @@ module.exports = {
 			.setDescription("How big can it get?")
 			.addField("Tower", `The tower currently has ${coins} coins!`)
 			.addField("Your Coins", `You have added ${yours} coins to the tower`)
-			.addField("Best Coinstackers", coinStackers)
-			.setColor("#5500ff")
+			.addField("Best Coinstackers", coinStackers.toString())
 			.setThumbnail("https://imgur.com/ClVbaOe.png");
 
 		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });

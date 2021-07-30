@@ -33,13 +33,13 @@ module.exports = {
 		if (abilities == "") abilities = "You have no abilities!";
 		const embed = new Discord.MessageEmbed()
 			.setTitle(kd.name)
-			.addField("Type", kd.type)
+			.addField("Type", kd.type.toString())
 			.addFields(
-				{ name: "XP", value: kd.xp, inline: true },
-				{ name: "Level", value: kd.level, inline: true }
+				{ name: "XP", value: kd.xp.toString(), inline: true },
+				{ name: "Level", value: kd.level.toString(), inline: true }
 			)
-			.addField("Battles Won", userData.stats.timesWon)
-			.addField("Abilities", abilities)
+			.addField("Battles Won", userData.stats.timesWon.toString())
+			.addField("Abilities", abilities.toString())
 			.setColor(embedColor);
 
 		if (kd.level >= 16) {

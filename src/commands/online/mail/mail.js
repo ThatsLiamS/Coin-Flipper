@@ -22,7 +22,7 @@ module.exports = {
 			.setTitle(`${message.author.username}'s Mailbox 📫`);
 
 		if (newMail != undefined) {
-			embed.addField("New Mail", newMail);
+			embed.addField("New Mail", newMail.join('\n').toString());
 			await firebase.doc(`/users/${message.author.id}`).update({ "newMail": admin.firestore.FieldValue.delete() });
 		}
 		else {

@@ -62,7 +62,8 @@ module.exports = {
 
 		send.sendChannel({ channel: msg.channel, author: msg.author }, { content: `<@${other.id}>, <@${msg.author.id}> has requested to trade with you! Type \`accept\` or \`decline\`!\nNote: make sure that both of your DMs are open` });
 
-		msg.channel.awaitMessages(m => m.author.id == other.id, { time: 30000, max: 1 }).then(async collected => {
+		const filter = m => m.author.id == other.id;
+		msg.channel.awaitMessages({ filter, time: 30000, max: 1 }).then(async collected => {
 
 			let message = collected.first();
 			if (!message) {

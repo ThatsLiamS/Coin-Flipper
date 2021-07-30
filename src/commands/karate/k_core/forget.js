@@ -5,6 +5,10 @@ module.exports = {
 	aliases: ["disown"],
 	execute: async function(message, args, prefix, client, kd, [firebase]) {
 
+		return;
+
+		/*   MAJOR ISSUE - we sort in the future
+
 		let userData = {};
 
 		send.sendChannel({ channel: message.channel, author: message.author }, { content: "Are you sure you want to forget your karate coin? This cannot be undone.\n\nReply with `yes` or `no`" });
@@ -32,5 +36,6 @@ module.exports = {
 			}
 
 		});
+		*/
 	}
 };

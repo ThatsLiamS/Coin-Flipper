@@ -51,7 +51,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`${user.username}'s Mining Data`)
 			.addField("Pickaxe", `${miningData.pickaxe} pickaxe ${emote}`)
-			.addField("Inventory", stuff)
+			.addField("Inventory", stuff.join('\n').toString())
 			.setColor("#ababab")
 			.setFooter("Thanks to Mr Spooky#6088 for making the pickaxe emojis!");
 

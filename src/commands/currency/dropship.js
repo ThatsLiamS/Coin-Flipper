@@ -57,7 +57,8 @@ module.exports = {
 		await firebase.doc(`/users/${message.author.id}`).set(userData);
 		send.sendChannel({ channel: message.channel, author: message.author }, { content: `What do you want to dropship? (One of them may do really well)\n\`${sell1}\`\n\`${sell2}\`\n\`${sell3}\`` });
 
-		message.channel.awaitMessages(m => m.author.id == message.author.id, { max: 1, time: 20000 }).then(async collected => {
+		const filter = m => m.author.id == message.author.id;
+		message.channel.awaitMessages({ filter, max: 1, time: 20000 }).then(async collected => {
 			if (!collected.first()) {
 				send.sendChannel({ channel: message.channel, author: message.author }, { content: "You didn't choose one of the items :/" });
 				return;

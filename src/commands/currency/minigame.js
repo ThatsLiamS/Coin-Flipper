@@ -15,6 +15,8 @@ module.exports = {
 	aliases: ["minigames"],
 	execute: async function(msg, args, prefix, client, [firebase, data]) {
 
+		const filter = m => (m.content.toLowerCase() == guildData.minigames.looking_for || m.content.toLowerCase() == guildData.minigames.cheater) && m.author.bot === false;
+
 		await checkGuild(firebase, msg.guild.id);
 		let guildata = await firebase.doc(`/guilds/${msg.guild.id}`).get();
 		if (guildata.data().enabled.minigames == false) return;
@@ -69,7 +71,7 @@ module.exports = {
 				await firebase.doc(`/guilds/${msg.guild.id}`).set(guildData);
 				send.sendChannel({ channel: msg.channel, author: msg.author }, { content: `**Repeat after me!**\n\n\`${output1}⠀${output2}⠀${output3}⠀${output4}\`` });
 
-				msg.channel.awaitMessages(m => (m.content.toLowerCase() == guildData.minigames.looking_for || m.content.toLowerCase() == guildData.minigames.cheater) && m.author.bot === false, { max: 1, time: 15000 }).then(async collected => {
+				msg.channel.awaitMessages({ filter, max: 1, time: 15000 }).then(async collected => {
 					if (!collected.first()) {
 						send.sendChannel({ channel: msg.channel, author: msg.author }, { content: "No one typed it in time!" });
 						guildData.minigames.in_game = false;
@@ -141,7 +143,7 @@ module.exports = {
 				send.sendChannel({ channel: msg.channel, author: msg.author }, { content: `**Unscramble this word or phrase!**\n\n${shuffledWord}` });
 				await firebase.doc(`/guilds/${msg.guild.id}`).set(guildData);
 
-				msg.channel.awaitMessages(m => m.content.toLowerCase() == guildData.minigames.looking_for && m.author.bot === false, { max: 1, time: 15000 }).then(async collected => {
+				msg.channel.awaitMessages({ filter, max: 1, time: 15000 }).then(async collected => {
 					if (!collected.first()) {
 						send.sendChannel({ channel: msg.channel, author: msg.author }, { content: `No one answered it in time! The word was \`${guildData.minigames.looking_for}\`` });
 						guildData.minigames.in_game = false;
@@ -183,7 +185,6 @@ module.exports = {
 				guildData.minigames.in_game = true;
 
 				await firebase.doc(`/guilds/${msg.guild.id}`).set(guildData);
-				if (!msg.guild.me.hasPermission("SEND_MESSAGES") || !msg.guild.me.hasPermission("EMBED_LINKS")) return;
 
 				msg.channel.send(`**When I say GO, send the word or phrase!**\n\n\`${word}\`\n\nNot time yet!`).then(async sentmessage => {
 
@@ -195,7 +196,7 @@ module.exports = {
 						await firebase.doc(`/guilds/${msg.guild.id}`).set(guildData);
 					}, 3000);
 
-					msg.channel.awaitMessages(m => m.content.toLowerCase() == guildData.minigames.looking_for && m.author.bot === false, { max: 1, time: 15000 }).then(async collected => {
+					msg.channel.awaitMessages({ filter, max: 1, time: 15000 }).then(async collected => {
 						if (!collected.first()) {
 							send.sendChannel({ channel: msg.channel, author: msg.author }, { content: "No one typed it in time!" });
 

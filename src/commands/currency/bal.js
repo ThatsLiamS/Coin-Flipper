@@ -82,12 +82,12 @@ module.exports = {
 
 			const embed = new Discord.MessageEmbed()
 				.setTitle(`${user.username}'s Stats:`)
-				.addField(`Cents:`, bal)
-				.addField(`Inventory:`, organized)
-				.addField(`Job:`, job)
-				.addField(`Coins flipped:`, flips)
-				.addField(`Minigames Won:`, wins)
-				.addField(`Badges:`, badgesOrganized)
+				.addField(`Cents:`, bal.toString())
+				.addField(`Inventory:`, organized.join('\n').toString())
+				.addField(`Job:`, job.toString())
+				.addField(`Coins flipped:`, flips.toString())
+				.addField(`Minigames Won:`, wins.toString())
+				.addField(`Badges:`, badgesOrganized.join('\n').toString())
 				.setColor("ORANGE");
 
 			if (bio) embed.setDescription(bio);

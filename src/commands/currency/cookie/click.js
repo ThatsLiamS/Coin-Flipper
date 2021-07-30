@@ -8,7 +8,7 @@ module.exports = {
 	description: "Click and get some cookies!",
 	argument: "None",
 	perms: "Embed Links",
-	cooldown: 1500,
+	cooldown: 1.5,
 	cooldowny: "1.5 seconds",
 	tips: "You need a cookie to use this",
 	aliases: ["cookieclick", "cookieclicker"],

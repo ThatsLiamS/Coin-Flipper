@@ -10,7 +10,7 @@ module.exports = {
 	perms: "Embed Links",
 	tips: "You can only use this if you have a pickaxe!",
 	cooldowny: "1 minute (45 seconds for gold tier, 30 seconds for platinum tier)",
-	cooldown: 60000,
+	cooldown: 60,
 	execute: async function(message, args, prefix, client, [firebase, data]) {
 
 		let userData = data.data();
@@ -244,7 +244,7 @@ module.exports = {
 		const embed = new Discord.MessageEmbed()
 			.setTitle(`Mining time! ⛏️`)
 			.setDescription("Good loot woo\n[Mine more crystals](https://top.gg/bot/791660709246271509)")
-			.addField("You got:", foundList)
+			.addField("You got:", foundList.join('\n').toString())
 			.setColor("#cccccc");
 
 		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });

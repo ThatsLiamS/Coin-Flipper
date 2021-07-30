@@ -11,7 +11,8 @@ const firestore = admin.firestore();
 
 const Discord = require("discord.js");
 const client = new Discord.Client({
-	intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_EMOJIS', 'GUILD_WEBHOOKS'],
+	intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_WEBHOOKS', "DIRECT_MESSAGES", "DIRECT_MESSAGE_REACTIONS", "DIRECT_MESSAGE_TYPING"],
+	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 	repliedUser: false
 });
 
@@ -58,7 +59,7 @@ async function sendError(error) {
 
 	const channel = client.channels.cache.get('868455901659541565');
 	const embed = new Discord.MessageEmbed()
-		.setDescription(error);
+		.setDescription(error.toString());
 
 	await channel.send(embed);
 }

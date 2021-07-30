@@ -9,6 +9,7 @@ module.exports = {
 	perms: "Embed Links",
 	tips: "",
 	aliases: ["info", "botstats", 'about'],
+	error: true,
 	execute: async function(message, args, prefix, client) {
 
 		const guilds = client.guilds.cache.size;

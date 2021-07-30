@@ -65,7 +65,7 @@ module.exports = {
 		for (let response of responses) {
 			newResponses.push(`\`${responses.indexOf(response) + 1}.\` ${response}`);
 		}
-		if (!responses.length) responses = "This addon has no responses!";
+		if (!responses.length) responses.push("This addon has no responses!");
 		else responses = newResponses;
 		let published = exists.published;
 		if (published) published = "Yes";
@@ -79,8 +79,8 @@ module.exports = {
 
 		if (args[1] == "separate") embed.addField("Responses", `${responses.length} responses`);
 
-		else embed.addField("Responses", responses);
-		embed.addField("Published", published);
+		else embed.addField("Responses", responses.join('\n').toString());
+		embed.addField("Published", published.toString());
 
 		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
 	}
