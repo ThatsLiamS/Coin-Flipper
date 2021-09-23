@@ -11,7 +11,7 @@ module.exports = {
 	argument: "Optional: a user mention or user ID",
 	perms: "Embed Links, Use External Emojis",
 	tips: "",
-	aliases: ["cents", "balance"],
+	aliases: ["cents", "balance", 'inv', 'inventory'],
 	execute: async function(message, args, prefix, client, [firebase]) {
 
 		let bIdList = ["dev", "partnered_dev", "support", "flip", "flip_plus", "minigame", "minigame_plus", "register", "collector", "collector_plus", "rich", "rich_plus", "niceness", "bughunter", "bughunter_plus"];
@@ -83,11 +83,11 @@ module.exports = {
 			const embed = new Discord.MessageEmbed()
 				.setTitle(`${user.username}'s Stats:`)
 				.addField(`Cents:`, bal.toString())
-				.addField(`Inventory:`, organized.join('\n').toString())
+				.addField(`Inventory:`, organized.toString())
 				.addField(`Job:`, job.toString())
 				.addField(`Coins flipped:`, flips.toString())
 				.addField(`Minigames Won:`, wins.toString())
-				.addField(`Badges:`, badgesOrganized.join('\n').toString())
+				.addField(`Badges:`, badgesOrganized.toString())
 				.setColor("ORANGE");
 
 			if (bio) embed.setDescription(bio);

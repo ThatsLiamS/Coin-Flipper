@@ -6,11 +6,11 @@ module.exports = {
 	description: "Enable a feature in your server!",
 	argument: "The feature you want to enable",
 	perms: "",
+	permissions: ['Manage Guild'],
 	tips: "You need the Manage Server permission to use this",
 	aliases: ["enablefeature"],
 	execute: async function(message, args, prefix, client, [firebase]) {
 
-		if (!message.member.permissions.has('MANAGE_GUILD')) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, only users with the Manage Server permission can use this command!" });
 		if (!args[0]) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, you need to specify something that you want to enable.\nList: `flipping`, `minigames`, `publiccreate`, `trash`, `karate`, `customaddons`, `online`" });
 
 		let feature = args[0];

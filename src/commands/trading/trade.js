@@ -12,7 +12,6 @@ module.exports = {
 	name: "trade",
 	description: "Start a trading session with another user!",
 	argument: "A user mention of the user you want to trade with",
-	perms: "Embed Links",
 	tips: "This won't work if trading is disabled",
 	aliases: ["session", "starttrade", "starttrading"],
 	execute: async function(msg, args, prefix, client, [firebase, data]) {

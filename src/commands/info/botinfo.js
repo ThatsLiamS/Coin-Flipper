@@ -75,7 +75,7 @@ module.exports = {
 
 				{ name: `**Uptime:**`, value: `\`${uptime}\``, inline: true },
 				{ name: `**Shard**`, value: `\`${shard}\``, inline: true },
-				{ name: `**Developers:**`, value: `[ThatsLiamS#6950](https://github.com/ThatsLiamS?from=2021-07-01&to=2021-07-26&year_list=1)\n[SuperPhantomUser#0441](https://github.com/SuperPhantomUser)\n[AsyncBanana#4612](https://github.com/AsyncBanana)`, inline: false },
+				{ name: `**Developers:**`, value: `[ThatsLiamS#6950](https://github.com/ThatsLiamS?from=2021-07-01&to=2021-07-26&year_list=1)\n[SuperPhantomUser#0441](https://github.com/SuperPhantomUser)\n[AsyncBanana#4612](https://github.com/AsyncBanana)`, inline: true },
 			);
 
 		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });

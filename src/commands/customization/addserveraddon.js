@@ -6,10 +6,9 @@ module.exports = {
 	description: "Add a server addon!",
 	argument: "The name of the addon you want to add!",
 	perms: "",
+	permissions: ['Manage Guild'],
 	tips: "Custom addons have to be enabled to use this, and anyone in a server can use the server's server addons",
 	execute: async function(message, args, prefix, client, [firebase, data]) {
-
-		if (!message.member.hasPermission('MANAGE_GUILD')) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, only users with the Manage Server permission can use this command!" });
 
 		await checkGuild(firebase, message.guild.id);
 		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();

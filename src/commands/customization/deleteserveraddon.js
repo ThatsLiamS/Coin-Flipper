@@ -6,11 +6,10 @@ module.exports = {
 	description: "Delete a server addon!",
 	argument: "The name of the addon you want to delete!",
 	perms: "",
+	permissions: ['Manage Guild'],
 	aliases: ["removeserveraddon"],
 	tips: "Custom addons have to be enabled to use this",
 	execute: async function(message, args, prefix, client, [firebase, data]) {
-
-		if (!message.member.hasPermission('MANAGE_GUILD')) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, only users with the Manage Server permission can use this command!" });
 
 		await checkGuild(firebase, message.guild.id);
 		let guilddata = await firebase.doc(`/guilds/${message.guild.id}`).get();

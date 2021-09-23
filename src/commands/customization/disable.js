@@ -6,11 +6,11 @@ module.exports = {
 	description: "Disable a feature in your server!",
 	argument: "The feature you want to disable",
 	perms: "",
+	permissions: ['Manage Guild'],
 	tips: "you need the Manage Server permission to use this",
 	aliases: ["disablefeature"],
 	execute: async function(message, args, prefix, client, [firebase]) {
 
-		if (!message.member.permissions.has('MANAGE_GUILD')) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, only users with the Manage Server permission can use this command!" });
 		if (!args[0]) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Sorry, you need to specify something that you want to disable.\nList: `flipping`, `minigames`, `publiccreate`, `trash`, `karate`, `customaddons`, `online`" });
 
 		let feature = args[0];

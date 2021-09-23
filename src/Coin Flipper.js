@@ -11,7 +11,7 @@ const firestore = admin.firestore();
 
 const Discord = require("discord.js");
 const client = new Discord.Client({
-	intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', 'GUILD_WEBHOOKS', "DIRECT_MESSAGES", "DIRECT_MESSAGE_REACTIONS", "DIRECT_MESSAGE_TYPING"],
+	intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_EMOJIS_AND_STICKERS', "DIRECT_MESSAGES", "DIRECT_MESSAGE_REACTIONS"],
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 	repliedUser: false
 });
@@ -22,10 +22,9 @@ client.commandsRun = new enmap({ name: "commandsRun" });
 
 const { AutoPoster } = require("topgg-autoposter");
 const ap = AutoPoster(`${process.env['API_TOKEN']}`, client);
-ap.on('posted', () => {});
+ap.on('posted', () => { });
 
 const fs = require('fs');
-
 client.commands = new Discord.Collection();
 const categories = fs.readdirSync(`${__dirname}/commands/`);
 for (const category of categories) {
@@ -55,23 +54,14 @@ for (const file of eventFiles) {
 	else { client.on(event.name, (...args) => event.execute(...args, client, firestore));}
 }
 
-async function sendError(error) {
-
-	const channel = client.channels.cache.get('868455901659541565');
-	const embed = new Discord.MessageEmbed()
-		.setDescription(error.toString());
-
-	await channel.send(embed);
-}
-
-process.on('uncaughtException', async (err) => {
-	await sendError(err);
-});
-process.on('warning', async (err) => {
-	await sendError(err);
-});
-process.on('uncaughtExceptionMonitor', async (err) => {
-	await sendError(err);
+const sendError = (error) => {
+	const embed = new Discord.MessageEmbed().setDescription(error.toString());
+	client.channels.cache.get('868455901659541565').send({ embeds: [embed] });
+};
+['uncaughtExceptionMonitor', 'warning', 'uncaughtException'].forEach(m => {
+	process.on(m, (err) => sendError(err));
 });
 
+
+require('dotenv').config();
 client.login(process.env['BotToken']);
