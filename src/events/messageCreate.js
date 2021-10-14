@@ -10,6 +10,7 @@ let cooldowns = new Discord.Collection();
 module.exports = {
 	name: 'messageCreate',
 	execute: async function(message, client, firestore) {
+
 		if (message.author.bot) return;
 
 		if(message.partial) { await message.fetch(); }

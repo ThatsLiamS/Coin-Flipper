@@ -67,7 +67,7 @@ module.exports = {
 				}
 			}
 			if (inv.toolbox) organized.push("🧰 toolbox");
-			if (organized.length == 0) organized = "There's nothing here";
+			if (organized.length == 0) organized.push("There's nothing here");
 			let job = userData.job;
 			let wins = userData.stats.minigames_won;
 			let flips = userData.stats.flipped;
@@ -78,16 +78,16 @@ module.exports = {
 			}
 			if (userData.donator == 1) badgesOrganized.push(`${badgeEmotes.gold_tier} Gold Tier`);
 			if (userData.donator == 2) badgesOrganized.push(`${badgeEmotes.platinum_tier} Platinum Tier`);
-			if (badgesOrganized.length == 0) badgesOrganized = "There are no badges";
+			if (badgesOrganized.length == 0) badgesOrganized.push("There are no badges");
 
 			const embed = new Discord.MessageEmbed()
 				.setTitle(`${user.username}'s Stats:`)
-				.addField(`Cents:`, bal.toString())
-				.addField(`Inventory:`, organized.toString())
-				.addField(`Job:`, job.toString())
-				.addField(`Coins flipped:`, flips.toString())
-				.addField(`Minigames Won:`, wins.toString())
-				.addField(`Badges:`, badgesOrganized.toString())
+				.addField(`Cents:`, `${bal}`)
+				.addField(`Inventory:`, `${organized.join('\n')}`)
+				.addField(`Job:`, `${job}`)
+				.addField(`Coins flipped:`, `${flips}`)
+				.addField(`Minigames Won:`, `${wins}`)
+				.addField(`Badges:`, `${badgesOrganized.join('\n')}`)
 				.setColor("ORANGE");
 
 			if (bio) embed.setDescription(bio);

@@ -1,9 +1,3 @@
-const express = require('express');
-const app = express();
-const port = 3000;
-app.get('/', (req, res) => res.send('Hello World!'));
-app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
-
 const admin = require("firebase-admin");
 const serviceAccount = JSON.parse(process.env['FirebaseJson']);
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
