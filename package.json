@@ -15,18 +15,5 @@
 	"bugs": {
 		"url": "https://github.com/Coin-Flipper/Coin-Flipper/issues"
 	},
-	"homepage": "https://github.com/Coin-Flipper/Coin-Flipper#readme",
-	"devDependencies": {
-		"eslint": "^7.30.0"
-	},
-	"dependencies": {
-		"bar-charts": "^1.0.3",
-		"canvas": "^2.8.0",
-		"dblapi.js": "^2.4.1",
-		"discord.js": "^13.0.0-dev.d310e4f.1627560163",
-		"enmap": "^5.8.6",
-		"express": "^4.17.1",
-		"firebase-admin": "^9.10.0",
-		"topgg-autoposter": "^2.0.0"
-	}
+	"homepage": "https://github.com/Coin-Flipper/Coin-Flipper#readme"
 }
