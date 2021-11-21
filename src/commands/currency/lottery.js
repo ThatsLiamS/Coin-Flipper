@@ -17,7 +17,7 @@ module.exports = {
 		let userData = data.data();
 		let bal = userData.currencies.cents;
 
-		if (bal < 20) bal = "Sorry, lottery tickets cost 20 cents!";
+		if (bal < 20) return message.channel.send({ content: "Sorry, lottery tickets cost 20 cents!" });
 		bal = Number(bal) - Number(20);
 		userData.currencies.cents = bal;
 

@@ -68,6 +68,7 @@ module.exports = {
 			}
 			if (inv.toolbox) organized.push("🧰 toolbox");
 			if (organized.length == 0) organized.push("There's nothing here");
+
 			let job = userData.job;
 			let wins = userData.stats.minigames_won;
 			let flips = userData.stats.flipped;

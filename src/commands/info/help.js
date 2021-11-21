@@ -1,4 +1,3 @@
-const fs = require("fs");
 const Discord = require('discord.js');
 
 const send = require(`${__dirname}/../../tools/send`);

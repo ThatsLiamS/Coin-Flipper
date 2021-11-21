@@ -4,7 +4,7 @@ const send = require(`${__dirname}/../../tools/send`);
 
 module.exports = {
 	name: `donate`,
-	description: "Get some info on Coin Flipper Gold and Platinum and the cool perks they give!",
+	description: "Get some info on Coin Flipper Gold and Platinum tiers and the cool perks they give!",
 	argument: "None",
 	perms: "Embed Links",
 	tips: "",
