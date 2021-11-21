@@ -4,8 +4,5 @@ node_modules/
 # dotenv environment variables file
 .env
 
-# database files
-data/
-
 # Workspace enviroment files
 .vscode/
