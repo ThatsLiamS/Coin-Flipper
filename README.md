@@ -47,6 +47,6 @@ key contributors of Coin Flipper
 
 ## Links
 
-- [Invite](https://automod.liamskinner.co.uk/invite)
+- [Invite](https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands)
 - [Support Server](https://discord.gg/AkFW56kXVp)
 - [GitHub](https://github.com/Coin-Flipper/Coin-Flipper)
