@@ -1,6 +1,7 @@
 module.exports.main = {
 
 	job: 'none',
+	evil: false,
 
 	currencies: {
 		cents: 0,
@@ -142,6 +143,9 @@ module.exports.main = {
 
 	trading: {
 		session: null,
+	},
+
+	achievements: {
 	},
 
 	donator: 0,
