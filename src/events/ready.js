@@ -21,18 +21,26 @@ module.exports = {
 
 		const categories = fs.readdirSync(`${__dirname}/../commands/`);
 		for (const category of categories) {
-			const commandFolders = fs.readdirSync(`${__dirname}/../commands/${category}`);
+			const commandFolders = fs.readdirSync(`${__dirname}/../commands/${category}`).filter(file => !file.endsWith('.js'));
+			if (commandFolders) {
+				for (const subCommandFolders of commandFolders) {
+					const commandFiles = fs.readdirSync(`${__dirname}/../commands/${category}/${subCommandFolders}`).filter(file => file.endsWith('.js'));
 
-			for (const subCommandFolders of commandFolders) {
-				const commandFiles = fs.readdirSync(`${__dirname}/../commands/${category}/${subCommandFolders}`).filter(file => file.endsWith('.js'));
-
-				for (const file of commandFiles) {
-
-					const command = require(`${__dirname}/../commands/${category}/${subCommandFolders}/${file}`);
-					client.commands.set(command.name, command);
-					data.push(command);
+					for (const file of commandFiles) {
+						const command = require(`${__dirname}/../commands/${category}/${subCommandFolders}/${file}`);
+						client.commands.set(command.name, command);
+						data.push(command);
+					}
 
 				}
+			}
+			const commandFiles = fs.readdirSync(`${__dirname}/../commands/${category}`).filter(file => file.endsWith('.js'));
+			for (const file of commandFiles) {
+
+				const command = require(`${__dirname}/../commands/${category}/${file}`);
+				client.commands.set(command.name, command);
+				data.push(command);
+
 			}
 
 		}

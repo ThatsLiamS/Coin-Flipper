@@ -13,25 +13,26 @@ module.exports = {
 
 		/* Is interaction a command? */
 		if (interaction.isCommand()) {
+			await interaction.deferReply();
 
 			const cmd = client.commands.get(interaction.commandName);
 			if (!cmd) return;
 
 			/* Is the database available? */
 			if (quotaExceeded == true) {
-				interaction.reply({ content: 'Sorry, we are experiencing some technical difficulties: please try again later.', ephemeral: true });
+				interaction.followUp({ content: 'Sorry, we are experiencing some technical difficulties: please try again later.', ephemeral: true });
 				return;
 			}
 
 			/* Is the command working? */
 			if (cmd['error'] == true) {
-				interaction.reply({ content: 'Sorry, this command is currently unavailable. Please try again later.', ephemeral: true });
+				interaction.followUp({ content: 'Sorry, this command is currently unavailable. Please try again later.', ephemeral: true });
 				return;
 			}
 
 			/* Is the command limited to inside a guild? */
 			if (cmd['guildOnly'] == true && !interaction.guild) {
-				interaction.reply({ content: 'Sorry, this command is only available inside a server.', ephemeral: true });
+				interaction.followUp({ content: 'Sorry, this command is only available inside a server.', ephemeral: true });
 				return;
 			}
 
@@ -39,7 +40,7 @@ module.exports = {
 				for (const permission of cmd['permissions']) {
 					/* Loops through and check permissions agasint the user */
 					if (!interaction.member.permissions.has(permission)) {
-						interaction.reply({ content: 'Sorry, you do not have permission to run this command.', ephemeral: true });
+						interaction.followUp({ content: 'Sorry, you do not have permission to run this command.', ephemeral: true });
 						return;
 					}
 				}
@@ -48,7 +49,7 @@ module.exports = {
 			/* Is the command limited to the server owner? */
 			if (cmd['ownerOnly'] == true) {
 				if (!interaction.user.id == interaction.guild.ownerId) {
-					interaction.reply({ content: 'Sorry, only the server owner can run this command.', ephemeral: true });
+					interaction.followUp({ content: 'Sorry, only the server owner can run this command.', ephemeral: true });
 					return;
 				}
 			}
@@ -59,7 +60,7 @@ module.exports = {
 
 			if (cmd['developerOnly'] == true) {
 				if (userData.inv.toolbox == false) {
-					interaction.reply({ content: 'Sorry, only Coin Flipper developers can use this command.', ephemeral: true });
+					interaction.followUp({ content: 'Sorry, only Coin Flipper developers can use this command.', ephemeral: true });
 					return;
 				}
 			}
