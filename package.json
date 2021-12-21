@@ -1,7 +1,7 @@
 {
 	"name": "coin-flipper",
-	"version": "1.10.4",
-	"description": "A simple and fun Discord economy bot, with over 200,000 users.",
+	"version": "2.0.0",
+	"description": "A simple and fun Discord economy bot, with over 400,000 users.",
 	"main": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
