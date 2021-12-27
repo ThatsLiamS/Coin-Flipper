@@ -148,6 +148,32 @@ module.exports.main = {
 	achievements: {
 	},
 
+	online: {
+		online: false,
+		addonInv: {
+			first: {
+				name: 'none',
+				description: 'none',
+				published: false,
+				author: 0,
+			},
+			second: {
+				name: 'none',
+				description: 'none',
+				published: false,
+				author: 0,
+			},
+			third: {
+				name: 'none',
+				description: 'none',
+				published: false,
+				author: 0,
+			},
+		},
+		credits: 0,
+		betsWon: 0,
+	},
+
 	donator: 0,
 };
 
