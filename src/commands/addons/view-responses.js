@@ -51,7 +51,7 @@ module.exports = {
 			const embed = new MessageEmbed()
 				.setColor('GREEN')
 				.setTitle(`${name} Responses`)
-				.setFooter('To view addon data, do /view-addon');
+				.setFooter({ text: 'To view addon data, do /view-addon' });
 
 			let data = '';
 			for (let y = 0; y < pageData[x].length; y++) {

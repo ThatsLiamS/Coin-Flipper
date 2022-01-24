@@ -19,13 +19,13 @@ module.exports = {
 			userData.addons.customaddons.third,
 			userData.online.addonInv.first,
 			userData.online.addonInv.second,
-			userData.online.addonInv.thrid,
+			userData.online.addonInv.third,
 		];
 
 		const embed = new MessageEmbed()
 			.setTitle('Flip Addons:')
 			.setColor('GREEN')
-			.setFooter('If you want to suggest an addon, go to the support server by using /links')
+			.setFooter({ text: 'If you want to suggest an addon, go to the support server by using /links' })
 			.setDescription('You can use these addons by doing the command `/flip <addon>`\nNote that this embed may differ depending on your items and abilities')
 			.addFields(
 				{ name: 'extra', value: 'Over 100 different responses, such as \'the coin blew up\' or \'the coin was pog\', or \'the coin spent itself on discord nitro\'', inline: true },

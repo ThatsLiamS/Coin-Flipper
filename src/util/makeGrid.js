@@ -3,7 +3,7 @@ const fitString = (str, length) => {
 };
 
 const border = '+----+----------+----------+---------+';
-const title = '| ID |   PING​   | SERVERS  |  US​ERS  |';
+const title = '| ID |   PING   | SERVERS  |  USERS  |';
 const length = [8, 7, 7];
 
 module.exports = (results) => {

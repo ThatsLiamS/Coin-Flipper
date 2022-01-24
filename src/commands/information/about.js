@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
 const makeGrid = require('./../../util/makeGrid');
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
 		const embed = new MessageEmbed()
 			.setTitle('My Information')
 			.setColor('GREEN')
-			.setDescription('Hey, I\'m **[' + client.user.tag + '](https://discord.gg/2je9aJynqt)**!\n```\n' + makeGrid(results) + '```')
+			.setDescription('Hey, I\'m **[' + client.user.tag + '](https://discord.gg/2je9aJynqt)**!\n```\n' + makeGrid(results) + '\n```')
 			.addFields(
 				{ name: '**Total Servers:**', value: results[1].reduce((acc, guildCount) => acc + guildCount, 0).toString(), inline: true },
 				{ name: '**Total Users:**', value: results[2].reduce((acc, memberCount) => acc + memberCount, 0).toString(), inline: true },
@@ -32,9 +32,17 @@ module.exports = {
 				{ name: '**Shard ID:**', value: `\`#${Number(interaction.guild.shardId) + 1} out of ${client.shard.count}\``, inline: true },
 				{ name: '**Developers:**', value: '**[ThatsLiamS#6950](https://discord.gg/2je9aJynqt)**\n[SuperPhantomUser#0441](https://github.com/SuperPhantomUser)', inline: true },
 			)
-			.setFooter('Do /help to get started.');
+			.setFooter({ text: 'Do /help to get started.' });
 
-		interaction.followUp({ embeds: [embed] });
+		const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setStyle('LINK').setLabel('Invite').setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
+				new MessageButton()
+					.setStyle('LINK').setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
+			);
+
+		interaction.followUp({ embeds: [embed], components: [row] });
 
 	},
 };

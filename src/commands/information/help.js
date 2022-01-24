@@ -43,7 +43,7 @@ module.exports = {
 			return;
 		}
 
-		const categories = ['flipping', 'currency', 'information', 'karate', 'addons', 'customization', 'online', 'trading'];
+		const categories = ['flipping', 'currency', 'information', 'karate', 'addons', 'customization', 'online', 'trading', 'donator'];
 		if (categories.includes(cmdName)) {
 			let description = '';
 

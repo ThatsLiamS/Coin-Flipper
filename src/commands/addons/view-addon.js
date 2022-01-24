@@ -50,7 +50,7 @@ module.exports = {
 				{ name: 'Responses', description: `${(addon.responses ?? []).length} responses`, inline: true },
 				{ name: 'Published', description: `${addon.published ? 'yes' : 'no'}`, inline: true },
 			)
-			.setFooter('To view the responses, do /view-responses <addon>');
+			.setFooter({ text: 'To view the responses, do /view-responses <addon>' });
 
 		interaction.followUp({ embeds: [embed] });
 
