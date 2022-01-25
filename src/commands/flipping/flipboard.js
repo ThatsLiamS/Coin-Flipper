@@ -2,11 +2,12 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'flipboard',
-	description: 'Shows the leaderboard of the top 10 flippers!!',
+	description: 'Shows the leaderboard of the top 10 flippers!',
 	usage: '',
 
 	permissions: [],
 	ownerOnly: false,
+	guildOnly: false,
 	developerOnly: false,
 
 	error: true,

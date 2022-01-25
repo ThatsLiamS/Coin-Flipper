@@ -46,9 +46,17 @@ module.exports = {
 				}
 			}
 
+			/* Is the command limited to guilds only? */
+			if (cmd['guildOnly'] == true) {
+				if (!interaction.guild) {
+					interaction.followUp({ content: 'Sorry, you can only run this command within a server.', ephemeral: true });
+					return;
+				}
+			}
+
 			/* Is the command limited to the server owner? */
 			if (cmd['ownerOnly'] == true) {
-				if (!interaction.user.id == interaction.guild.ownerId) {
+				if (!interaction.user.id == interaction?.guild?.ownerId) {
 					interaction.followUp({ content: 'Sorry, only the server owner can run this command.', ephemeral: true });
 					return;
 				}

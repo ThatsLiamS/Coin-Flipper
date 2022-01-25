@@ -8,6 +8,8 @@ module.exports = {
 
 	permissions: [],
 	ownerOnly: false,
+	guildOnly: true,
+	developerOnly: false,
 
 	error: false,
 	execute: async ({ interaction, client }) => {
