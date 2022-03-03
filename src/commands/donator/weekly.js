@@ -1,3 +1,5 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
 module.exports = {
 	name: 'weekly',
 	description: 'Claim your weekly donator cents!',
@@ -7,6 +9,10 @@ module.exports = {
 	ownerOnly: false,
 	guildOnly: false,
 	developerOnly: false,
+
+	data: new SlashCommandBuilder()
+		.setName('weekly')
+		.setDescription('Claim your weekly donator cents!'),
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {

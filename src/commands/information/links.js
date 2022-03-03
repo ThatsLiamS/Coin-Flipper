@@ -1,14 +1,19 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 
 module.exports = {
 	name: 'links',
-	description: 'Get loads of useful Coin Flipper links!',
+	description: 'Useful Coin Flipper links!',
 	usage: '',
 
 	permissions: [],
 	ownerOnly: false,
 	guildOnly: false,
 	developerOnly: false,
+
+	data: new SlashCommandBuilder()
+		.setName('links')
+		.setDescription('Useful Coin Flipper links!'),
 
 	error: false,
 	execute: async ({ interaction }) => {

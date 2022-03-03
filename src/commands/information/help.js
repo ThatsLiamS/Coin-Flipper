@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 const { readdirSync } = require('fs');
 
@@ -11,9 +12,14 @@ module.exports = {
 	guildOnly: false,
 	developerOnly: false,
 
-	options: [
-		{ name: 'command', description: 'Which command or category?', type: 'STRING', required: false },
-	],
+	data: new SlashCommandBuilder()
+		.setName()
+		.setDescription()
+
+		.addStringOption(option => option
+			.setName('command')
+			.setDescription('Which command or category?')
+			.setRequired(false)),
 
 	error: false,
 	execute: async ({ interaction, client }) => {

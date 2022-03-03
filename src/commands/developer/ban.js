@@ -1,20 +1,36 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { WebhookClient } = require('discord.js');
 const defaultData = require('./../../util/defaultData/users.js').main;
 
 module.exports = {
 	name: 'ban',
 	description: 'Bans or unbans a user from CF',
-	usage: '<user ID> <boolean>',
+	usage: '<user> <boolean> <reason>',
 
 	permissions: [],
 	ownerOnly: false,
 	guildOnly: false,
 	developerOnly: true,
 
-	options: [
-		{ name: 'user', description: 'User ID', type: 'STRING', required: true },
-		{ name: 'boolean', description: 'Ban or unban the user', type: 'STRING', choices: [{ name: 'ban', value: 'true' }, { name: 'unban', value: 'false' }], required: true },
-	],
+	data: new SlashCommandBuilder()
+		.setName('ban')
+		.setDescription('Bans a user from using the bot')
+		
+		.addSubcommand(subcommand => subcommand
+			.setName('by-user')
+			.setDescription('Bans a user from using the bot')
+			.addUserOption(option => option.setName('user').setDescription('The user to ban').setRequired(true))
+			.addBooleanOption(option => option.setName('boolean').setDescription('(Ban = True) || (Unban = False)')).setRequired(true)
+			.addStringOption(option => option.setName('reason').setDescription('Why are we banning them?'))
+		)
+			
+		.addSubcommand(subcommand => subcommand
+			.setName('by-user-id')
+			.setDescription('Bans a user from using the bot')
+			.addStringOption(option => option.setName('user').setDescription('The user ID to ban').setRequired(true))
+			.addBooleanOption(option => option.setName('boolean').setDescription('(Ban = True) || (Unban = False)')).setRequired(true)
+			.addStringOption(option => option.setName('reason').setDescription('Why are we banning them?')).setRequired(true)
+		),
 
 	error: false,
 	execute: async ({ interaction, client, firestore }) => {

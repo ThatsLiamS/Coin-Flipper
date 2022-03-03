@@ -1,4 +1,6 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+
 const flips = require('./../../util/flips');
 const gotItem = require('./../../util/gotItem');
 const achievementAdd = require('./../../util/achievementAdd');
@@ -13,9 +15,15 @@ module.exports = {
 	guildOnly: false,
 	developerOnly: false,
 
-	options: [
-		{ name: 'addon', description: 'What is the addon\'s name?', type: 'STRING', required: false },
-	],
+	data: new SlashCommandBuilder()
+		.setName('flip')
+		.setDescription('Flip a coin, or spice it up with an addon!')
+
+		.addStringOption(option => option
+			.setName('addon')
+			.setDescription('What\'s the addon\'s name?')
+			.setRequired(false)
+		),
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {

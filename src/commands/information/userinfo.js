@@ -1,9 +1,10 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const defaultData = require('./../../util/defaultData/users');
 
 module.exports = {
 	name: 'userinfo',
-	description: 'View a user\'s stats.',
+	description: 'View a user\'s stats!',
 	usage: '',
 
 	permissions: [],
@@ -11,9 +12,14 @@ module.exports = {
 	guildOnly: true,
 	developerOnly: false,
 
-	options: [
-		{ name: 'user', description: 'Select a user', type: 'USER', required: false },
-	],
+	data: new SlashCommandBuilder()
+		.setName('userinfo')
+		.setDescription('View a user\'s stats!')
+
+		.addUserOption(option => option
+			.setName('user')
+			.setDescription('Select a user')
+			.setRequired(false)),
 
 	error: false,
 	execute: async ({ interaction, firestore }) => {

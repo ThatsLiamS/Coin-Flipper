@@ -4,16 +4,30 @@ const defaultData = require('./../../util/defaultData/users.js').main;
 module.exports = {
 	name: 'reset-bal',
 	description: 'Reset a user\'s balance & register',
-	usage: '<user ID>',
+	usage: '<user> <reason>',
 
 	permissions: [],
 	ownerOnly: false,
 	guildOnly: false,
 	developerOnly: true,
 
-	options: [
-		{ name: 'user', description: 'User ID', type: 'STRING', required: true },
-	],
+	data: new SlashCommandBuilder()
+		.setName('reset-bal')
+		.setDescription('Reset a user\'s balance & register')
+		
+		.addSubcommand(subcommand => subcommand
+			.setName('by-user')
+			.setDescription('Reset a user\'s balance & register')
+			.addUserOption(option => option.setName('user').setDescription('The user to reset').setRequired(true))
+			.addStringOption(option => option.setName('reason').setDescription('Why are we resetting them?'))
+		)
+			
+		.addSubcommand(subcommand => subcommand
+			.setName('by-user-id')
+			.setDescription('Reset a user\'s balance & register')
+			.addStringOption(option => option.setName('user').setDescription('The user ID to rest').setRequired(true))
+			.addStringOption(option => option.setName('reason').setDescription('Why are we resetting them?')).setRequired(true)
+		),
 
 	error: false,
 	execute: async ({ interaction, client, firestore }) => {

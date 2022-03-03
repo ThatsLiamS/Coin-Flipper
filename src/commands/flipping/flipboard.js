@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -9,6 +10,10 @@ module.exports = {
 	ownerOnly: false,
 	guildOnly: false,
 	developerOnly: false,
+
+	data: new SlashCommandBuilder()
+		.setName('flipboard')
+		.setDescription('Show the leaderboard of the top 10 flippers!'),
 
 	error: true,
 	execute: async ({ interaction, firestore, client }) => {

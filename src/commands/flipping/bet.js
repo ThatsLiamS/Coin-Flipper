@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 const achievementAdd = require('./../../util/achievementAdd');
 
@@ -11,10 +12,25 @@ module.exports = {
 	guildOnly: false,
 	developerOnly: false,
 
-	options: [
-		{ name: 'side', description: 'Heads or tails', type: 'STRING', choices: [{ name: 'heads', value: 'heads' }, { name: 'tails', value: 'tails' }], required: true },
-		{ name: 'amount', description: 'How much are you willing to bet?', type: 'INTEGER', required: true },
-	],
+	data: new SlashCommandBuilder()
+		.setName('bet')
+		.setDescription('Bets cents on the coinflip!')
+
+		.addStringOption(option => option
+			.setName('side')
+			.setDescription('Heads or tails!')
+			.setRequired(true)
+
+			.addChoice('heads', 'heads').addChoice('tails', 'tails')
+		)
+		.addIntegerOption(option => option
+			.setName('amount')
+			.setDescription('How much are you betting?')
+			.setRequired(true)
+			
+			.setMaxValue(1_000_000)
+			.setMinValue(50)
+		),
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {

@@ -1,4 +1,6 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+
 const { readdirSync } = require('fs');
 
 module.exports = {
@@ -10,6 +12,10 @@ module.exports = {
 	ownerOnly: false,
 	guildOnly: false,
 	developerOnly: true,
+
+	data: new SlashCommandBuilder()
+		.setName('devhelp')
+		.setDescription('Get a list of the developer commands'),
 
 	error: false,
 	execute: async ({ interaction }) => {

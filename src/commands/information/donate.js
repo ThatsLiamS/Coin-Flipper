@@ -1,14 +1,19 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 
 module.exports = {
 	name: 'donate',
-	description: 'Get loads of information about our donator tiers!',
+	description: 'Information about our donator tiers!',
 	usage: '',
 
 	permissions: [],
 	ownerOnly: false,
 	guildOnly: false,
 	developerOnly: false,
+
+	data: new SlashCommandBuilder()
+		.setName('donate')
+		.setDescription('Information about our donator tiers!'),
 
 	error: false,
 	execute: async ({ interaction }) => {
