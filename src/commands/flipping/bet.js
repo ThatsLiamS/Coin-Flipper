@@ -21,15 +21,15 @@ module.exports = {
 			.setDescription('Heads or tails!')
 			.setRequired(true)
 
-			.addChoice('heads', 'heads').addChoice('tails', 'tails')
+			.addChoice('heads', 'heads').addChoice('tails', 'tails'),
 		)
 		.addIntegerOption(option => option
 			.setName('amount')
 			.setDescription('How much are you betting?')
 			.setRequired(true)
-			
+
 			.setMaxValue(1_000_000)
-			.setMinValue(50)
+			.setMinValue(50),
 		),
 
 	error: false,

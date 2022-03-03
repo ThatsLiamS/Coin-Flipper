@@ -39,7 +39,7 @@ module.exports = {
 
 				const command = require(`${__dirname}/../commands/${category}/${file}`);
 				client.commands.set(command.name, command);
-				data.push(command);
+				data.push(command.data.toJSON());
 
 			}
 

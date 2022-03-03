@@ -25,7 +25,7 @@ module.exports = {
 		let amt = 0;
 
 		if (userData.donator == 0) {
-			interaction.followUp({ content: 'You must be a donator or server booster to use this command!' });
+			interaction.followUp({ content: 'You must be a donator to use this command!' });
 			return;
 		}
 

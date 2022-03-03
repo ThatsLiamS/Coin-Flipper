@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { WebhookClient } = require('discord.js');
 const defaultData = require('./../../util/defaultData/users.js').main;
 
@@ -14,19 +15,19 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('reset-bal')
 		.setDescription('Reset a user\'s balance & register')
-		
+
 		.addSubcommand(subcommand => subcommand
 			.setName('by-user')
 			.setDescription('Reset a user\'s balance & register')
 			.addUserOption(option => option.setName('user').setDescription('The user to reset').setRequired(true))
-			.addStringOption(option => option.setName('reason').setDescription('Why are we resetting them?'))
+			.addStringOption(option => option.setName('reason').setDescription('Why are we resetting them?')),
 		)
-			
+
 		.addSubcommand(subcommand => subcommand
 			.setName('by-user-id')
 			.setDescription('Reset a user\'s balance & register')
 			.addStringOption(option => option.setName('user').setDescription('The user ID to rest').setRequired(true))
-			.addStringOption(option => option.setName('reason').setDescription('Why are we resetting them?')).setRequired(true)
+			.addStringOption(option => option.setName('reason').setDescription('Why are we resetting them?')).setRequired(true),
 		),
 
 	error: false,

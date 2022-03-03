@@ -22,7 +22,7 @@ module.exports = {
 		.addStringOption(option => option
 			.setName('addon')
 			.setDescription('What\'s the addon\'s name?')
-			.setRequired(false)
+			.setRequired(false),
 		),
 
 	error: false,
