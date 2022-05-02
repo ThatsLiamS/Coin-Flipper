@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'view-responses',
 	description: 'View the responses of a custom addon!',
-	usage: '<name> [page number]',
+	usage: '`/view-responses <name> [page number]`',
 
 	permissions: [],
 	ownerOnly: false,

@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'addon-inputs',
 	description: 'See the different values you can include in your responses!',
-	usage: '',
+	usage: '`/addon-inputs`',
 
 	permissions: [],
 	ownerOnly: false,

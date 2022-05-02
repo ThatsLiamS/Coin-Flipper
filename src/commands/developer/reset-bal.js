@@ -5,7 +5,7 @@ const defaultData = require('./../../util/defaultData/users.js').main;
 module.exports = {
 	name: 'reset-bal',
 	description: 'Reset a user\'s balance & register',
-	usage: '<user> <reason>',
+	usage: '`/reset-bal <user> <reason>`',
 
 	permissions: [],
 	ownerOnly: false,

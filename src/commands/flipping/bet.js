@@ -5,7 +5,7 @@ const achievementAdd = require('./../../util/achievementAdd');
 module.exports = {
 	name: 'bet',
 	description: 'Bet cents on the coinflip!',
-	usage: '<side> <amount>',
+	usage: '`/bet <side> <amount>`',
 
 	permissions: [],
 	ownerOnly: false,

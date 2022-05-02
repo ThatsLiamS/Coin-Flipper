@@ -4,7 +4,7 @@ const achievementAdd = require('./../../util/achievementAdd');
 module.exports = {
 	name: 'create-addon',
 	description: 'Create a custom addon!',
-	usage: '<name>',
+	usage: '`/create-addon <name>`',
 
 	permissions: [],
 	ownerOnly: false,

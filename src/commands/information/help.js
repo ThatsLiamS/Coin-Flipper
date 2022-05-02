@@ -5,7 +5,7 @@ const { readdirSync } = require('fs');
 module.exports = {
 	name: 'help',
 	description: 'Get a list of my commands',
-	usage: '[command | category]',
+	usage: '`/help [command | category]`',
 
 	permissions: [],
 	ownerOnly: false,

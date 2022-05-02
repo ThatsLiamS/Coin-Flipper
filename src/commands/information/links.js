@@ -4,7 +4,7 @@ const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 module.exports = {
 	name: 'links',
 	description: 'Useful Coin Flipper links!',
-	usage: '',
+	usage: '`/links`',
 
 	permissions: [],
 	ownerOnly: false,

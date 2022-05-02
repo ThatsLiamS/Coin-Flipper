@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'delete-addon',
 	description: 'Delete a custom or purchased addon!',
-	usage: '<name>',
+	usage: '`/delete-addon <name>`',
 
 	permissions: [],
 	ownerOnly: false,

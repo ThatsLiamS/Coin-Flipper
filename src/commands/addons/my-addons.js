@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'my-addons',
 	description: 'Get a list of all your custom addons!',
-	usage: '',
+	usage: '`/my-addons`',
 
 	permissions: [],
 	ownerOnly: false,

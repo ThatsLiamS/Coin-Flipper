@@ -5,7 +5,7 @@ const defaultData = require('./../../util/defaultData/users');
 module.exports = {
 	name: 'userinfo',
 	description: 'View a user\'s stats!',
-	usage: '',
+	usage: '`/userinfo [user]`',
 
 	permissions: [],
 	ownerOnly: false,

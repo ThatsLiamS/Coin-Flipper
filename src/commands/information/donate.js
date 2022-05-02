@@ -4,7 +4,7 @@ const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
 module.exports = {
 	name: 'donate',
 	description: 'Information about our donator tiers!',
-	usage: '',
+	usage: '`/donate`',
 
 	permissions: [],
 	ownerOnly: false,

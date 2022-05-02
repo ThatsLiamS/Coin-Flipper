@@ -5,7 +5,7 @@ const defaultData = require('./../../util/defaultData/users.js').main;
 module.exports = {
 	name: 'reset',
 	description: 'Completely resets a user\'s account',
-	usage: '<user> <reason>',
+	usage: '`/reset <user> <reason>`',
 
 	permissions: [],
 	ownerOnly: false,

@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
 	name: 'weekly',
 	description: 'Claim your weekly donator cents!',
-	usage: '',
+	usage: '`/weekly`',
 
 	permissions: [],
 	ownerOnly: false,

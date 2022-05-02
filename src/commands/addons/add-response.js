@@ -3,7 +3,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'add-response',
 	description: 'Add a response to a custom/server addon!',
-	usage: '<name> <response>',
+	usage: '`/add-response <name> <response>`',
 
 	permissions: [],
 	ownerOnly: false,

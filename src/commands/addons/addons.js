@@ -4,7 +4,7 @@ const achievementAdd = require('../../util/achievementAdd');
 module.exports = {
 	name: 'addons',
 	description: 'Get a list of all your addons!',
-	usage: '',
+	usage: '`/addons`',
 
 	permissions: [],
 	ownerOnly: false,

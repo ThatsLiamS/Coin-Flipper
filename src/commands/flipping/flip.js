@@ -8,7 +8,7 @@ const achievementAdd = require('./../../util/achievementAdd');
 module.exports = {
 	name: 'flip',
 	description: 'Flip a coin, or spice it up with an addon!',
-	usage: '[addon]',
+	usage: '`/flip [addon]`',
 
 	permissions: [],
 	ownerOnly: false,

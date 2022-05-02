@@ -5,7 +5,7 @@ const defaultData = require('./../../util/defaultData/users.js').main;
 module.exports = {
 	name: 'ban',
 	description: 'Bans or unbans a user from CF',
-	usage: '<user> <boolean> <reason>',
+	usage: '`/ban <user> <boolean> <reason>`',
 
 	permissions: [],
 	ownerOnly: false,

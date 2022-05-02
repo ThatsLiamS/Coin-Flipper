@@ -1,9 +1,9 @@
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-	name: 'set-cost',
-	description: 'Set the price of your custom addon!',
-	usage: '<name> <cost>',
+	name: 'rename-addon',
+	description: 'Change the name of your custom addon!',
+	usage: '`/set-cost <name> <cost>`',
 
 	permissions: [],
 	ownerOnly: false,

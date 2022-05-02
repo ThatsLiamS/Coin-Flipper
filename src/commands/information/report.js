@@ -4,7 +4,7 @@ const { MessageEmbed, WebhookClient } = require('discord.js');
 module.exports = {
 	name: 'report',
 	description: 'Report a bug/issue to the developers!',
-	usage: '<description>',
+	usage: '`/report <description>`',
 
 	permissions: [],
 	ownerOnly: false,
