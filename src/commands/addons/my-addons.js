@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -9,6 +10,10 @@ module.exports = {
 	ownerOnly: false,
 	guildOnly: true,
 	developerOnly: false,
+
+	data: new SlashCommandBuilder()
+		.setName('my-addons')
+		.setDescription('Get a list of all your custom addons!'),
 
 	error: false,
 	execute: async ({ interaction, userData }) => {

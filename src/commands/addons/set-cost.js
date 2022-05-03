@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -10,10 +11,16 @@ module.exports = {
 	guildOnly: true,
 	developerOnly: false,
 
-	options: [
-		{ name: 'name', description: 'What is the addon\'s name?', type: 'STRING', required: true },
-		{ name: 'cost', description: 'What is the addon\'s cost?', type: 'INTEGER', required: true },
-	],
+	data: new SlashCommandBuilder()
+		.setName('set-cost')
+		.setDescription('Set the price of your custom addon!')
+
+		.addStringOption(option => option
+			.setName('name').setDescription('What is the addon\'s name?').setRequired(true),
+		)
+		.addIntegerOption(option => option
+			.setName('cost').setDescription('How much for?').setRequired(true),
+		),
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {

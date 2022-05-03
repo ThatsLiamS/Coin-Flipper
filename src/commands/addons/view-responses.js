@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -10,10 +11,16 @@ module.exports = {
 	guildOnly: true,
 	developerOnly: false,
 
-	options: [
-		{ name: 'name', description: 'What is the addon\'s name?', type: 'STRING', required: true },
-		{ name: 'page', description: 'Page number, default is 1.', type: 'INTEGER', required: true },
-	],
+	data: new SlashCommandBuilder()
+		.setName('view-responses')
+		.setDescription('View the responses of a custom addon!')
+
+		.addStringOption(option => option
+			.setName('name').setDescription('What is the addon\'s name?').setRequired(true),
+		)
+		.addStringOption(option => option
+			.setName('page').setDescription('Page number, default is 1').setRequired(false),
+		),
 
 	error: false,
 	execute: async ({ interaction, userData }) => {

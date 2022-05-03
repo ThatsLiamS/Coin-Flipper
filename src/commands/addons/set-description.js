@@ -1,19 +1,26 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'set-description',
 	description: 'Set the description of your custom addon!',
-	usage: '`/set-description <name> <cost>`',
+	usage: '`/set-description <name> <description>`',
 
 	permissions: [],
 	ownerOnly: false,
 	guildOnly: true,
 	developerOnly: false,
 
-	options: [
-		{ name: 'name', description: 'What is the addon\'s name?', type: 'STRING', required: true },
-		{ name: 'description', description: 'What is the addon\'s description?', type: 'INTEGER', required: true },
-	],
+	data: new SlashCommandBuilder()
+		.setName('set-description')
+		.setDescription('Set the description of your custom addon!')
+
+		.addStringOption(option => option
+			.setName('name').setDescription('What is the addon\'s name?').setRequired(true),
+		)
+		.addStringOption(option => option
+			.setName('description').setDescription('What is the addon\'s description?').setRequired(true),
+		),
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {

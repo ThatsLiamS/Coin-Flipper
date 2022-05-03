@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -10,10 +11,16 @@ module.exports = {
 	guildOnly: true,
 	developerOnly: false,
 
-	options: [
-		{ name: 'name', description: 'What is the addon\'s name?', type: 'STRING', required: true },
-		{ name: 'response', description: 'What is the new response?', type: 'STRING', required: true },
-	],
+	data: new SlashCommandBuilder()
+		.setName('add-response')
+		.setDescription('Add a response to a custom/server addon!')
+
+		.addStringOption(option => option
+			.setName('name').setDescription('What is the addon\'s name?').setRequired(true),
+		)
+		.addStringOption(option => option
+			.setName('response').setDescription('What is the new response?').setRequired(true),
+		),
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {

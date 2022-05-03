@@ -1,4 +1,6 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
+
 const achievementAdd = require('../../util/achievementAdd');
 
 module.exports = {
@@ -10,6 +12,10 @@ module.exports = {
 	ownerOnly: false,
 	guildOnly: true,
 	developerOnly: false,
+
+	data: new SlashCommandBuilder()
+		.setName('addons')
+		.setDescription('Get a list of all your addons!'),
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {

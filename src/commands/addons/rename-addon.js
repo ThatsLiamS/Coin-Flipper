@@ -1,25 +1,32 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'rename-addon',
 	description: 'Change the name of your custom addon!',
-	usage: '`/set-cost <name> <cost>`',
+	usage: '`/rename-addon <old> <new>`',
 
 	permissions: [],
 	ownerOnly: false,
 	guildOnly: true,
 	developerOnly: false,
 
-	options: [
-		{ name: 'current-name', description: 'What is the addon\'s name?', type: 'STRING', required: true },
-		{ name: 'new-name', description: 'What should it be renamed to?', type: 'INTEGER', required: true },
-	],
+	data: new SlashCommandBuilder()
+		.setName('rename-addon')
+		.setDescription('Change the name of a custom addon!')
+
+		.addStringOption(option => option
+			.setName('old').setDescription('What is the addon\'s name?').setRequired(true),
+		)
+		.addStringOption(option => option
+			.setName('new').setDescription('What do you want the new name to be?').setRequired(true),
+		),
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {
 
-		const oldName = interaction.options.getString('current-name');
-		const newName = interaction.options.getString('new-name');
+		const oldName = interaction.options.getString('old');
+		const newName = interaction.options.getString('new');
 
 		const invalid = ['none', 'null', 'undefined', 'nan'];
 		if (oldName.length > 50 || invalid.includes(oldName.toLowerCase()) || oldName.includes(' ')) {

@@ -1,3 +1,4 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
 module.exports = {
@@ -10,9 +11,13 @@ module.exports = {
 	guildOnly: true,
 	developerOnly: false,
 
-	options: [
-		{ name: 'name', description: 'What is the addon\'s name?', type: 'STRING', required: true },
-	],
+	data: new SlashCommandBuilder()
+		.setName('delete-addon')
+		.setDescription('Delete a custom or purchased addon!')
+
+		.addStringOption(option => option
+			.setName('name').setDescription('What is the addon\'s name?').setRequired(true),
+		),
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {
