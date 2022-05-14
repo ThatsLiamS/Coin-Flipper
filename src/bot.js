@@ -1,11 +1,3 @@
-const express = require('express');
-const app = express();
-app.get('/', (req, res) => res.send('Hello World!'));
-
-const time = new Date();
-app.listen(3000, () => console.log(`Last restart: ${time.getHours()}:${time.getMinutes()}, ${time.getDate()}/${time.getMonth() + 1}/${time.getFullYear()} UTC`));
-
-
 const Discord = require('discord.js');
 const client = new Discord.Client({
 	intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_WEBHOOKS'],
@@ -14,7 +6,9 @@ const client = new Discord.Client({
 
 
 const admin = require('firebase-admin');
-admin.initializeApp({ credential: admin.credential.cert(JSON.parse(process.env['Database'])) });
+admin.initializeApp({
+	credential: admin.credential.cert(JSON.parse(process.env['Database'])),
+});
 const firestore = admin.firestore();
 
 
