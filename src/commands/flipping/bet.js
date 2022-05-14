@@ -1,76 +1,71 @@
-const Discord = require('discord.js');
-
-const achievementAdd = require(`${__dirname}/../../tools/achievementAdd`);
-const send = require(`${__dirname}/../../tools/send`);
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
+const achievementAdd = require('./../../util/achievementAdd');
 
 module.exports = {
-	name: "bet",
-	description: "Bet an amount of cents on either heads or tails!",
-	argument: "`Heads` or `Tails`, and the amount of cents you want to bet or `All`",
-	perms: "Embed Links",
-	tips: "If the coin lands on the same side as you bet, you'll get the same amount of cents you bet. Otherwise, you'll lose the amount of cents you bet.",
-	aliases: ["gamble"],
-	execute: async function(message, args, prefix, client, [firebase, data]) {
+	name: 'bet',
+	description: 'Bet cents on the coinflip!',
+	usage: '`/bet <side> <amount>`',
 
-		if (!args[1]) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "Phrase the command like this: `c!bet <heads or tails> <amount>`" });
-		let betAmt = args[1];
-		let userData = data.data();
-		let bal = userData.currencies.cents;
+	permissions: [],
+	ownerOnly: false,
+	guildOnly: false,
+	developerOnly: false,
 
-		if (isNaN(betAmt) && (betAmt != "all" && betAmt != "max")) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need to bet a *number* of cents" });
+	data: new SlashCommandBuilder()
+		.setName('bet')
+		.setDescription('Bets cents on the coinflip!')
 
-		let all = betAmt == "all" || betAmt == "max";
-		if (betAmt == "all" || betAmt == "max") betAmt = Number(bal);
-		else betAmt = Number(args[1]);
+		.addStringOption(option => option
+			.setName('side')
+			.setDescription('Heads or tails!')
+			.setRequired(true)
 
-		if (bal < betAmt) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You don't have that many cents!" });
-		if (betAmt == undefined || betAmt < 1 || betAmt % 1 != 0) return send.sendChannel({ channel: message.channel, author: message.author }, { content: "That's not a valid number of cents!" });
+			.addChoice('heads', 'heads').addChoice('tails', 'tails'),
+		)
+		.addIntegerOption(option => option
+			.setName('amount')
+			.setDescription('How much are you betting?')
+			.setRequired(true)
 
-		let myBet = args[0];
-		if (myBet != "heads" && myBet != "tails") return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need to bet either heads or tails!" });
+			.setMaxValue(1_000_000)
+			.setMinValue(50),
+		),
 
-		let output = "none";
-		let simpleOut = "none";
-		let randomOut = Math.random() * 100;
-		let needed = 50;
+	error: false,
+	execute: async ({ interaction, firestore, userData }) => {
 
-		if (userData.inv.chart !== undefined && userData.inv.chart > 0) {
-			if (myBet == "heads") needed = 45;
-			else needed = 55;
-		}
-		if (randomOut > needed) {
-			output = "The coin landed on heads";
-			simpleOut = "heads";
-		}
-		else{
-			output = "The coin landed on tails";
-			simpleOut = "tails";
+		const bet = interaction.options.getString('side');
+		let amount = Number(interaction.options.getInteger('amount'));
+
+		if (amount > userData.currencies.cents) {
+			interaction.followUp({ content: 'You can not afford this bet.' });
+			return;
 		}
 
-		const embed = new Discord.MessageEmbed()
-			.setTitle(output);
+		const boolean = Math.floor(Math.random() * 100) > 65;
+		const embed = new MessageEmbed()
+			.setColor('ORANGE');
 
-		let decision = "none";
-		if (myBet == simpleOut) {
+		if (boolean == true) {
+			if (userData.evil == true) amount = Math.floor(amount * 0.75);
 
-			decision = `You got ${betAmt} cents!`;
-			if (userData.evil == true) betAmt = Math.ceil(betAmt * 0.75);
-			bal = Number(bal) + Number(betAmt);
-			userData.currencies.cents = bal;
+			userData.currencies.cents = Number(userData.currencies.cents) + Number(amount);
+			embed.setDescription('You won ' + amount + ' cents!')
+				.setTitle('The coin landed on ' + bet + '!');
+
 		}
-		else{
+		else {
+			if (amount == userData.currencies.cents) userData = await achievementAdd(userData, 'justMyLuck');
 
-			decision = `You lost ${betAmt} cents...`;
-			bal = Number(bal) - Number(betAmt);
-			if (bal < 0) bal = 0;
-			userData.currencies.cents = bal;
-			if (all) userData = await achievementAdd(userData, "justMyLuck");
+			userData.currencies.cents = Number(userData.currencies.cents) - Number(amount);
+			embed.setDescription('You lost ' + amount + ' cents!')
+				.setTitle('The coin landed on ' + bet == 'heads' ? 'tails!' : 'heads!');
+
 		}
 
-		embed.setDescription(decision);
-		embed.setColor('ORANGE');
+		interaction.followUp({ embeds: [embed] });
+		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { embeds: [embed] });
-		await firebase.doc(`/users/${message.author.id}`).set(userData);
-	}
+	},
 };

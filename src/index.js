@@ -1,21 +1,19 @@
-const express = require('express');
-const app = express();
-app.get('/', (req, res) => res.send('Hello World!'));
-
-const time = new Date();
-app.listen(3000, () => console.log(`Last full restart: ${time.getHours()}:${time.getMinutes() + 1}, ${time.getDate()}/${time.getMonth()}/${time.getFullYear()} UTC`));
-
-
 require('dotenv').config();
 const { ShardingManager } = require('discord.js');
 
-const manager = new ShardingManager(`${__dirname}/Coin Flipper.js`, {
+
+const manager = new ShardingManager('./src/bot.js', {
 	totalShards: 'auto',
-	token: process.env['BotToken']
+	token: process.env['BotToken'],
+	respawn: true,
 });
 
-manager.on('shardCreate', shard => {
-	console.log(`Shard ${shard.id} launched`);
+manager.spawn({
+	amount: manager.totalShards,
+	delay: 500,
+	timeout: -1,
 });
 
-manager.spawn(this.totalShards, 500, -1);
+manager.on('shardCreate', (shard) => {
+	console.log(`Launched shard ${shard.id + 1}/${manager.totalShards}`);
+});

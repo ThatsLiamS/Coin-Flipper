@@ -1,7 +1,7 @@
 {
 	"name": "coin-flipper",
-	"version": "1.10.4",
-	"description": "A simple and fun Discord economy bot, with over 200,000 users.",
+	"version": "2.0.0",
+	"description": "A simple and fun Discord economy bot, with over 400,000 users.",
 	"main": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -17,17 +17,14 @@
 	},
 	"homepage": "https://github.com/Coin-Flipper/Coin-Flipper#readme",
 	"devDependencies": {
-		"eslint": "^7.30.0"
+		"eslint": "^8.3.0"
 	},
 	"dependencies": {
-		"bar-charts": "^1.0.3",
-		"canvas": "^2.8.0",
+		"@discordjs/builders": "^0.12.0",
 		"dblapi.js": "^2.4.1",
-		"discord.js": "^13.0.0-dev.d310e4f.1627560163",
+		"discord.js": "^13.6.0",
 		"dotenv": "^10.0.0",
-		"enmap": "^5.8.6",
 		"express": "^4.17.1",
-		"firebase-admin": "^9.10.0",
-		"topgg-autoposter": "^2.0.0"
+		"firebase-admin": "^10.0.0"
 	}
 }

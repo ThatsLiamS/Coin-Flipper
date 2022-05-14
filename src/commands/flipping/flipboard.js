@@ -1,20 +1,25 @@
-const Discord = require('discord.js');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
-	name: "flipboard",
-	description: "See the top 10 coin flippers that use the bot!",
-	argument: "None",
-	perms: "Embed Links",
-	aliases: ["fliplb", "superleaderboard", "flb", "fleaderboard", "flipleaderboard"],
-	error: true,
-	execute: async function(message, args, prefix, client, [firebase]) {
+	name: 'flipboard',
+	description: 'Shows the leaderboard of the top 10 flippers!',
+	usage: '`/flipboard`',
 
-		let error = false;
-		let msg = await message.channel.send("Getting data...").catch(() => { error = true; });
-		if(error == true) { return; }
+	permissions: [],
+	ownerOnly: false,
+	guildOnly: false,
+	developerOnly: false,
+
+	data: new SlashCommandBuilder()
+		.setName('flipboard')
+		.setDescription('Show the leaderboard of the top 10 flippers!'),
+
+	error: true,
+	execute: async ({ interaction, firestore, client }) => {
 
 		let usersArray = [];
-		let users = await firebase.collection("users");
+		const users = await firestore.collection('users');
 
 		await users.get().then((querySnapshot) => {
 			querySnapshot.forEach(async (doc) => {
@@ -23,52 +28,38 @@ module.exports = {
 					if (!doc.data().stats) doc.data().stats = { flipped: 0 };
 					await usersArray.push({
 						id: doc.id,
-						flips: doc.data().stats.flipped
+						flips: doc.data().stats.flipped,
 					});
 				}
 				catch {
-
-					await usersArray.push({
-						id: doc.id,
-						flips: 0
-					});
+					/* ignore it */
 				}
 			});
 		});
 
 		setTimeout(async () => {
 
-			await msg.edit("Sorting data...");
-
 			usersArray = usersArray.sort((a, b) => b.flips - a.flips);
 			usersArray = usersArray.slice(0, 10);
 
 			setTimeout(async () => {
 
-				await msg.edit("Creating flipboard...");
-				const embed = new Discord.MessageEmbed()
-					.setTitle(`The Top 10 Coin Flippers ever!`)
-					.setColor("#e08c38");
+				const embed = new MessageEmbed()
+					.setTitle('The Top 10 Coin Flippers ever!')
+					.setColor('#e08c38');
 
 				for (const profile of usersArray) {
-					if (!profile.id.startsWith("<")) {
-						let user = await client.users.fetch(profile.id);
-						let tag;
-						if (user) tag = user.tag;
-						else tag = "Unknown User";
-						embed.addField(tag, `${profile.flips} coins flipped`);
+					if (!profile.id.startsWith('<')) {
+						const user = await client.users.fetch(profile.id);
+						embed.addField(`${user ? user.tag : 'Unknown user'}`, `${profile.flips} coins flipped`);
 					}
 				}
 
-				setTimeout(async () => {
-
-					await msg.edit(embed);
-
-				}, 750);
+				interaction.followUp({ embeds: [embed] });
 
 			}, 1000);
 
 		}, 1000);
 
-	}
+	},
 };

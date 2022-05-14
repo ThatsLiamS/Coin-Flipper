@@ -1,9 +1,8 @@
-# Dependency directories
+# Dependency directory
 node_modules/
-jspm_packages/
 
 # dotenv environment variables file
 .env
 
-# database files
-data/
+# Workspace enviroment files
+.vscode/

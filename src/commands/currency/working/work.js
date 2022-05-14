@@ -1,46 +1,51 @@
-const achievementAdd = require(`${__dirname}/../../../tools/achievementAdd`);
-const joblist = require(`${__dirname}/../../../tools/constants`).joblist;
-const send = require(`${__dirname}/../../../tools/send`);
+const { SlashCommandBuilder } = require('@discordjs/builders');
+
+const achievementAdd = require('./../../../util/achievementAdd');
+const { joblist } = require('./../../../util/constants');
 
 module.exports = {
-	name: "work",
-	description: "Work at your job and get some cents!",
-	argument: "None",
-	perms: "",
-	cooldown: 3600,
-	tips: "You can only use this if you have a job! (use `c!jobs` to get a list of jobs)",
-	aliases: ["hourly"],
-	execute: async function(message, args, prefix, client, [firebase, data]) {
+	name: 'work',
+	description: 'Work at your job and collect your paycheck!',
+	usage: '`/work`',
 
-		let userData = data.data();
+	permissions: [],
+	ownerOnly: false,
+	guildOnly: false,
+	developerOnly: false,
 
-		let job = userData.job;
-		if (job == "none") return send.sendChannel({ channel: message.channel, author: message.author }, { content: "You need a job to do work! Get a job using `c!jobs`" });
-		let jobFound = joblist.find(ite => ite.name.toLowerCase() == job);
+	data: new SlashCommandBuilder()
+		.setName('work')
+		.setDescription('Work at your job and collect your paycheck!'),
 
-		let work = jobFound.working;
+	error: false,
+	execute: async ({ interaction, firestore, userData }) => {
 
-		let reason = work[Math.floor(Math.random() * work.length)];
+		const job = userData.job;
+		if (job == 'none') {
+			interaction.followUp({ content: 'You need a job to do work! Get a job using `/job claim`' });
+			return;
+		}
+
+		const jobFound = joblist.find(ite => ite.name.toLowerCase() == job);
+		const work = jobFound.working;
+
+		const reason = work[Math.floor(Math.random() * work.length)];
 		let randomAmt = Math.floor(Math.random() * (500 - 300 + 1)) + 400;
 
 		if (userData.evil == true) randomAmt = Math.ceil(randomAmt * 0.5);
-		if (userData.inv.clipboard > 0 && userData.evil == false) {
-			randomAmt = Math.ceil(randomAmt * 1.5);
-		}
+		if (userData.inv.clipboard > 0 && userData.evil == false) randomAmt = Math.ceil(randomAmt * 1.5);
 		if (userData.donator > 0) randomAmt = Math.ceil(randomAmt * 1.5);
+
 		randomAmt = Math.ceil(randomAmt * jobFound.multi);
 
-		let bal = userData.currencies.cents;
-		bal = Number(bal) + Number(randomAmt);
-		let worked = userData.stats.timesWorked;
-		worked = Number(worked) + Number(1);
+		userData.currencies.cents = Number(userData.currencies.cents) + Number(randomAmt);
+		userData.stats.timesWorked = Number(userData.stats.timesWorked) + Number(1);
 
-		userData.currencies.cents = bal;
-		userData.stats.timesWorked = worked;
+		if (userData.stats.timesWorked >= 40) userData = await achievementAdd(userData, 'nineToFive');
+		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 
-		if (userData.stats.timesWorked >= 40) userData = await achievementAdd(userData, "nineToFive");
-		await firebase.doc(`/users/${message.author.id}`).set(userData);
+		interaction.followUp({ content: `You got \`${randomAmt}\` cents by ${reason}!` });
+		return true;
 
-		send.sendChannel({ channel: message.channel, author: message.author }, { content: `You got \`${randomAmt}\` cents by ${reason}!` });
-	}
+	},
 };
