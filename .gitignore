@@ -3,6 +3,3 @@ node_modules/
 
 # dotenv environment variables file
 .env
-
-# Workspace enviroment files
-.vscode/

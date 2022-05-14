@@ -60,7 +60,7 @@ module.exports = {
 
 			userData.currencies.cents = Number(userData.currencies.cents) - Number(amount);
 			embed.setDescription('You lost ' + amount + ' cents!')
-				.setTitle('The coin landed on ' + bet == 'heads' ? 'tails!' : 'heads!');
+				.setTitle('The coin landed on ' + (bet == 'heads' ? 'tails!' : 'heads!'));
 
 		}
 

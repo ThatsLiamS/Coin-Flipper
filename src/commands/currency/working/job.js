@@ -39,7 +39,7 @@ module.exports = {
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {
 
-		const subCommandName = interaction.options.getSubcommand();
+		const subCommandName = interaction.options.getSubcommand().catch(() => false);
 		if (!subCommandName) {
 			interaction.followUp({ content: 'Woah, an unexpected error has occurred. Please try again!' });
 			return false;

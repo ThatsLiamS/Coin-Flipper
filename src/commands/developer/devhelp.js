@@ -24,7 +24,7 @@ module.exports = {
 		const commandFiles = readdirSync(`${__dirname}/../developer`).filter(file => file.endsWith('.js'));
 		for (const file of commandFiles) {
 			const command = require(`${__dirname}/../developer/${file}`);
-			description = description + `\`/${command.name} ${command.usage}\` ${command.description}\n`;
+			description = description + `${command.usage} ${command.description}\n`;
 		}
 
 		const embed = new MessageEmbed()

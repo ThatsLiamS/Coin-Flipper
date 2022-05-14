@@ -46,11 +46,11 @@ module.exports = {
 		if (userData.donator > 0) randomAmt = Math.ceil(randomAmt * 1.5);
 
 		userData.currencies.cents = Number(userData.currencies.cents) + Number(randomAmt);
-		await firestore.doc(`/users/${interaction.usr.id}`).set(userData);
+		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 
 		const embed = new MessageEmbed()
 			.setTitle('You claimed your daily reward!')
-			.setDescription(`You got \`${randomAmt}\` cents!\nMake sure to come back tomorrow to claim your next one!\nIf you want 1000 more cents, vote for the bot with \`c!vote\`!`)
+			.setDescription(`You got \`${randomAmt}\` cents!\nMake sure to come back tomorrow to claim your next one!\nIf you want 1000 more cents, vote for the bot with \`/vote\`!`)
 			.setColor('GREEN');
 
 		interaction.followUp({ embeds: [embed] });
