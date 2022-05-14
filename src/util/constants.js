@@ -1,3 +1,5 @@
+const emojis = require('./emojis.js');
+
 module.exports.minigameWords = [
 	'coin',
 	'flip',
@@ -864,7 +866,7 @@ module.exports.achievements = [
 	},
 	{
 		name: 'Black Belt',
-		emoji: '<:blackbelt:842511815173996634>',
+		emoji:  `${emojis.blackbelt || 'blackbelt'}`,
 		req: 'Train your karate coin to level 16',
 		id: 'blackBelt',
 	},
@@ -900,7 +902,7 @@ module.exports.achievements = [
 	},
 	{
 		name: 'Ultimate flipper',
-		emoji: '<:avidflipper_badge:832251366369787914>',
+		emoji: `${emojis.avid_flipper || 'badge_avidFlipper'}`,
 		req: 'Flip at least 1000 coins',
 		id: 'ultimateFlipper',
 	},
