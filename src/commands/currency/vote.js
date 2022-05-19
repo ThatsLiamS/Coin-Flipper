@@ -3,14 +3,6 @@ const dbl = require('dblapi.js');
 
 const achievementAdd = require('./../../util/achievementAdd');
 
-const mydbl = new dbl(
-	process.env['API_TOKEN'],
-	{
-		webhookPort: 5000,
-		webhookAuth: 'password',
-	},
-);
-
 module.exports = {
 	name: 'vote',
 	description: 'Vote for the bot and get cents!',
@@ -27,6 +19,14 @@ module.exports = {
 
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {
+
+		const mydbl = new dbl(
+			process.env['API_TOKEN'],
+			{
+				webhookPort: 5000,
+				webhookAuth: 'password',
+			},
+		);
 
 		const hasVoted = await mydbl.hasVoted(interaction.user.id);
 

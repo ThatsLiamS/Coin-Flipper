@@ -39,7 +39,7 @@ module.exports = {
 	error: false,
 	execute: async ({ interaction, firestore, userData }) => {
 
-		const subCommandName = interaction.options.getSubcommand().catch(() => false);
+		const subCommandName = interaction.options.getSubcommand();
 		if (!subCommandName) {
 			interaction.followUp({ content: 'Woah, an unexpected error has occurred. Please try again!' });
 			return false;
@@ -106,8 +106,10 @@ module.exports = {
 				return false;
 			}
 
-			userData.job == 'none';
-			userData.currencies.cents = userData.currencies.cents > 50 ? userData.currencies.cents - 50 : 0;
+			userData.job = 'none';
+			userData.currencies.cents = userData.currencies.cents > 50 ? Number(userData.currencies.cents) - 50 : 0;
+
+			interaction.followUp({ content: 'You have successfully quit your job.' });
 
 			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 			return true;

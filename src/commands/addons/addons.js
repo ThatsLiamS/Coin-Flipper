@@ -59,9 +59,8 @@ module.exports = {
 			&& userData.inv.kcoin > 0
 			&& userData.karate.abilities.flip === true) {
 
-			achievementAdd(userData, 'addonMaster').then(async (data) => {
-				await firestore.doc(`/users/${interaction.user.id}`).set(data);
-			});
+			userData = achievementAdd(userData, 'addonMaster');
+			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 
 		}
 

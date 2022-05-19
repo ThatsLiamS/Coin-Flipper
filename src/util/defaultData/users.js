@@ -6,7 +6,7 @@ module.exports.main = {
 	currencies: {
 		cents: 0,
 		register: 0,
-		multiplier: 0,
+		multiplier: 1,
 	},
 
 	inv: {
@@ -139,10 +139,6 @@ module.exports.main = {
 				author: 0,
 			},
 		},
-	},
-
-	trading: {
-		session: null,
 	},
 
 	achievements: {

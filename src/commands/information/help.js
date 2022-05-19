@@ -52,7 +52,7 @@ module.exports = {
 
 		const categories = ['flipping', 'currency', 'information', 'karate', 'addons', 'customization', 'online', 'trading', 'donator'];
 		if (categories.includes(cmdName)) {
-			let description = '__**General**__';
+			let description = '__**General**__\n';
 
 			const commandFiles = readdirSync(`${__dirname}/../../commands/${cmdName}`).filter(file => file.endsWith('.js'));
 			for (const file of commandFiles) {
@@ -64,11 +64,11 @@ module.exports = {
 			if (commandFolders) {
 				for (const subCommandFolders of commandFolders) {
 					const cmdFiles = readdirSync(`${__dirname}/../../commands/${cmdName}/${subCommandFolders}`).filter(file => file.endsWith('.js'));
-					description = description + `\n**__${subCommandFolders}__**`;
+					description = description + `\n**__${subCommandFolders.charAt(0).toUpperCase() + subCommandFolders.slice(1)}__**\n`;
 
 					for (const file of cmdFiles) {
 						const command = require(`${__dirname}/../../commands/${cmdName}/${subCommandFolders}/${file}`);
-						description = description + `\`/${command.name} ${command.usage}\` ${command.description}\n`;
+						description = description + `${command.usage}\n`;
 					}
 
 				}

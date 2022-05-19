@@ -2,10 +2,10 @@ const admin = require('firebase-admin');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
 
-const achievementAdd = require('./../../../util/achievementAdd');
-const { itemlist } = require('./../../../util/constants');
-const gotItem = require('./../../../util/gotItem');
-const defaultData = require('./../../../util/defaultData/guilds');
+const achievementAdd = require('../../../util/achievementAdd');
+const { itemlist } = require('../../../util/constants');
+const gotItem = require('../../../util/gotItem');
+const defaultData = require('../../../util/defaultData/guilds');
 
 module.exports = {
 	name: 'trash',
@@ -56,16 +56,12 @@ module.exports = {
 
 		if (subCommandName == 'items') {
 
-			const trash = guildData.trash;
-			trash?.map((a) => {
-				const item = itemlist.filter((b) => a == b.name);
-				return item.prof;
-			});
+			const trash = guildData?.trash?.map((a) => itemlist.filter((b) => a == b.name)[0].prof);
 
 			const embed = new MessageEmbed()
 				.setTitle(`${interaction.guild.name}'s Trash:`)
 				.setDescription(trash?.join('\n') || 'Nothing\'s here ;-;')
-				.setFooter({ text: 'Use c!take <item> to take an item out!' })
+				.setFooter({ text: 'Use /trash take <item> to take an item out!' })
 				.setColor('#ffffff');
 
 			interaction.followUp({ embeds: [embed] });
@@ -74,7 +70,7 @@ module.exports = {
 
 		if (subCommandName == 'take') {
 
-			const item = itemlist.filter((i) => i.name == interaction.options.get('item'));
+			const item = itemlist.filter((i) => i.name == interaction.options.getString('item').toLowerCase())[0];
 			if (!item) {
 				interaction.followUp({ content: 'That is not a valid item name.' });
 				return false;
@@ -102,17 +98,13 @@ module.exports = {
 
 		if (subCommandName == 'throw') {
 
-			const item = itemlist.filter((i) => i.name == interaction.options.get('item'));
-			if (!item) {
+			const item = itemlist.filter((i) => i.name == interaction.options.getString('item').toLowerCase())[0];
+			if (!item || item == []) {
 				interaction.followUp({ content: 'That is not a valid item name.' });
 				return false;
 			}
-			if (!userData?.inv?.[item.id] < 1) {
+			if (userData?.inv?.[item.id] < 1) {
 				interaction.followUp({ content: 'You do not have that item.' });
-				return false;
-			}
-			if (guildData?.trash?.includes(item.name)) {
-				interaction.followUp({ content: 'That item is already in the trash.' });
 				return false;
 			}
 
