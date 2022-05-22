@@ -1,7 +1,11 @@
 module.exports.main = {
 
 	job: 'none',
+	donator: 0,
+
 	evil: false,
+	compact: false,
+	banned: false,
 
 	currencies: {
 		cents: 0,
@@ -62,61 +66,8 @@ module.exports.main = {
 		weekly: 0,
 		monthly: 0,
 		claimed: 0,
-		flipCooldown: false,
-		dropshipCooldown: false,
-		exploreCooldown: false,
-		lotteryCooldown: false,
 	},
 
-	lottery: {
-		id: 0,
-		won: false,
-		prize: 0,
-	},
-
-	karate: {
-
-		abilities: {
-			flip: false,
-			spin: false,
-			slide: false,
-			dive: false,
-			swipe: false,
-			slice: false,
-		},
-
-		name: 'NA',
-		type: 'NA',
-		belt: 'NA',
-		xp: 0,
-		level: 0,
-
-		battles: {
-			in_battle: false,
-			against: 0,
-			askedTo: 0,
-			askedBy: 0,
-			hp: 0,
-			st: 0,
-			mhp: 0,
-			mst: 0,
-			choosing: false,
-			first: false,
-			guild: 0,
-			channel: 0,
-			turn: false,
-
-			chosen: {
-				flip: false,
-				spin: false,
-				slide: false,
-				dive: false,
-				swipe: false,
-				slice: false,
-			},
-
-		},
-	},
 
 	addons: {
 		customaddons: {
@@ -144,39 +95,58 @@ module.exports.main = {
 	achievements: {
 	},
 
-	online: {
-		online: false,
-		addonInv: {
-			first: {
-				name: 'none',
-				description: 'none',
-				published: false,
-				author: 0,
-			},
-			second: {
-				name: 'none',
-				description: 'none',
-				published: false,
-				author: 0,
-			},
-			third: {
-				name: 'none',
-				description: 'none',
-				published: false,
-				author: 0,
-			},
-		},
-		credits: 0,
-		betsWon: 0,
-	},
-
-	donator: 0,
 };
 
-/* --------------------------------------------------- */
-/*             Unlocked by buying a pickaxe            */
-/* --------------------------------------------------- */
+
+/* Karate System */
+module.exports.karate = {
+
+	abilities: {
+		flip: false,
+		spin: false,
+		slide: false,
+		dive: false,
+		swipe: false,
+		slice: false,
+	},
+
+	name: 'NA',
+	type: 'NA',
+	belt: 'NA',
+	xp: 0,
+	level: 0,
+
+	battles: {
+		in_battle: false,
+		against: 0,
+		askedTo: 0,
+		askedBy: 0,
+		hp: 0,
+		st: 0,
+		mhp: 0,
+		mst: 0,
+		choosing: false,
+		first: false,
+		guild: 0,
+		channel: 0,
+		turn: false,
+
+		chosen: {
+			flip: false,
+			spin: false,
+			slide: false,
+			dive: false,
+			swipe: false,
+			slice: false,
+		},
+
+	},
+};
+
+
+/* Mining System */
 module.exports.mining = {
+	on: false,
 	pickaxe: 'standard',
 	easier: 0,
 	rock: 0,
@@ -187,4 +157,32 @@ module.exports.mining = {
 	banana: 0,
 	steel: 0,
 	infinitystone: 0,
+};
+
+
+/* Online System */
+module.exports.online = {
+	online: false,
+	addonInv: {
+		first: {
+			name: 'none',
+			description: 'none',
+			published: false,
+			author: 0,
+		},
+		second: {
+			name: 'none',
+			description: 'none',
+			published: false,
+			author: 0,
+		},
+		third: {
+			name: 'none',
+			description: 'none',
+			published: false,
+			author: 0,
+		},
+	},
+	credits: 0,
+	betsWon: 0,
 };
