@@ -23,7 +23,7 @@ module.exports = {
 	execute: async ({ interaction, firestore, userData }) => {
 
 		const itemName = interaction.options.getString('item');
-		const item = itemlist.filter((i) => i.name == itemName.toLowerCase())[0];
+		const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases(itemName.toLowerCase()))[0];
 
 		if (!item || item?.found != 'shop' && item?.found != 'market') {
 			interaction.followUp({ content: 'That is not a valid item to buy.' });

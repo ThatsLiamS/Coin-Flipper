@@ -33,7 +33,7 @@ module.exports = {
 			.setColor('ORANGE')
 			.setTitle(`${user.username}'s Balance!`);
 
-		if (userData?.evil == true) {
+		if (userData?.compact == true) {
 			embed.setDescription(`Cents: \`${userData?.currencies?.cents || 0}\`\nRegister: \`${userData?.currencies?.register || 0}\``);
 
 			interaction.followUp({ embeds: [embed] });

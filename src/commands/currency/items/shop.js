@@ -27,7 +27,7 @@ module.exports = {
 		const itemName = interaction.options.getString('item')?.toLowerCase();
 
 		if (itemName) {
-			const item = itemlist.filter((i) => i.name == itemName?.toLowerCase())[0];
+			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases(itemName.toLowerCase()))[0];
 			if (!item) {
 				interaction.followUp({ content: `\`${itemName}\` is not a valid item.` });
 				return false;

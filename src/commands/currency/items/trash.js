@@ -70,7 +70,8 @@ module.exports = {
 
 		if (subCommandName == 'take') {
 
-			const item = itemlist.filter((i) => i.name == interaction.options.getString('item').toLowerCase())[0];
+			const itemName = interaction.options.getString('item');
+			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases(itemName.toLowerCase()))[0];
 			if (!item) {
 				interaction.followUp({ content: 'That is not a valid item name.' });
 				return false;
@@ -98,7 +99,8 @@ module.exports = {
 
 		if (subCommandName == 'throw') {
 
-			const item = itemlist.filter((i) => i.name == interaction.options.getString('item').toLowerCase())[0];
+			const itemName = interaction.options.getString('item');
+			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases(itemName.toLowerCase()))[0];
 			if (!item || item == []) {
 				interaction.followUp({ content: 'That is not a valid item name.' });
 				return false;
