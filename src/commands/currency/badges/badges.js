@@ -25,10 +25,11 @@ module.exports = {
 		.addSubcommand(subcommand => subcommand
 			.setName('claim')
 			.setDescription('Claim a badge to show off on your profile!')
-			.addStringOption(option => option.setName('badge').setDescription('Select a badge').setRequired(true))
-			.addChoice('Supporter', 'support').addChoice('Flipper', 'flip').addChoice('Avid Flipper', 'flip_pro')
-			.addChoice('Gamer', 'minigame').addChoice('Pro Gamer', 'minigame_plus').addChoice('Registered', 'register')
-			.addChoice('Collector', 'collector').addChoice('Scavenger', 'collector_pro').addChoice('Wealthy', 'rich').addChoice('Millionaire', 'rich_pro'),
+			.addStringOption(option => option.setName('badge').setDescription('Select a badge').setRequired(true)
+				.addChoice('Supporter', 'support').addChoice('Flipper', 'flip').addChoice('Avid Flipper', 'flip_pro')
+				.addChoice('Gamer', 'minigame').addChoice('Pro Gamer', 'minigame_plus').addChoice('Registered', 'register')
+				.addChoice('Collector', 'collector').addChoice('Scavenger', 'collector_pro').addChoice('Wealthy', 'rich').addChoice('Millionaire', 'rich_pro'),
+			),
 		),
 
 	error: false,
