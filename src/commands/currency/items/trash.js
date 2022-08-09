@@ -71,7 +71,7 @@ module.exports = {
 		if (subCommandName == 'take') {
 
 			const itemName = interaction.options.getString('item');
-			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases(itemName.toLowerCase()))[0];
+			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
 			if (!item) {
 				interaction.followUp({ content: 'That is not a valid item name.' });
 				return false;
@@ -100,7 +100,7 @@ module.exports = {
 		if (subCommandName == 'throw') {
 
 			const itemName = interaction.options.getString('item');
-			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases(itemName.toLowerCase()))[0];
+			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
 			if (!item || item == []) {
 				interaction.followUp({ content: 'That is not a valid item name.' });
 				return false;

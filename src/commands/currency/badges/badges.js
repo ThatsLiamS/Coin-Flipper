@@ -25,11 +25,13 @@ module.exports = {
 		.addSubcommand(subcommand => subcommand
 			.setName('claim')
 			.setDescription('Claim a badge to show off on your profile!')
-			.addStringOption(option => option.setName('badge').setDescription('Select a badge').setRequired(true)
-				.addChoice('Supporter', 'support').addChoice('Flipper', 'flip').addChoice('Avid Flipper', 'flip_pro')
-				.addChoice('Gamer', 'minigame').addChoice('Pro Gamer', 'minigame_plus').addChoice('Registered', 'register')
-				.addChoice('Collector', 'collector').addChoice('Scavenger', 'collector_pro').addChoice('Wealthy', 'rich').addChoice('Millionaire', 'rich_pro'),
-			),
+			.addStringOption(option => option.setName('badge').setDescription('Select a badge').setRequired(true).addChoices(
+				{ 'name': 'Supporter', 'value': 'support' }, { 'name': 'Flipper', 'value': 'flip' },
+				{ 'name': 'Avid Flipper', 'value': 'flip_pro' }, { 'name': 'Gamer', 'value': 'minigame' },
+				{ 'name': 'Pro Gamer', 'value': 'minigame_plus' }, { 'name': 'Registered', 'value': 'register' },
+				{ 'name': 'Collector', 'value': 'collector' }, { 'name': 'Scavenger', 'value': 'collector_pro' },
+				{ 'name': 'Wealthy', 'value': 'rich' }, { 'name': 'Millionaire', 'value': 'rich_pro' },
+			)),
 		),
 
 	error: false,

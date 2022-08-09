@@ -24,8 +24,8 @@ module.exports = {
 			.setDescription('Give cents to another user!')
 
 			.addUserOption(option => option.setName('user').setDescription('Select a user').setRequired(true))
-			.addIntegerOption(option => option.setName('amount').setDescription('How much would you like to give?').setRequired(true))
-			.setMin(5).setMax(50_000),
+			.addIntegerOption(option => option.setName('amount').setDescription('How much would you like to give?')
+				.setRequired(true).setMinValue(5).setMaxValue(50_000)),
 		)
 
 		.addSubcommand(subcommand => subcommand

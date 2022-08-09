@@ -19,8 +19,11 @@ module.exports = {
 		.setDescription('Use an item in your inventory!')
 
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to use').setRequired(true)
-			.addChoice('Dynamite', 'dynamite').addChoice('Party Popper', 'partypopper').addChoice('Flex your Trophy', 'goldtrophy')
-			.addChoice('Briefcase', 'briefcase').addChoice('Broken 8-ball', 'broken8ball'),
+			.addChoices(
+				{ 'name': 'Dynamite', 'value': 'dynamite' }, { 'name': 'Party Popper', 'value': 'partypopper' },
+				{ 'name': 'Flex your Trophy', 'value': 'goldtrophy' }, { 'name': 'Briefcase', 'value': 'briefcase' },
+				{ 'name': 'Broken 8-ball', 'value': 'broken8ball' },
+			),
 		),
 
 	error: false,
