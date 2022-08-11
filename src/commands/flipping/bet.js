@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const achievementAdd = require('./../../util/achievementAdd');
 
 module.exports = {
@@ -21,7 +20,7 @@ module.exports = {
 			.setDescription('Heads or tails!')
 			.setRequired(true)
 
-			.addChoice('heads', 'heads').addChoice('tails', 'tails'),
+			.addChoices({ 'name': 'heads', 'value': 'heads' }, { 'name': 'tails', 'value': 'tails'}),
 		)
 		.addIntegerOption(option => option
 			.setName('amount')
@@ -44,7 +43,7 @@ module.exports = {
 		}
 
 		const boolean = Math.floor(Math.random() * 100) > 65;
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor('ORANGE');
 
 		if (boolean == true) {

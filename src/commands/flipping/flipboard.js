@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	name: 'flipboard',
@@ -44,7 +43,7 @@ module.exports = {
 
 			setTimeout(async () => {
 
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setTitle('The Top 10 Coin Flippers ever!')
 					.setColor('#e08c38');
 

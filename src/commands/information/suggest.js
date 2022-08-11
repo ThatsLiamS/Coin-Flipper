@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, WebhookClient } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, WebhookClient } = require('discord.js');
 
 module.exports = {
 	name: 'suggest',
@@ -24,7 +23,7 @@ module.exports = {
 	execute: ({ interaction, client }) => {
 
 		const avatarURL = interaction.guild.iconURL() ? interaction.guild.iconURL() : 'https://i.imgur.com/yLv2YVnh.jpg';
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor('#0099ff')
 			.setDescription(`**${client.user.tag}**\n${interaction.options.getString('description')}`)
 			.setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })

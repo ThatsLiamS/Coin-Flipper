@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 const { joblist } = require('./../../../util/constants');
 
@@ -54,7 +53,7 @@ module.exports = {
 			if (userData.stats.timesWorked < 30) fields = fields.slice(0, 6);
 			if (userData.stats.timesWorked < 15) fields = fields.slice(0, 3);
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle('Jobs:')
 				.setColor('BLUE')
 				.addFields(fields)
@@ -72,7 +71,7 @@ module.exports = {
 			}
 
 			const TargetJob = interaction.options.getString('job').toLowerCase();
-			const jobFound = joblist.find(item => item.name.toLowerCase() == TargetJob);
+			const jobFound = joblist.find(job => job.name.toLowerCase() == TargetJob);
 			if (!jobFound || jobFound == undefined || jobFound == null) {
 				interaction.followUp({ content: 'That is not a valid job!' });
 				return false;

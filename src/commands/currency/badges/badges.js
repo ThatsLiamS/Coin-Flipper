@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 const { itemlist, badgelist } = require('./../../../util/constants.js');
 
@@ -45,7 +44,7 @@ module.exports = {
 
 		if (subCommandName == 'list') {
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle('Badges:')
 				.setColor('#54fff1')
 				.setFooter({ text: 'Use "/badges claim <badge>" to claim a badge!\nThanks to X-Boy742#8981 for making the badges.' });

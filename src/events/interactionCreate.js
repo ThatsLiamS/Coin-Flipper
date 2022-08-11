@@ -1,4 +1,4 @@
-const { Collection } = require('discord.js');
+const { Collection, InteractionType } = require('discord.js');
 const defaultData = require('./../util/defaultData/users').main;
 
 const cooldowns = new Collection();
@@ -12,7 +12,7 @@ module.exports = {
 		const now = Date.now();
 
 		/* Is interaction a command? */
-		if (interaction.isCommand()) {
+		if (interaction.type === InteractionType.ApplicationCommand) {
 			await interaction.deferReply();
 
 			const cmd = client.commands.get(interaction.commandName);
@@ -62,6 +62,16 @@ module.exports = {
 				}
 			}
 
+			/* Work out the appropriate cooldown time */
+			if (!cooldowns.has(cmd.name)) cooldowns.set(cmd.name, new Collection());
+			const timestamps = cooldowns.get(cmd.name);
+			let cooldownAmount = (cmd.cooldown || 0) * 1000;
+
+			if (cmd.name == 'flip' && interaction.channel.id == '832245298969182246') cooldownAmount = 0;
+			if (userData.donator == 1) cooldownAmount = Math.floor(cooldownAmount * 0.75);
+			if (userData.donator == 2) cooldownAmount = Math.floor(cooldownAmount * 0.5);
+
+
 			/* Receive userdata from the Firestore Database */
 			const collection = await firestore.collection('users').doc(interaction.user.id).get();
 			const userData = collection.data() || defaultData;
@@ -73,22 +83,21 @@ module.exports = {
 				}
 			}
 
-			/* Work out the appropriate cooldown time */
-			if (!cooldowns.has(cmd.name)) cooldowns.set(cmd.name, new Collection());
-			const timestamps = cooldowns.get(cmd.name);
-			let cooldownAmount = (cmd.cooldown || 0) * 1000;
-
-			if (cmd.name == 'flip' && interaction.channel.id == '832245298969182246') cooldownAmount = 0;
-			if (userData.donator == 1) cooldownAmount = Math.floor(cooldownAmount * 0.75);
-			if (userData.donator == 2) cooldownAmount = Math.floor(cooldownAmount * 0.5);
-
 
 			/* Execute the command file */
-			await cmd.execute({ interaction, client, firestore, userData });
-
-			/* Set and delete the cooldown */
-			timestamps.set(interaction.user.id, now);
-			setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
+			cmd.execute({ interaction, client, firestore, userData })
+			
+				.then((res) => {
+					if (res == true) {
+						/* Set and delete the cooldown */
+						timestamps.set(interaction.user.id, now);
+						setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
+					}
+				})
+				
+				.catch((err) => {
+					console.log(err);
+				});
 
 		}
 

@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 const { itemlist } = require('./../../../util/constants.js');
 
@@ -40,7 +39,7 @@ module.exports = {
 
 		userData.inv[item.id] = Number(userData.inv[item.id]) - Number(1);
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle(`Congrats, ${interaction.user.username}!`)
 			.setDescription(`You sold 1 ${item.prof} for **${price}** cents!`)
 			.setColor('GREEN');

@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const { exploreAreas } = require('./../../util/constants.js');
 
@@ -27,7 +26,7 @@ module.exports = {
 			(chance > 2 ? 'win' : 'draw') :
 			(chance > 4 ? 'win' : (chance > 2 ? 'draw' : 'loss'));
 
-		const embed = new MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		if (result == 'win') {
 			let amount = Math.floor(Math.random() * (80 - 40 + 1)) + 40;

@@ -1,6 +1,5 @@
 const admin = require('firebase-admin');
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder} = require('discord.js');
 
 const achievementAdd = require('../../../util/achievementAdd');
 const { itemlist } = require('../../../util/constants');
@@ -58,7 +57,7 @@ module.exports = {
 
 			const trash = guildData?.trash?.map((a) => itemlist.filter((b) => a == b.name)[0].prof);
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.guild.name}'s Trash:`)
 				.setDescription(trash?.join('\n') || 'Nothing\'s here ;-;')
 				.setFooter({ text: 'Use /trash take <item> to take an item out!' })

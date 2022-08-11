@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const { readdirSync } = require('fs');
 
 module.exports = {
@@ -28,7 +27,7 @@ module.exports = {
 
 		const cmd = client.commands.get(cmdName);
 		if (cmd) {
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setColor('#0099FF')
 				.setTitle(cmd.name.charAt(0).toUpperCase() + cmd.name.slice(1) + ' Command')
 				.setDescription(cmd.description)
@@ -50,7 +49,7 @@ module.exports = {
 			return;
 		}
 
-		const categories = ['flipping', 'currency', 'information', 'donator'];
+		const categories = ['flipping', 'currency', 'information', 'donator', 'addons'];
 		if (categories.includes(cmdName)) {
 			let description = '__**General**__\n';
 
@@ -75,7 +74,7 @@ module.exports = {
 			}
 
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle(cmdName.charAt(0).toUpperCase() + cmdName.slice(1) + ' Commands')
 				.setDescription(description)
 				.setColor('#D3D3D3');
@@ -84,7 +83,7 @@ module.exports = {
 			return;
 		}
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Coin Flipper Commands')
 			.setDescription('Use `/help <category>` to get commands in one category, or `/help <command>` to get more info on a single command')
 			.addFields(
@@ -99,12 +98,12 @@ module.exports = {
 			)
 			.setColor('#cd7f32');
 
-		const row = new MessageActionRow()
+		const row = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
-					.setStyle('LINK').setLabel('Invite').setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
-				new MessageButton()
-					.setStyle('LINK').setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Link).setLabel('Invite').setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Link).setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
 			);
 
 		interaction.followUp({ embeds: [embed], components: [row] });

@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const emojis = require('./../../util/emojis');
 const defaultData = require('./../../util/defaultData/users');
@@ -30,7 +29,7 @@ module.exports = {
 		const collection = await firestore.collection('users').doc(user.id).get();
 		const userData = collection.data() || defaultData;
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle(`${user.username}'s information`)
 			.setColor('cd7f32')
 			.addFields(

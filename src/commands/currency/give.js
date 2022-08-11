@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const achievementAdd = require('./../../util/achievementAdd.js');
 const defaultData = require('./../../util/defaultData/users.js');
@@ -69,7 +68,7 @@ module.exports = {
 			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 			await firestore.doc(`/users/${user.id}`).set(thierData);
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setColor('GREEN')
 				.setTitle('Every little helps!')
 				.setDescription(`You gave <@${user.id}> **${amount}** cents!\n\nYou now have ${userData.currencies.cents} and ${user.username} has ${thierData.currencies.cents}.`);

@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 const flips = require('./../../util/flips');
 const gotItem = require('./../../util/gotItem');
@@ -90,7 +89,7 @@ module.exports = {
 
 
 				/* Create and send the embed */
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setColor('ORANGE')
 					.setTitle(response)
 					.setDescription(message);
@@ -139,7 +138,7 @@ module.exports = {
 				}
 
 				/* Create and send the embed */
-				const embed = new MessageEmbed()
+				const embed = new EmbedBuilder()
 					.setColor('RED')
 					.setTitle(responses[Math.floor(Math.random() * responses.length)])
 					.setDescription(message);

@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 
 module.exports = {
 	name: 'links',
@@ -18,7 +17,7 @@ module.exports = {
 	error: false,
 	execute: async ({ interaction }) => {
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Coin Flipper links')
 			.setColor('#E0DB38')
 			.addFields(
@@ -27,14 +26,14 @@ module.exports = {
 				{ name: '__Donator__', value: '[PayPal](https://paypal.me/ThatsLiamS)\n[Patreon](https://www.patreon.com/CoinFlipper)', inline: true },
 			);
 
-		const row = new MessageActionRow()
+		const row = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
-					.setStyle('LINK').setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
-				new MessageButton()
-					.setStyle('LINK').setLabel('Invite').setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
-				new MessageButton()
-					.setStyle('LINK').setLabel('Website').setURL('https://coinflipper.pages.dev'),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Link).setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Link).setLabel('Invite').setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Link).setLabel('Website').setURL('https://coinflipper.pages.dev'),
 			);
 
 		interaction.followUp({ embeds: [embed], components: [row] });

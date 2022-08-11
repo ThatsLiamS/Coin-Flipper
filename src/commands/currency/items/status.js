@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	name: 'status',
@@ -18,7 +17,7 @@ module.exports = {
 	error: false,
 	execute: async ({ interaction, userData }) => {
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle(`${interaction.user.username}'s Status:`)
 			.setColor('GREEN');
 

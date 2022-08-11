@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 const { itemlist } = require('./../../../util/constants.js');
 
@@ -33,7 +32,7 @@ module.exports = {
 				return false;
 			}
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle(item.prof.slice(0, 2) + ' ' + item.prof.charAt(3).toUpperCase() + item.prof.slice(4))
 				.setColor('YELLOW')
 				.setDescription(item.description)
@@ -48,7 +47,7 @@ module.exports = {
 		}
 
 		const embed = [
-			new MessageEmbed()
+			new EmbedBuilder()
 				.setTitle('Shop - page 1/2')
 				.setColor('YELLOW')
 				.setDescription('use `/buy <item>` to buy an item!')
@@ -66,7 +65,7 @@ module.exports = {
 				)
 				.setFooter({ text: 'Platinum Donators get everything 25% off!\nUse "/shop <page>" to switch to a different page' }),
 
-			new MessageEmbed()
+			new EmbedBuilder()
 				.setTitle('Shop - page 2/2')
 				.setColor('YELLOW')
 				.setDescription('use `/buy <item>` to buy an item!')

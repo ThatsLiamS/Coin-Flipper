@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 
 const { dropshipItems } = require('./../../util/constants.js');
 
@@ -31,14 +30,14 @@ module.exports = {
 		else if (chance > 10) list = [smallWinOne, largeWin, smallWinTwo];
 		else list = [smallWinOne, smallWinTwo, largeWin];
 
-		const row = new MessageActionRow();
+		const row = new ActionRowBuilder();
 		for (const value of list) {
 			const item = dropshipItems[Math.floor(Math.random() * dropshipItems.length)];
 			row.addComponent(
-				new MessageButton().setStyle('PRIMARY').setLabel(item).setCustomId(`dropship-${value}-${item}`),
+				new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel(item).setCustomId(`dropship-${value}-${item}`),
 			);
 		}
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Dropship!')
 			.setDescription('Select one of the items below.');
 
@@ -51,13 +50,13 @@ module.exports = {
 				const values = button.customId.split('-');
 				userData.currencies.cents = Number(userData.currencies.cents) + Number(values[1]);
 
-				interaction.editReply({ embeds: [new MessageEmbed().setTitle('Dropship!').setDescription(`You dropshipped the ${values[2]} for \`${values[1]}\` cents!`)] });
+				interaction.editReply({ embeds: [new EmbedBuilder().setTitle('Dropship!').setDescription(`You dropshipped the ${values[2]} for \`${values[1]}\` cents!`)] });
 				await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 
 				return true;
 			})
 			.catch(async () => {
-				await interaction.editReply({ embeds: [new MessageEmbed().setTitle('Dropship!').setDescription('Whoa, you took too long to respond!')] });
+				await interaction.editReply({ embeds: [new EmbedBuilder().setTitle('Dropship!').setDescription('Whoa, you took too long to respond!')] });
 				return false;
 			});
 

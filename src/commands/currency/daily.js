@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder} = require('discord.js');
 
 module.exports = {
 	name: 'daily',
@@ -48,7 +47,7 @@ module.exports = {
 		userData.currencies.cents = Number(userData.currencies.cents) + Number(randomAmt);
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('You claimed your daily reward!')
 			.setDescription(`You got \`${randomAmt}\` cents!\nMake sure to come back tomorrow to claim your next one!\nIf you want 1000 more cents, vote for the bot with \`/vote\`!`)
 			.setColor('GREEN');

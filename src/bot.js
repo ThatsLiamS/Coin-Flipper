@@ -1,7 +1,7 @@
-const Discord = require('discord.js');
-const client = new Discord.Client({
-	intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_WEBHOOKS'],
-	partials: ['CHANNEL', 'MESSAGE', 'REACTION'],
+const { Client, GatewayIntentBits, Partials } = require('discord.js');
+const client = new Client({
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildWebhooks],
+	partials: [Partials.Channel, Partials.Message, Partials.Reaction],
 });
 
 

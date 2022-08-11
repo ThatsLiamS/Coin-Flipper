@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	name: 'addon',
@@ -90,7 +89,7 @@ module.exports = {
 			return false;
 		}
 
-		const embed = new MessageEmbed();
+		const embed = new EmbedBuilder();
 
 		if (subCommandName == 'view') {
 		}

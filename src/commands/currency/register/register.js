@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	name: 'register',
@@ -52,7 +51,7 @@ module.exports = {
 			if (userData.inv.label > 0) percent += 10;
 			if (userData.evil == true) percent = 7.5;
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username}'s cash register`)
 				.setColor('BLACK')
 				.setDescription(`There are ${userData.currencies.register} cents in this register!\nEvery time you flip a coin, **${percent}%** of the amount goes into this register!`)

@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 const { itemlist } = require('./../../../util/constants.js');
 const achievementAdd = require('./../../../util/achievementAdd.js');
@@ -43,7 +42,7 @@ module.exports = {
 				return false;
 			}
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle('KABOOM')
 				.setDescription('You got 250 cents!')
 				.setImage('https://media.giphy.com/media/HhTXt43pk1I1W/giphy.gif')
@@ -64,7 +63,7 @@ module.exports = {
 				return false;
 			}
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle('Woooooooo!!')
 				.setDescription('1000 servers! Time to celebrate!')
 				.setImage('https://imgur.com/oOP7hRN.gif')
@@ -81,7 +80,7 @@ module.exports = {
 				return false;
 			}
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username} flexes on all of you!`)
 				.setImage('https://imgur.com/iqooiDn.jpg')
 				.setColor('YELLOW');
@@ -117,7 +116,7 @@ module.exports = {
 
 			const responses = ['Ask again later', 'Idk', 'Sorry I don\'t know', 'Why would I know', 'Yes... or no... yeah idk', 'Signs point to nowhere', 'As I see it... i forgot', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Don\'t count on me knowing', 'It is uncertain', 'My reply is maybe', 'My sources are not credible so idk', 'Outlook blank', 'Reply hazy, try again', 'Without a doubt I have no idea', '50% yes, 50% no'];
 
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
 				.setTitle('The magic 8ball says...')
 				.setDescription(responses[Math.floor(Math.random() * responses.length)])
 				.setFooter({ text: 'Well what do you expect its a broken 8ball' })

@@ -1,5 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const makeGrid = require('./../../util/makeGrid');
 
 module.exports = {
@@ -26,7 +25,7 @@ module.exports = {
 		];
 		const results = await Promise.all(promises);
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('My Information')
 			.setColor('GREEN')
 			.setDescription('Hey, I\'m **[' + client.user.tag + '](https://discord.gg/2je9aJynqt)**!\n```\n' + makeGrid(results) + '\n```')
@@ -41,12 +40,12 @@ module.exports = {
 			)
 			.setFooter({ text: 'Do /help to get started.' });
 
-		const row = new MessageActionRow()
+		const row = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
-					.setStyle('LINK').setLabel('Invite').setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
-				new MessageButton()
-					.setStyle('LINK').setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Link).setLabel('Invite').setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Link).setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
 			);
 
 		interaction.followUp({ embeds: [embed], components: [row] });

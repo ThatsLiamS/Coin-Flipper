@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 
 const emojis = require('./../../util/emojis');
 
@@ -20,7 +19,7 @@ module.exports = {
 	error: false,
 	execute: async ({ interaction }) => {
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setTitle('Coin Flipper donator tiers')
 			.setColor('#E0DB38')
 			.setThumbnail('https://imgur.com/7TPl2Ia.png')
@@ -30,12 +29,12 @@ module.exports = {
 				{ name: `${emojis.coin_platinum_tier} Platinum Tier`, value: '» Free weekly 75,000 cents\n» 25% off everything in the shop\n» Access to private text and voice channels\n» Even smaller cooldowns\n» 15% more cents go in register (for a total of 25%)\n» Very exclusive donator badge\n» Secret teasers of new features\nPrice: £10/month', inline: false },
 			);
 
-		const row = new MessageActionRow()
+		const row = new ActionRowBuilder()
 			.addComponents(
-				new MessageButton()
-					.setStyle('LINK').setLabel('PayPal').setURL('https://paypal.me/ThatsLiamS'),
-				new MessageButton()
-					.setStyle('LINK').setLabel('Patreon').setURL('https://www.patreon.com/CoinFlipper'),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Link).setLabel('PayPal').setURL('https://paypal.me/ThatsLiamS'),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Link).setLabel('Patreon').setURL('https://www.patreon.com/CoinFlipper'),
 			);
 
 		interaction.followUp({ embeds: [embed], components: [row] });

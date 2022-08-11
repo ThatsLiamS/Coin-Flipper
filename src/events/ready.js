@@ -7,7 +7,7 @@ module.exports = {
 
 	execute: async (client) => {
 
-		console.log(`Shard ${client.shard.ids} ready`);
+		console.log(`Shard ${client.shard.ids}/${client.shard.count} ready`);
 
 		/* Set client status */
 		client.user.setPresence({

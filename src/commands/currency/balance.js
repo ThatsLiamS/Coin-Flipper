@@ -1,8 +1,7 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 const emojis = require('./../../util/emojis');
-const { itemlist } = require('./../../util/constants');
+const { itemlist, joblist } = require('./../../util/constants');
 const defaultData = require('./../../util/defaultData/users');
 
 module.exports = {
@@ -29,7 +28,7 @@ module.exports = {
 		const collection = await firestore.collection('users').doc(user.id).get();
 		const userData = collection.data() || defaultData;
 
-		const embed = new MessageEmbed()
+		const embed = new EmbedBuilder()
 			.setColor('ORANGE')
 			.setTitle(`${user.username}'s Balance!`);
 
@@ -62,11 +61,14 @@ module.exports = {
 		if (userData?.inv?.toolbox) items.push('🧰 toolbox');
 		if (items.length == 0) items.push('There\'s nothing here');
 
+		const jobObject = joblist.filter(job => job.name.toLowerCase() == userData?.job?.toLowerCase());
+		const job = jobObject ? `${jobObject.emoji} ${jobObject.name}` : 'none';
+
 		if (userData?.stats?.bio) embed.setDescription(userData.stats.bio);
 		embed.addFields(
 			{ name: 'Cents', value: `${userData?.currencies?.cents || 0}` },
 			{ name: 'Inventory', value: items.join('\n') },
-			{ name: 'Job', value: `${userData?.job}` },
+			{ name: 'Job', value: `${job}` },
 
 			{ name: 'Coins Flipped', value: `${userData?.stats?.flipped || 0}` },
 			{ name: 'Minigames Won', value: `${userData?.stats?.minigames_won || 0}` },
