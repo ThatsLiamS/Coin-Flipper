@@ -42,7 +42,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setTitle(`Congrats, ${interaction.user.username}!`)
 			.setDescription(`You sold 1 ${item.prof} for **${price}** cents!`)
-			.setColor('GREEN');
+			.setColor('Green');
 
 		interaction.followUp({ embeds: [embed] });
 

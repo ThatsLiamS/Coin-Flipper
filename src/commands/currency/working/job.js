@@ -55,7 +55,7 @@ module.exports = {
 
 			const embed = new EmbedBuilder()
 				.setTitle('Jobs:')
-				.setColor('BLUE')
+				.setColor('Blue')
 				.addFields(fields)
 				.setFooter({ text: 'Work more to unlock new jobs!' });
 

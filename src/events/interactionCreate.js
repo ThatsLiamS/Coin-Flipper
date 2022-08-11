@@ -62,15 +62,6 @@ module.exports = {
 				}
 			}
 
-			/* Work out the appropriate cooldown time */
-			if (!cooldowns.has(cmd.name)) cooldowns.set(cmd.name, new Collection());
-			const timestamps = cooldowns.get(cmd.name);
-			let cooldownAmount = (cmd.cooldown || 0) * 1000;
-
-			if (cmd.name == 'flip' && interaction.channel.id == '832245298969182246') cooldownAmount = 0;
-			if (userData.donator == 1) cooldownAmount = Math.floor(cooldownAmount * 0.75);
-			if (userData.donator == 2) cooldownAmount = Math.floor(cooldownAmount * 0.5);
-
 
 			/* Receive userdata from the Firestore Database */
 			const collection = await firestore.collection('users').doc(interaction.user.id).get();
@@ -82,6 +73,15 @@ module.exports = {
 					return;
 				}
 			}
+
+			/* Work out the appropriate cooldown time */
+			if (!cooldowns.has(cmd.name)) cooldowns.set(cmd.name, new Collection());
+			const timestamps = cooldowns.get(cmd.name);
+			let cooldownAmount = (cmd.cooldown || 0) * 1000;
+
+			if (cmd.name == 'flip' && interaction.channel.id == '832245298969182246') cooldownAmount = 0;
+			if (userData.donator == 1) cooldownAmount = Math.floor(cooldownAmount * 0.75);
+			if (userData.donator == 2) cooldownAmount = Math.floor(cooldownAmount * 0.5);
 
 
 			/* Execute the command file */

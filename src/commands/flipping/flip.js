@@ -90,7 +90,7 @@ module.exports = {
 
 				/* Create and send the embed */
 				const embed = new EmbedBuilder()
-					.setColor('ORANGE')
+					.setColor('Orange')
 					.setTitle(response)
 					.setDescription(message);
 
@@ -139,7 +139,7 @@ module.exports = {
 
 				/* Create and send the embed */
 				const embed = new EmbedBuilder()
-					.setColor('RED')
+					.setColor('Red')
 					.setTitle(responses[Math.floor(Math.random() * responses.length)])
 					.setDescription(message);
 

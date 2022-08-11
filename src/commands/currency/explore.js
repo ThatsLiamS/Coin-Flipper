@@ -34,11 +34,13 @@ module.exports = {
 			userData.currencies.cents = Number(userData.currencies.cents) + Number(amount);
 
 			embed.setTitle('You explored and found..')
-				.setDescription(`You explored the ${area.name}, and ${area.got.replace('{earned}', amount)}`);
+				.setDescription(`You explored the ${area.name}, and ${area.got.replace('{earned}', amount)}`)
+				.setColor('Green');
 		}
 		if (result == 'draw') {
 			embed.setTitle('Better luck next time')
-				.setDescription(`You explored ${area.name} but got no cents...`);
+				.setDescription(`You explored ${area.name} but got no cents...`)
+				.setColor('White');
 
 		}
 		if (result == 'loss') {
@@ -46,7 +48,8 @@ module.exports = {
 			userData.currencies.cents = Number(userData.currencies.cents) - Number(amount);
 
 			embed.setTitle('Aw, you lost cents')
-				.setDescription(`You explored ${area.name}, but ${area.lost.replace('{lost}', amount)}`);
+				.setDescription(`You explored ${area.name}, but ${area.lost.replace('{lost}', amount)}`)
+				.setColor('Red');
 
 		}
 

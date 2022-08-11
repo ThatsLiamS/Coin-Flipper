@@ -49,7 +49,7 @@ module.exports = {
 				.setColor('#54fff1')
 				.setFooter({ text: 'Use "/badges claim <badge>" to claim a badge!\nThanks to X-Boy742#8981 for making the badges.' });
 
-			const badges = badgelist.map((b) => {
+			const badges = badgelist.filter((b) => {
 				if (userData.badges[b.id] == true) return undefined;
 
 				if (b.id.endsWith('_plus')) {
@@ -57,10 +57,10 @@ module.exports = {
 					if (userData.badges[newId] == false) return undefined;
 				}
 
-				return b;
+				return true;
 			});
 			if (!badges || badges == []) embed.setDescription('Looks like you have claimed all the badges!');
-			for (const badge of badges) embed.addField(badge.prof, badge.req);
+			for (const badge of badges) embed.addFields({ name: badge.prof, value: badge.req });
 
 			interaction.followUp({ embeds: [embed] });
 			return true;

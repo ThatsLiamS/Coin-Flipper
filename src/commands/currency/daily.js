@@ -49,8 +49,8 @@ module.exports = {
 
 		const embed = new EmbedBuilder()
 			.setTitle('You claimed your daily reward!')
-			.setDescription(`You got \`${randomAmt}\` cents!\nMake sure to come back tomorrow to claim your next one!\nIf you want 1000 more cents, vote for the bot with \`/vote\`!`)
-			.setColor('GREEN');
+			.setDescription(`You got \`${randomAmt}\` cents!\nMake sure to come back tomorrow to claim your next one!`)
+			.setColor('Green');
 
 		interaction.followUp({ embeds: [embed] });
 		return true;

@@ -44,7 +44,7 @@ module.exports = {
 
 		const boolean = Math.floor(Math.random() * 100) > 65;
 		const embed = new EmbedBuilder()
-			.setColor('ORANGE');
+			.setColor('Orange');
 
 		if (boolean == true) {
 			if (userData.evil == true) amount = Math.floor(amount * 0.75);

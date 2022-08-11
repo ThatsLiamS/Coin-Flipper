@@ -34,7 +34,7 @@ module.exports = {
 
 			const embed = new EmbedBuilder()
 				.setTitle(item.prof.slice(0, 2) + ' ' + item.prof.charAt(3).toUpperCase() + item.prof.slice(4))
-				.setColor('YELLOW')
+				.setColor('Yellow')
 				.setDescription(item.description)
 				.addFields(
 					{ name: '__Cost__', value: `${item.cost ? `${item.cost} cents` : 'This item cannot be bought'}`, inline: false },
@@ -49,7 +49,7 @@ module.exports = {
 		const embed = [
 			new EmbedBuilder()
 				.setTitle('Shop - page 1/2')
-				.setColor('YELLOW')
+				.setColor('Yellow')
 				.setDescription('use `/buy <item>` to buy an item!')
 				.addFields(
 					{ name: '🥉 Bronze Coin', value: '`Cost:` 50 cents `Usage:` can use the PENNY add-on\n`Description:` a cool bronze coin', inline: false },
@@ -67,7 +67,7 @@ module.exports = {
 
 			new EmbedBuilder()
 				.setTitle('Shop - page 2/2')
-				.setColor('YELLOW')
+				.setColor('Yellow')
 				.setDescription('use `/buy <item>` to buy an item!')
 				.addFields(
 					{ name: '📅 Calendar', value: '`Cost:` 5000 cents `Usage:` Can use the monthly command\n`Description:` a normal calendar that helps you keep track of the months', inline: false },

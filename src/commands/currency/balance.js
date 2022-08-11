@@ -2,7 +2,7 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 const emojis = require('./../../util/emojis');
 const { itemlist, joblist } = require('./../../util/constants');
-const defaultData = require('./../../util/defaultData/users');
+const defaultData = require('./../../util/defaultData/users').main;
 
 module.exports = {
 	name: 'balance',
@@ -29,7 +29,7 @@ module.exports = {
 		const userData = collection.data() || defaultData;
 
 		const embed = new EmbedBuilder()
-			.setColor('ORANGE')
+			.setColor('Orange')
 			.setTitle(`${user.username}'s Balance!`);
 
 		if (userData?.compact == true) {
@@ -62,7 +62,7 @@ module.exports = {
 		if (items.length == 0) items.push('There\'s nothing here');
 
 		const jobObject = joblist.filter(job => job.name.toLowerCase() == userData?.job?.toLowerCase());
-		const job = jobObject ? `${jobObject.emoji} ${jobObject.name}` : 'none';
+		const job = jobObject.emoji ? `${jobObject.emoji} ${jobObject.name}` : 'none';
 
 		if (userData?.stats?.bio) embed.setDescription(userData.stats.bio);
 		embed.addFields(

@@ -46,7 +46,7 @@ module.exports = {
 				.setTitle('KABOOM')
 				.setDescription('You got 250 cents!')
 				.setImage('https://media.giphy.com/media/HhTXt43pk1I1W/giphy.gif')
-				.setColor('RED');
+				.setColor('Red');
 
 			userData.currencies.cents = Number(userData.currencies.cents) + Number(250);
 			userData = achievementAdd(userData, 'kaboom');
@@ -67,7 +67,7 @@ module.exports = {
 				.setTitle('Woooooooo!!')
 				.setDescription('1000 servers! Time to celebrate!')
 				.setImage('https://imgur.com/oOP7hRN.gif')
-				.setColor('PURPLE');
+				.setColor('Purple');
 
 			interaction.followUp({ embeds: [embed] });
 			return true;
@@ -83,7 +83,7 @@ module.exports = {
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username} flexes on all of you!`)
 				.setImage('https://imgur.com/iqooiDn.jpg')
-				.setColor('YELLOW');
+				.setColor('Yellow');
 
 			interaction.followUp({ embeds: [embed] });
 			return true;

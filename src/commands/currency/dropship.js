@@ -16,7 +16,7 @@ module.exports = {
 		.setName('dropship')
 		.setDescription('Dropship an item and try to earn some cents!'),
 
-	error: false,
+	error: true,
 	execute: async ({ interaction, firestore, userData }) => {
 
 		const chance = Math.floor(Math.random() * 30);
@@ -33,7 +33,7 @@ module.exports = {
 		const row = new ActionRowBuilder();
 		for (const value of list) {
 			const item = dropshipItems[Math.floor(Math.random() * dropshipItems.length)];
-			row.addComponent(
+			row.addComponents(
 				new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel(item).setCustomId(`dropship-${value}-${item}`),
 			);
 		}
@@ -41,7 +41,7 @@ module.exports = {
 			.setTitle('Dropship!')
 			.setDescription('Select one of the items below.');
 
-		const sentMessage = await interaction.follwoUp({ embeds: [embed], components: [row] });
+		const sentMessage = await interaction.followUp({ embeds: [embed], components: [row] });
 		if (!sentMessage) return false;
 
 		const filter = (button) => button.customId.startsWith('dropship-') && button.user.id === interaction.user.id;
