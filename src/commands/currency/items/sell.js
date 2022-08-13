@@ -1,5 +1,5 @@
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-
 const { itemlist } = require('./../../../util/constants.js');
 
 module.exports = {
@@ -19,11 +19,23 @@ module.exports = {
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to sell:').setRequired(true)),
 
 	error: false,
+
+	/**
+	 * Sell an item to the shop.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * @param {object} userData - Discord User's data/information
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore, userData }) => {
 
+		/* Locate the selected item */
 		const itemName = interaction.options.getString('item');
 		const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
 
+		/* Can you sell it? */
 		if (!item) {
 			interaction.followUp({ content: 'That is not a valid item to sell.' });
 			return false;
@@ -34,6 +46,7 @@ module.exports = {
 			return false;
 		}
 
+		/* How much for? */
 		const price = item.sell ? item.sell : Math.ceil(item.cost / 2);
 		userData.currencies.cents = Number(userData.currencies.cents) + price;
 
@@ -46,7 +59,10 @@ module.exports = {
 
 		interaction.followUp({ embeds: [embed] });
 
+		/* Set the new values in the database */
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+
+		/* Return true to enable the cooldown */
 		return true;
 	},
 };

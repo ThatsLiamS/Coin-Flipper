@@ -1,3 +1,4 @@
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder} = require('discord.js');
 
 module.exports = {
@@ -15,11 +16,22 @@ module.exports = {
 		.setDescription('Claim your daily cents!'),
 
 	error: false,
+
+	/**
+	 * Claim your daily cents.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * @param {object} userData - Discord User's data/information
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore, userData }) => {
 
+		/* Have they claimed it already */
 		const date = new Date();
 		const thisDate = date.getDate();
-		const lastDate = userData.cooldowns.daily;
+		const lastDate = userData?.cooldowns?.daily;
 		let pass = false;
 
 		if (userData.inv.vault > 0) {
@@ -41,9 +53,11 @@ module.exports = {
 
 		userData.cooldowns.daily = thisDate;
 
+		/* How much do they claim */
 		let randomAmt = Math.floor(Math.random() * (6000 - 4000 + 1)) + 1000;
 		if (userData.donator > 0) randomAmt = Math.ceil(randomAmt * 1.5);
 
+		/* Set the balance in the database */
 		userData.currencies.cents = Number(userData.currencies.cents) + Number(randomAmt);
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 

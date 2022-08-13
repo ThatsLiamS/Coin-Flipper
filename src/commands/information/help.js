@@ -1,3 +1,4 @@
+/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const { readdirSync } = require('fs');
 
@@ -21,10 +22,20 @@ module.exports = {
 			.setRequired(false)),
 
 	error: false,
+
+	/**
+	 * Get a list of my commands.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} client - Discord Client object
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, client }) => {
 
 		const cmdName = interaction.options.getString('command');
 
+		/* Shows information on a selected command */
 		const cmd = client.commands.get(cmdName);
 		if (cmd) {
 			const embed = new EmbedBuilder()
@@ -45,10 +56,12 @@ module.exports = {
 					.setColor('RED');
 			}
 
+			/* Send the command-specfic embed and return true */
 			interaction.followUp({ embeds: [embed], ephemeral: false });
-			return;
+			return true;
 		}
 
+		/* Filter through the files and get the commands from the selected category */
 		const categories = ['flipping', 'currency', 'information', 'donator', 'addons'];
 		if (categories.includes(cmdName)) {
 			let description = '__**General**__\n';
@@ -79,10 +92,12 @@ module.exports = {
 				.setDescription(description)
 				.setColor('#D3D3D3');
 
+			/* Send the category's commands, and return true */
 			interaction.followUp({ embeds: [embed], ephemeral: false });
-			return;
+			return true;
 		}
 
+		/* List of all our command categories */
 		const embed = new EmbedBuilder()
 			.setTitle('Coin Flipper Commands')
 			.setDescription('Use `/help <category>` to get commands in one category, or `/help <command>` to get more info on a single command')
@@ -90,14 +105,11 @@ module.exports = {
 				{ name: ':coin: Flipping', value: 'Commands for flipping coins and using fun addons', inline: true },
 				{ name: '💸 Currency', value: 'A variety of commands for getting and spending cents', inline: true },
 				{ name: '🛎️ Information', value: 'Invite, support server, privacy policy, and other info', inline: true },
-				// { name: '🥋 Karate', value: 'Train, level up, and battle your karate coin with a ton of cool commands', inline: true },
 				{ name: '📄 Addons', value: 'Create your own addons for flipping and publish them to the worldwide addon shop', inline: true },
-				// { name: '⚙️ Customization', value: 'Commands that let you customize Coin Flipper and its features', inline: true },
-				// { name: '🌐 Online', value: 'Visit CoinTopia, an online coin-themed world!', inline: true },
-				// { name: '💱 Trading', value: 'Trade items and cents with other users quickly and efficiently!', inline: true },
 			)
 			.setColor('#cd7f32');
 
+		/* Creates row on link buttons */
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -106,7 +118,9 @@ module.exports = {
 					.setStyle(ButtonStyle.Link).setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
 			);
 
+		/* Returns true to enable the cooldown */
 		interaction.followUp({ embeds: [embed], components: [row] });
+		return true;
 
 	},
 };

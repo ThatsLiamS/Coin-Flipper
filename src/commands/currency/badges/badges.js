@@ -1,5 +1,5 @@
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-
 const { itemlist, badgelist } = require('./../../../util/constants.js');
 
 module.exports = {
@@ -34,8 +34,19 @@ module.exports = {
 		),
 
 	error: false,
+
+	/**
+	 * View and claim badges.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * @param {object} userData - Discord User's data/information
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore, userData }) => {
 
+		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
 		if (!subCommandName) {
 			interaction.followUp({ content: 'Woah, an unexpected error has occurred. Please try again!' });
@@ -49,6 +60,7 @@ module.exports = {
 				.setColor('#54fff1')
 				.setFooter({ text: 'Use "/badges claim <badge>" to claim a badge!\nThanks to X-Boy742#8981 for making the badges.' });
 
+			/* Filter all unclaimed badges */
 			const badges = badgelist.filter((b) => {
 				if (userData.badges[b.id] == true) return undefined;
 
@@ -62,24 +74,27 @@ module.exports = {
 			if (!badges || badges == []) embed.setDescription('Looks like you have claimed all the badges!');
 			for (const badge of badges) embed.addFields({ name: badge.prof, value: badge.req });
 
+			/* Response to user, and return true to enable cooldown */
 			interaction.followUp({ embeds: [embed] });
 			return true;
 		}
 
 		if (subCommandName == 'claim') {
 			const badgeId = interaction.options.getString('badge');
-
+			/* Already claimed badge */
 			if (userData.badges[badgeId] == true) {
 				interaction.followUp({ content: 'You have already claimed that badge! ' });
 				return false;
 			}
 
+			/* Locate badge object */
 			const badge = badgelist.filter((b) => b.id == badgeId);
 			if (!badge.condition) {
 				interaction.followUp({ content: 'You can not claim this badge.' });
 				return false;
 			}
 
+			/* Compare badge requirements */
 			const [type, compare, value] = badge.condition;
 			let allowed = false;
 			if (type == 'support') {
@@ -101,9 +116,10 @@ module.exports = {
 			}
 			else {
 				if (compare == '>') allowed = (userData[type] > value);
-				if (compare == '=') allowed = (userData[type] = value);
+				if (compare == '=') allowed = (userData[type] == value);
 				if (compare == '<') allowed = (userData[type] < value);
 			}
+			/* Reject the claim */
 			if (allowed != true) {
 				interaction.followUp({ content: `You do not meet the requirements for this badge.${badge.req}!` });
 				return false;
@@ -111,8 +127,11 @@ module.exports = {
 
 			interaction.followUp({ content: `You have claimed: ${badge.prof}!` });
 
+			/* Update firestore database */
 			userData.badges[badge.id] = true;
 			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+
+			/* Return true to enable the cooldown */
 			return true;
 		}
 

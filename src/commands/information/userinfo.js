@@ -1,5 +1,5 @@
+/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-
 const emojis = require('./../../util/emojis');
 const defaultData = require('./../../util/defaultData/users').main;
 
@@ -23,12 +23,23 @@ module.exports = {
 			.setRequired(false)),
 
 	error: false,
+
+	/**
+	 * Collection of user-based, custom addons.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore }) => {
 
+		/* Get the user's information */
 		const user = interaction.options.getUser('user') || interaction.user;
 		const collection = await firestore.collection('users').doc(user.id).get();
 		const userData = collection.data() || defaultData;
 
+		/* Create the information embed */
 		const embed = new EmbedBuilder()
 			.setTitle(`${user.username}'s information`)
 			.setColor('#cd7f32')
@@ -38,7 +49,9 @@ module.exports = {
 				{ name: '**Donator Status**', value: `${userData.donator == 0 ? 'None' : (userData.donator == 1 ? 'Gold' : 'Platinum')}`, inline: false },
 			);
 
+		/*  */
 		interaction.followUp({ embeds: [embed] });
+		return true;
 
 	},
 };

@@ -1,3 +1,4 @@
+/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, WebhookClient } = require('discord.js');
 
 module.exports = {
@@ -20,6 +21,15 @@ module.exports = {
 		),
 
 	error: false,
+
+	/**
+	 * Report a bug/issue to the developers.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} client - Discord Client object
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: ({ interaction, client }) => {
 
 		const avatarURL = interaction.guild.iconURL() ? interaction.guild.iconURL() : 'https://i.imgur.com/yLv2YVnh.jpg';
@@ -30,9 +40,12 @@ module.exports = {
 			.setFooter({ text: `ID: ${interaction.member.id}` })
 			.setTimestamp();
 
+		/* Locate and send the webhook */
 		const webhook = new WebhookClient({ url: process.env['ReportWebhook'] });
 		webhook.send({ username: interaction.guild.name, avatarURL, embeds: [embed] });
 
+		/* Returns true to enable the cooldown */
 		interaction.followUp({ content: 'Thank you for helping us make Coin Flipper even better.', ephemeral: true });
+		return true;
 	},
 };

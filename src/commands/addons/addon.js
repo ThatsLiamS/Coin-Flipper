@@ -1,3 +1,4 @@
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
@@ -67,19 +68,32 @@ module.exports = {
 		),
 
 	error: true,
+
+	/**
+	 * Collection of user-based, custom addons.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * @param {object} userData - Discord User's data/information
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore, userData }) => {
 
+		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
 		if (!subCommandName) {
 			interaction.followUp({ content: 'Woah, an unexpected error has occurred. Please try again!' });
 			return false;
 		}
 
+		/* Addon Name validation */
 		const name = interaction.options.getString('name');
 		if (name.length > 50 || ['none', 'null', 'undefined', 'nan'].includes(name.toLowerCase()) || name.includes(' ')) {
 			return interaction.followUp({ content: 'That is an invalid addon name.' });
 		}
 
+		/* Locate Addon object */
 		let pathway = null;
 		for (const path of ['first', 'second', 'third']) {
 			if (userData.addons.customaddons[path].name == 'hello2') pathway = userData.addons.customaddons[path];
@@ -115,9 +129,11 @@ module.exports = {
 		if (subCommandName == 'deleteresponse') {
 		}
 
+		/* Response to user, and set values in the database */
 		interaction.followUp({ embeds: [embed] });
-
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+
+		/* Return true to enable the cooldown */
 		return true;
 	},
 };

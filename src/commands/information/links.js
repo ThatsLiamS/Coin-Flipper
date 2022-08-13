@@ -1,3 +1,4 @@
+/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 
 module.exports = {
@@ -15,8 +16,17 @@ module.exports = {
 		.setDescription('Useful Coin Flipper links!'),
 
 	error: false,
+
+	/**
+	 * Useful Coin Flipper links.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction }) => {
 
+		/* Create embed full of information */
 		const embed = new EmbedBuilder()
 			.setTitle('Coin Flipper links')
 			.setColor('#E0DB38')
@@ -26,6 +36,7 @@ module.exports = {
 				{ name: '__Donator__', value: '[PayPal](https://paypal.me/ThatsLiamS)\n[Patreon](https://www.patreon.com/CoinFlipper)', inline: true },
 			);
 
+		/* Create row of link buttons */
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -36,7 +47,9 @@ module.exports = {
 					.setStyle(ButtonStyle.Link).setLabel('Website').setURL('https://coinflipper.pages.dev'),
 			);
 
+		/* Returns true to enable the cooldown */
 		interaction.followUp({ embeds: [embed], components: [row] });
+		return true;
 
 	},
 };

@@ -24,10 +24,10 @@ module.exports = {
 	true: '<:true:956523933522362482>',
 
 
-	dev: '<:badge_developer:956323651941183488> ',
+	dev: '<:badge_developer:956323651941183488>',
 	partnered_dev: '<:badge_partner:956323653564370966>',
 
-	support: '<:badge_support:956323525105446942> ',
+	support: '<:badge_support:956323525105446942>',
 	register: '<:badge_registered:956323523352231946>',
 	niceness: '<:badge_niceness:975078534554992720>',
 
@@ -37,7 +37,7 @@ module.exports = {
 	collector: '<:badge_collector:956323383103078440>',
 	collector_plus: '<:badge_scavenger:956323385762263100>',
 
-	minigame: '<:badge_minigamer:956323434265182288> ',
+	minigame: '<:badge_minigamer:956323434265182288>',
 	minigame_plus: '<:badge_pro_gamer:956323436286836826>',
 
 	rich: '<:badge_rich:956323487847440425>',
@@ -47,10 +47,10 @@ module.exports = {
 	bughunter_plus: '<:badge_bug_poacher:956323564766757015>',
 
 
-	gold_tier: '<:badge_cf_gold:956323628817997824> ',
-	coin_gold_tier: '<:coin_goldtier:832295667795624027> ',
+	gold_tier: '<:badge_cf_gold:956323628817997824>',
+	coin_gold_tier: '<:coin_goldtier:832295667795624027>',
 
-	platinum_tier: '<:badge_cf_platinum:956323631397503037> ',
+	platinum_tier: '<:badge_cf_platinum:956323631397503037>',
 	coin_platinum_tier: '<:coin_platinumtier:832295735445553152>',
 
 };

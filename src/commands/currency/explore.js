@@ -1,5 +1,5 @@
+/* Import required modules and packages */
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-
 const { exploreAreas } = require('./../../util/constants.js');
 
 module.exports = {
@@ -17,17 +17,29 @@ module.exports = {
 		.setDescription('Explore the wilderness and find some cents!'),
 
 	error: false,
+
+	/**
+	 * Explroe the wilderness and find some cents.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * @param {object} userData - Discord User's data/information
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore, userData }) => {
 
 		const area = exploreAreas[Math.floor(Math.random() * exploreAreas.length)];
 		const chance = Math.floor(Math.random() * 10);
 
+		/* How did they do */
 		const result = userData.inv.compass > 0 ?
 			(chance > 2 ? 'win' : 'draw') :
 			(chance > 4 ? 'win' : (chance > 2 ? 'draw' : 'loss'));
 
 		const embed = new EmbedBuilder();
 
+		/* Create the embed based on the result */
 		if (result == 'win') {
 			let amount = Math.floor(Math.random() * (80 - 40 + 1)) + 40;
 			if (userData?.evil == true) amount = Math.ceil(amount * 0.5);
@@ -55,6 +67,7 @@ module.exports = {
 
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 
+		/* Returns true to enable the cooldown */
 		interaction.followUp({ embeds: [embed] });
 		return true;
 

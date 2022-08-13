@@ -1,12 +1,12 @@
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-
 const emojis = require('./../../util/emojis');
 const { itemlist, joblist } = require('./../../util/constants');
 const defaultData = require('./../../util/defaultData/users').main;
 
 module.exports = {
 	name: 'balance',
-	description: 'View a user\'s stats!',
+	description: 'View a user\'s balance!',
 	usage: '`/balance [user]`',
 
 	permissions: [],
@@ -22,8 +22,19 @@ module.exports = {
 			.setName('user').setDescription('Select a user').setRequired(false)),
 
 	error: false,
+
+	/**
+	 * View a user's balance.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * @param {object} userData - Discord User's data/information
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore }) => {
 
+		/* Grab the user's information */
 		const user = interaction.options.getUser('user') || interaction.user;
 		const collection = await firestore.collection('users').doc(user.id).get();
 		const userData = collection.data() || defaultData;
@@ -32,6 +43,7 @@ module.exports = {
 			.setColor('Orange')
 			.setTitle(`${user.username}'s Balance!`);
 
+		/* Are they on compact mode? */
 		if (userData?.compact == true) {
 			embed.setDescription(`Cents: \`${userData?.currencies?.cents || 0}\`\nRegister: \`${userData?.currencies?.register || 0}\``);
 
@@ -40,6 +52,7 @@ module.exports = {
 		}
 
 
+		/* Sort and organise the user's badges */
 		const badgeOrder = ['dev', 'partnered_dev', 'support', 'flip', 'flip_plus', 'minigame', 'minigame_plus', 'register', 'collector', 'collector_plus', 'rich', 'rich_plus', 'niceness', 'bughunter', 'bughunter_plus' ];
 		const badgesList = [`${emojis.dev} Developer`, `${emojis.partnered_dev} Partnered Developer`, `${emojis.support} Supporter`, `${emojis.flip} Flipper`, `${emojis.flip_plus} Avid Flipper`, `${emojis.gamer} Gamer`, `${emojis.pro_gamer} Pro Gamer`, `${emojis.register} Registered`, `${emojis.rich} Wealthy`, `${emojis.rich_plus} Millionaire`, `${emojis.niceness} Niceness`, `${emojis.bughunter} Bug Hunter`, `${emojis.bughunter_plus} Bug Poacher`];
 
@@ -54,6 +67,7 @@ module.exports = {
 		if (badges.length == 0) badges.push('There are no badges');
 
 
+		/* Sort and organise the user's items */
 		const items = [];
 		for (const item of itemlist) {
 			if (userData?.inv[item.id] > 0) items.push(`${item.prof}${userData?.inv[item.id] > 1 ? ` (${userData?.inv[item.id]})` : ''}`);
@@ -61,6 +75,7 @@ module.exports = {
 		if (userData?.inv?.toolbox) items.push('🧰 toolbox');
 		if (items.length == 0) items.push('There\'s nothing here');
 
+		/* Do they have a job? */
 		const jobObject = joblist.filter(job => job.name.toLowerCase() == userData?.job?.toLowerCase());
 		const job = jobObject.emoji ? `${jobObject.emoji} ${jobObject.name}` : 'none';
 
@@ -75,6 +90,7 @@ module.exports = {
 			{ name: 'Badges', value: badges.join('\n') },
 		);
 
+		/* return true to enable the cooldown */
 		interaction.followUp({ embeds: [embed] });
 		return true;
 

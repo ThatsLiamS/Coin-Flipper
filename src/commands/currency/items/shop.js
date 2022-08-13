@@ -1,5 +1,5 @@
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-
 const { itemlist } = require('./../../../util/constants.js');
 
 module.exports = {
@@ -20,12 +20,22 @@ module.exports = {
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to take:').setRequired(false)),
 
 	error: false,
+
+	/**
+	 * View the shop and all the items in it.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction }) => {
 
 		const pageNumber = interaction.options.getInteger('page') || 1;
 		const itemName = interaction.options.getString('item')?.toLowerCase();
 
+		/* Shows information on a specifc item */
 		if (itemName) {
+			/* Find the selected item */
 			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
 			if (!item) {
 				interaction.followUp({ content: `\`${itemName}\` is not a valid item.` });
@@ -42,10 +52,12 @@ module.exports = {
 					{ name: '__Found In__', value: `${item.found}`, inline: false },
 				);
 
+			/* Reply and enable cooldown */
 			interaction.followUp({ embeds: [embed] });
 			return true;
 		}
 
+		/* Create shop pages */
 		const embed = [
 			new EmbedBuilder()
 				.setTitle('Shop - page 1/2')
@@ -84,7 +96,11 @@ module.exports = {
 				.setFooter({ text: 'Platinum Donators get everything 25% off!\nUse "/shop <page>" to switch to a different page' }),
 		];
 
+		/* Select the correct page and send */
 		interaction.followUp({ embeds: [embed[pageNumber > 2 ? 0 : pageNumber - 1]] });
+		
+		
+		/* return true to enable the cooldown */
 		return true;
 	},
 };

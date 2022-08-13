@@ -1,3 +1,4 @@
+/* Import required modules and files */
 const { Collection } = require('discord.js');
 const fs = require('fs');
 
@@ -5,6 +6,13 @@ module.exports = {
 	name: 'ready',
 	once: true,
 
+	/**
+	 * Triggered when the client is ready
+	 * 
+	 * @param {object} client - Discord Client object
+	 * 
+	 * @returns {void}
+	**/
 	execute: async (client) => {
 
 		console.log(`Shard ${client.shard.ids}/${client.shard.count} ready`);

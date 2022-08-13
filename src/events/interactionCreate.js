@@ -1,6 +1,8 @@
+/* Import required modules and files */
 const { Collection, InteractionType } = require('discord.js');
 const defaultData = require('./../util/defaultData/users').main;
 
+/* Global variable definitions */
 const cooldowns = new Collection();
 const quotaExceeded = false;
 
@@ -8,6 +10,15 @@ module.exports = {
 	name: 'interactionCreate',
 	once: false,
 
+	/**
+	 * Triggered when an interaction is used.
+	 * 
+	 * @param {object} interaction - Discord interaction object
+	 * @param {object} client - Discord Client object
+	 * @param {object} firestore - Firestore database object
+	 * 
+	 * @returns {void}
+	**/
 	execute: async (interaction, client, firestore) => {
 		const now = Date.now();
 

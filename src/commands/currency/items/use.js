@@ -1,5 +1,5 @@
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-
 const { itemlist } = require('./../../../util/constants.js');
 const achievementAdd = require('./../../../util/achievementAdd.js');
 
@@ -26,8 +26,19 @@ module.exports = {
 		),
 
 	error: false,
+
+	/**
+	 * Use an intem in your inventory.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * @param {object} userData - Discord User's data/information
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore, userData }) => {
 
+		/* Locate the selected item */
 		const itemName = interaction.options.getString('item');
 		const item = itemlist.filter((i) => i.id == itemName.toLowerCase())[0];
 		if (!item) {
@@ -98,6 +109,7 @@ module.exports = {
 
 			userData.inv.briefcase = Number(userData.inv.briefcase) - Number(1);
 
+			/* Generate random winnings to add to the user */
 			let winnings = Math.ceil(Math.random() * (750 - 250) + 250);
 			if (userData?.evil == true) winnings = Math.ceil(winnings * 0.9);
 			userData.currencies.cents = Number(userData.currencies.cents) + Number(winnings);

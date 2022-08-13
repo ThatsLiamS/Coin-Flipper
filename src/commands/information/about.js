@@ -1,3 +1,4 @@
+/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const makeGrid = require('./../../util/makeGrid');
 
@@ -16,8 +17,18 @@ module.exports = {
 		.setDescription('Shows lots of cool information about the bot!'),
 
 	error: false,
+
+	/**
+	 * Shows lots of cool information about the bot.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} client - Discord Client object
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, client }) => {
 
+		/* Fetch values from all the shards */
 		const promises = [
 			client.shard.fetchClientValues('ws.ping'),
 			client.shard.fetchClientValues('guilds.cache.size'),
@@ -25,6 +36,7 @@ module.exports = {
 		];
 		const results = await Promise.all(promises);
 
+		/* Create the embed full of information */
 		const embed = new EmbedBuilder()
 			.setTitle('My Information')
 			.setColor('Green')
@@ -40,6 +52,7 @@ module.exports = {
 			)
 			.setFooter({ text: 'Do /help to get started.' });
 
+		/* Create row of buttons */
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -48,7 +61,9 @@ module.exports = {
 					.setStyle(ButtonStyle.Link).setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
 			);
 
+		/* returns true to enable the cooldown */
 		interaction.followUp({ embeds: [embed], components: [row] });
+		return true;
 
 	},
 };

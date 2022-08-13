@@ -1,9 +1,10 @@
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const achievementAdd = require('./../../util/achievementAdd');
 
 module.exports = {
 	name: 'bet',
-	description: 'Bet cents on the coinflip!',
+	description: 'Bet cents on a coinflip!',
 	usage: '`/bet <side> <amount>`',
 
 	permissions: [],
@@ -13,7 +14,7 @@ module.exports = {
 
 	data: new SlashCommandBuilder()
 		.setName('bet')
-		.setDescription('Bets cents on the coinflip!')
+		.setDescription('Bets cents on a coinflip!')
 
 		.addStringOption(option => option
 			.setName('side')
@@ -32,11 +33,22 @@ module.exports = {
 		),
 
 	error: false,
+
+	/**
+	 * Bet cents on a coin flip.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * @param {object} userData - Discord User's data/information
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore, userData }) => {
 
 		const bet = interaction.options.getString('side');
 		let amount = Number(interaction.options.getInteger('amount'));
 
+		/* Can they afford the bet? */
 		if (amount > userData.currencies.cents) {
 			interaction.followUp({ content: 'You can not afford this bet.' });
 			return;
@@ -46,6 +58,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setColor('Orange');
 
+		/* Did they win? */
 		if (boolean == true) {
 			if (userData.evil == true) amount = Math.floor(amount * 0.75);
 
@@ -55,16 +68,22 @@ module.exports = {
 
 		}
 		else {
+			/* Did they lose everything? */
 			if (amount == userData.currencies.cents) userData = await achievementAdd(userData, 'justMyLuck');
 
+			/* Remove the money from their account */
 			userData.currencies.cents = Number(userData.currencies.cents) - Number(amount);
 			embed.setDescription('You lost ' + amount + ' cents!')
 				.setTitle('The coin landed on ' + (bet == 'heads' ? 'tails!' : 'heads!'));
 
 		}
 
-		interaction.followUp({ embeds: [embed] });
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+		
+		
+		/* Returns true to enable the cooldown */
+		interaction.followUp({ embeds: [embed] });
+		return true;
 
 	},
 };

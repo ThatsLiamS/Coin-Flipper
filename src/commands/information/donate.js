@@ -1,5 +1,5 @@
+/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
-
 const emojis = require('./../../util/emojis');
 
 module.exports = {
@@ -17,8 +17,17 @@ module.exports = {
 		.setDescription('Information about our donator tiers!'),
 
 	error: false,
+
+	/**
+	 * Information about our donator tiers.
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction }) => {
 
+		/* Create embed full of information */
 		const embed = new EmbedBuilder()
 			.setTitle('Coin Flipper donator tiers')
 			.setColor('#E0DB38')
@@ -29,6 +38,7 @@ module.exports = {
 				{ name: `${emojis.coin_platinum_tier} Platinum Tier`, value: '» Free weekly 75,000 cents\n» 25% off everything in the shop\n» Access to private text and voice channels\n» Even smaller cooldowns\n» 15% more cents go in register (for a total of 25%)\n» Very exclusive donator badge\n» Secret teasers of new features\nPrice: £10/month', inline: false },
 			);
 
+		/* Create row of link buttons */
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
@@ -37,7 +47,9 @@ module.exports = {
 					.setStyle(ButtonStyle.Link).setLabel('Patreon').setURL('https://www.patreon.com/CoinFlipper'),
 			);
 
+		/* Returns true to enable the cooldown */
 		interaction.followUp({ embeds: [embed], components: [row] });
+		return true;
 
 	},
 };

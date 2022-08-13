@@ -1,5 +1,5 @@
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-
 const flips = require('./../../util/flips');
 const gotItem = require('./../../util/gotItem');
 const achievementAdd = require('./../../util/achievementAdd');
@@ -25,6 +25,16 @@ module.exports = {
 		),
 
 	error: false,
+
+	/**
+	 * Flip a code or spice it up with an addon
+	 * 
+	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} firestore - Firestore database object
+	 * @param {object} userData - Discord User's data/information
+	 * 
+	 * @returns {boolean}
+	**/
 	execute: async ({ interaction, firestore, userData }) => {
 
 		const flip = async (responses, multiplier = 1, briefcaseChance = 95, type = 'normal') => {
