@@ -1,6 +1,6 @@
 /* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const achievementAdd = require('./../../util/achievementAdd.js');
+const { achievementAdd } = require('./../../util/functions.js');
 const defaultData = require('./../../util/defaultData/users.js').main;
 const { itemlist } = require('./../../util/constants.js');
 

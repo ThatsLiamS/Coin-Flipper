@@ -1,7 +1,7 @@
 /* Import required modules and files */
 const { SlashCommandBuilder } = require('discord.js');
-const achievementAdd = require('./../../../util/achievementAdd');
-const { joblist } = require('./../../../util/constants');
+const { achievementAdd } = require('./../../../util/functions.js');
+const { joblist } = require('./../../../util/constants.js');
 
 module.exports = {
 	name: 'work',

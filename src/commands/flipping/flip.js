@@ -1,8 +1,7 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const flips = require('./../../util/flips');
-const gotItem = require('./../../util/gotItem');
-const achievementAdd = require('./../../util/achievementAdd');
+const flips = require('./../../util/flips.js');
+const { gotItem, achievementAdd } = require('./../../util/functions.js');
 
 module.exports = {
 	name: 'flip',

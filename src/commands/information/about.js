@@ -1,6 +1,6 @@
 /* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const makeGrid = require('./../../util/makeGrid');
+const { makeGrid } = require('./../../util/functions.js');
 
 module.exports = {
 	name: 'about',

@@ -1,9 +1,8 @@
 /* Import required modules and files */
 const admin = require('firebase-admin');
 const { EmbedBuilder, SlashCommandBuilder} = require('discord.js');
-const achievementAdd = require('../../../util/achievementAdd');
 const { itemlist } = require('../../../util/constants');
-const gotItem = require('../../../util/gotItem');
+const { achievementAdd, gotItem } = require('../../../util/functions.js');
 const defaultData = require('../../../util/defaultData/guilds');
 
 module.exports = {
