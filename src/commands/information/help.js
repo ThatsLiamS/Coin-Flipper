@@ -53,7 +53,7 @@ module.exports = {
 			}
 			if (cmd.error == true) {
 				embed.addField('__Error:__', 'This command is currently unavailable, please try again later.', false)
-					.setColor('RED');
+					.setColor('Red');
 			}
 
 			/* Send the command-specfic embed and return true */

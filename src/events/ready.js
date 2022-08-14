@@ -20,7 +20,7 @@ module.exports = {
 		/* Set client status */
 		client.user.setPresence({
 			status: 'online',
-			activities: [{ type: 'WATCHING', name: `coins flip in ${client.shard.count} shards` }],
+			activities: [{ type: 3, name: `coins flip in ${client.shard.count} shards` }],
 		});
 
 		/* Registering slash commands */
