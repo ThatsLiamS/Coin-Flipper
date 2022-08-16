@@ -7,13 +7,13 @@ module.exports = {
 	usage: '`/suggest <description>`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: true,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('suggest')
 		.setDescription('Suggest an improvement, command or feature!')
+		.setDMPermission(false)
+
 		.addStringOption(option => option
 			.setName('description')
 			.setDescription('Include a detailed description of your suggestion')

@@ -9,13 +9,12 @@ module.exports = {
 	usage: '`/work`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('work')
-		.setDescription('Work at your job and collect your pay cheque!'),
+		.setDescription('Work at your job and collect your pay cheque!')
+		.setDMPermission(true),
 
 	error: false,
 

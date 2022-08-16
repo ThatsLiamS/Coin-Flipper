@@ -8,15 +8,14 @@ module.exports = {
 	usage: '`/dropship`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('dropship')
-		.setDescription('Dropship an item and try to earn some cents!'),
+		.setDescription('Dropship an item and try to earn some cents!')
+		.setDMPermission(true),
 
-	error: true,
+	error: false,
 
 	/**
 	 * Dropship an item and try to earn some cents.

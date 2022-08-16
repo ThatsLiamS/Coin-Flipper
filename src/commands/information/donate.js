@@ -8,13 +8,12 @@ module.exports = {
 	usage: '`/donate`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('donate')
-		.setDescription('Information about our donator tiers!'),
+		.setDescription('Information about our donator tiers!')
+		.setDMPermission(true),
 
 	error: false,
 

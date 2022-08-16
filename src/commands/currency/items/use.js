@@ -9,13 +9,12 @@ module.exports = {
 	usage: '`/use <item>`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('use')
 		.setDescription('Use an item in your inventory!')
+		.setDMPermission(true)
 
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to use').setRequired(true)
 			.addChoices(

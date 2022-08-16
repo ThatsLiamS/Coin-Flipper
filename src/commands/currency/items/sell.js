@@ -8,13 +8,12 @@ module.exports = {
 	usage: '`/sell <item>`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('sell')
 		.setDescription('Sell an item to the shop!')
+		.setDMPermission(true)
 
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to sell:').setRequired(true)),
 

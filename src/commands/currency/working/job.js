@@ -12,13 +12,12 @@ module.exports = {
 	usage: '`/job centre`\n`/job quit`\n`/job claim <job>`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('job')
 		.setDescription('View and claim jobs!')
+		.setDMPermission(true)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('centre')

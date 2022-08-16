@@ -11,13 +11,12 @@ module.exports = {
 	usage: '`/trash items`\n`/trash take <item>`\n`/trash throw <item>`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: true,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('trash')
 		.setDescription('Place and take items from the trash!')
+		.setDMPermission(false)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('items')

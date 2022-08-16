@@ -8,13 +8,12 @@ module.exports = {
 	usage: '`/badges list`\n`/badges claim <badge>`',
 
 	permissions: [],
-	ownerOnly: false,
-	guildOnly: true,
-	developerOnly: false,
+	guildOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('badges')
 		.setDescription('View and claim badges!')
+		.setDMPermission(true)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('list')
@@ -98,7 +97,7 @@ module.exports = {
 			const [type, compare, value] = badge.condition;
 			let allowed = false;
 			if (type == 'support') {
-				if (interaction.guild.id != '821152669141565480' && interaction.guild.id != '832245298578849822') {
+				if (interaction?.guild?.id != '821152669141565480' && interaction?.guild?.id != '832245298578849822') {
 					interaction.followUp({ content: 'This command needs to be ran in the support server.' });
 					return false;
 				}

@@ -31,19 +31,13 @@ module.exports = {
 
 			/* Is the database available? */
 			if (quotaExceeded == true) {
-				interaction.followUp({ content: 'Sorry, we are experiencing some technical difficulties: please try again later.', ephemeral: true });
+				interaction.followUp({ content: 'Sorry, we are experiencing some technical difficulties, please try again later.', ephemeral: true });
 				return;
 			}
 
 			/* Is the command working? */
 			if (cmd['error'] == true) {
 				interaction.followUp({ content: 'Sorry, this command is currently unavailable. Please try again later.', ephemeral: true });
-				return;
-			}
-
-			/* Is the command limited to inside a guild? */
-			if (cmd['guildOnly'] == true && !interaction.guild) {
-				interaction.followUp({ content: 'Sorry, this command is only available inside a server.', ephemeral: true });
 				return;
 			}
 
@@ -57,33 +51,10 @@ module.exports = {
 				}
 			}
 
-			/* Is the command limited to guilds only? */
-			if (cmd['guildOnly'] == true) {
-				if (!interaction.guild) {
-					interaction.followUp({ content: 'Sorry, you can only run this command within a server.', ephemeral: true });
-					return;
-				}
-			}
-
-			/* Is the command limited to the server owner? */
-			if (cmd['ownerOnly'] == true) {
-				if (!interaction.user.id == interaction?.guild?.ownerId) {
-					interaction.followUp({ content: 'Sorry, only the server owner can run this command.', ephemeral: true });
-					return;
-				}
-			}
-
 
 			/* Receive userdata from the Firestore Database */
 			const collection = await firestore.collection('users').doc(interaction.user.id).get();
 			const userData = collection.data() || defaultData;
-
-			if (cmd['developerOnly'] == true) {
-				if (userData.inv.toolbox == false) {
-					interaction.followUp({ content: 'Sorry, only Coin Flipper developers can use this command.', ephemeral: true });
-					return;
-				}
-			}
 
 			/* Work out the appropriate cooldown time */
 			if (!cooldowns.has(cmd.name)) cooldowns.set(cmd.name, new Collection());

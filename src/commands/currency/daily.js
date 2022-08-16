@@ -7,13 +7,12 @@ module.exports = {
 	usage: '`/daily`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('daily')
-		.setDescription('Claim your daily cents!'),
+		.setDescription('Claim your daily cents!')
+		.setDMPermission(true),
 
 	error: false,
 

@@ -9,13 +9,12 @@ module.exports = {
 	usage: '`/flip [addon]`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('flip')
 		.setDescription('Flip a coin, or spice it up with an addon!')
+		.setDMPermission(true)
 
 		.addStringOption(option => option
 			.setName('addon')

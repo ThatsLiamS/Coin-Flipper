@@ -7,13 +7,12 @@ module.exports = {
 	usage: '`/status`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('status')
-		.setDescription('Check your status and see how your items help you!'),
+		.setDescription('Check your status and see how your items help you!')
+		.setDMPermission(true),
 
 	error: false,
 

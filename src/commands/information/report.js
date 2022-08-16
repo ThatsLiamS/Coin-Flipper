@@ -7,13 +7,13 @@ module.exports = {
 	usage: '`/report <description>`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: true,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('report')
 		.setDescription('Report a bug/issue to the developers!')
+		.setDMPermission(false)
+
 		.addStringOption(option => option
 			.setName('description')
 			.setDescription('Explain the issue you are having')

@@ -7,13 +7,12 @@ module.exports = {
 	usage: '`/flipboard`',
 
 	permissions: [],
-	ownerOnly: false,
-	guildOnly: false,
-	developerOnly: false,
+	guildOnly: true,
 
 	data: new SlashCommandBuilder()
 		.setName('flipboard')
-		.setDescription('Show the leaderboard of the top 10 flippers!'),
+		.setDescription('Show the leaderboard of the top 10 flippers!')
+		.setDMPermission(false),
 
 	error: true,
 

@@ -8,13 +8,12 @@ module.exports = {
 	usage: '`/about`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: true,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('about')
-		.setDescription('Shows lots of cool information about the bot!'),
+		.setDescription('Shows lots of cool information about the bot!')
+		.setDMPermission(false),
 
 	error: false,
 

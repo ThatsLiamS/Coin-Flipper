@@ -8,13 +8,12 @@ module.exports = {
 	usage: '`/shop [page] [item]`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('shop')
 		.setDescription('View the shop and all the items in it!')
+		.setDMPermission(true)
 
 		.addIntegerOption(option => option.setName('page').setDescription('Which item would you like to take:').setRequired(false))
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to take:').setRequired(false)),

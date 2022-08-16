@@ -7,13 +7,12 @@ module.exports = {
 	usage: '`/links`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('links')
-		.setDescription('Useful Coin Flipper links!'),
+		.setDescription('Useful Coin Flipper links!')
+		.setDMPermission(true),
 
 	error: false,
 

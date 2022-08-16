@@ -10,13 +10,12 @@ module.exports = {
 	usage: '`/give cents <user> <amount>`\n`/give item <user> <item>`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: true,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('give')
 		.setDescription('Help out and support another user!')
+		.setDMPermission(false)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('cents')

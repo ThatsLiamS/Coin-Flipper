@@ -7,13 +7,12 @@ module.exports = {
 	usage: '`/monthly`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('monthly')
-		.setDescription('Claim your monthly cents!'),
+		.setDescription('Claim your monthly cents!')
+		.setDMPermission(true),
 
 	error: false,
 

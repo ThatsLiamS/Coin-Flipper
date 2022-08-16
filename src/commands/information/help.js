@@ -8,13 +8,12 @@ module.exports = {
 	usage: '`/help [command]`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('help')
 		.setDescription('Get a list of my commands!')
+		.setDMPermission(true)
 
 		.addStringOption(option => option
 			.setName('command')

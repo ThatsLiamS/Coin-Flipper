@@ -7,13 +7,12 @@ module.exports = {
 	usage: '`/register balance`\n`/register withdraw <amount>`\n`/register deposit <amount>`',
 
 	permissions: [],
-	ownerOnly: false,
-	guildOnly: true,
-	developerOnly: false,
+	guildOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('register')
 		.setDescription('View or edit your register balance!')
+		.setDMPermission(true)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('balance')

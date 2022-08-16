@@ -7,13 +7,12 @@ module.exports = {
 	usage: '`/weekly`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('weekly')
-		.setDescription('Claim your weekly donator cents!'),
+		.setDescription('Claim your weekly donator cents!')
+		.setDMPermission(true),
 
 	error: false,
 

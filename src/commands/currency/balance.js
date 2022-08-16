@@ -10,13 +10,12 @@ module.exports = {
 	usage: '`/balance [user]`',
 
 	permissions: [],
-	ownerOnly: false,
-	guildOnly: true,
-	developerOnly: false,
+	guildOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('balance')
 		.setDescription('View a user\'s balance!')
+		.setDMPermission(true)
 
 		.addUserOption(option => option
 			.setName('user').setDescription('Select a user').setRequired(false)),

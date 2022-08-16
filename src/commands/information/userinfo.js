@@ -9,13 +9,12 @@ module.exports = {
 	usage: '`/userinfo [user]`',
 
 	permissions: [],
-	ownerOnly: false,
-	guildOnly: true,
-	developerOnly: false,
+	guildOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('userinfo')
 		.setDescription('View a user\'s stats!')
+		.setDMPermission(true)
 
 		.addUserOption(option => option
 			.setName('user')
@@ -49,7 +48,7 @@ module.exports = {
 				{ name: '**Donator Status**', value: `${userData.donator == 0 ? 'None' : (userData.donator == 1 ? 'Gold' : 'Platinum')}`, inline: false },
 			);
 
-		/*  */
+		/* Returns true to enable the cooldown */
 		interaction.followUp({ embeds: [embed] });
 		return true;
 

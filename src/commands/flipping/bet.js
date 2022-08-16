@@ -8,13 +8,12 @@ module.exports = {
 	usage: '`/bet <side> <amount>`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('bet')
 		.setDescription('Bets cents on a coinflip!')
+		.setDMPermission(true)
 
 		.addStringOption(option => option
 			.setName('side')

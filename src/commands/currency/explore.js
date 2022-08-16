@@ -8,13 +8,12 @@ module.exports = {
 	usage: '`/explore`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
 
 	data: new SlashCommandBuilder()
 		.setName('explore')
-		.setDescription('Explore the wilderness and find some cents!'),
+		.setDescription('Explore the wilderness and find some cents!')
+		.setDMPermission(true),
 
 	error: false,
 
