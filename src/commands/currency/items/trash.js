@@ -1,6 +1,7 @@
 /* Import required modules and files */
 const admin = require('firebase-admin');
-const { EmbedBuilder, SlashCommandBuilder} = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+
 const { itemlist } = require('../../../util/constants');
 const { achievementAdd, gotItem } = require('../../../util/functions.js');
 const defaultData = require('../../../util/defaultData/guilds');
@@ -39,11 +40,11 @@ module.exports = {
 
 	/**
 	 * Place and take items from the trash.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
 	 * @param {object} userData - Discord User's data/information
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, firestore, userData }) => {

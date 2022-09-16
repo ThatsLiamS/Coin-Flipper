@@ -8,9 +8,9 @@ module.exports = {
 
 	/**
 	 * Triggered when the client is ready
-	 * 
+	 *
 	 * @param {object} client - Discord Client object
-	 * 
+	 *
 	 * @returns {void}
 	**/
 	execute: async (client) => {

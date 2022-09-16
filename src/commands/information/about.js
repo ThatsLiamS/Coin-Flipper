@@ -19,10 +19,10 @@ module.exports = {
 
 	/**
 	 * Shows lots of cool information about the bot.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} client - Discord Client object
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, client }) => {

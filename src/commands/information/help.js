@@ -24,10 +24,10 @@ module.exports = {
 
 	/**
 	 * Get a list of my commands.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} client - Discord Client object
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, client }) => {
@@ -105,7 +105,7 @@ module.exports = {
 				{ name: '💸 Currency', value: 'A variety of commands for getting and spending cents', inline: true },
 				{ name: '🛎️ Information', value: 'Invite, support server, privacy policy, and other info', inline: true },
 				{ name: '📄 Addons', value: 'Create your own addons for flipping and publish them to the worldwide addon shop', inline: true },
-				{ name: "⚙️ Customisation", value: "Commands that let you customise Coin Flipper and its features", inline: true },
+				{ name: '⚙️ Customisation', value: 'Commands that let you customise Coin Flipper and its features', inline: true },
 			)
 			.setColor('#cd7f32');
 

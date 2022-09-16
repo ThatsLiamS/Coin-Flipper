@@ -24,10 +24,10 @@ module.exports = {
 
 	/**
 	 * Suggest an improvement, command or feature.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} client - Discord Client object
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: ({ interaction, client }) => {

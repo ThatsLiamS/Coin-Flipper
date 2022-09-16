@@ -18,10 +18,10 @@ module.exports = {
 
 	/**
 	 * Check your status and see how your items help you.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} userData - Discord User's data/information
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, userData }) => {

@@ -18,11 +18,11 @@ module.exports = {
 
 	/**
 	 * Claim your weekly donator cents.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
 	 * @param {object} userData - Discord User's data/information
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, firestore, userData }) => {
@@ -43,7 +43,7 @@ module.exports = {
 		const onejan = new Date(now.getFullYear(), 0, 1);
 		const thisWeek = Math.ceil((((now.getTime() - onejan.getTime()) / 86400000) + onejan.getDay() + 1) / 7);
 		const lastWeek = userData.cooldowns.weekly;
-		
+
 		if (thisWeek == lastWeek) {
 			interaction.followUp({ content: 'You can only claim your weekly reward once per week! You can claim it on Sunday.' });
 			return;

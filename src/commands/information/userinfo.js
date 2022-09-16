@@ -25,10 +25,10 @@ module.exports = {
 
 	/**
 	 * Collection of user-based, custom addons.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, firestore }) => {

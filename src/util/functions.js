@@ -76,5 +76,5 @@ module.exports = {
 	achievementAdd,
 	gotItem,
 	fitString,
-	makeGrid
+	makeGrid,
 };

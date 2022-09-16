@@ -75,11 +75,11 @@ module.exports = {
 
 	/**
 	 * Collection of user-based, custom addons.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
 	 * @param {object} userData - Discord User's data/information
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, firestore, userData }) => {
@@ -112,7 +112,7 @@ module.exports = {
 		if (subCommandName == 'view') {
 			/* Create the message to send */
 			const embeds = [embed];
-			embed.setColor('Green').setTitle(`Addon ${pathway.name}!`).setDescription(`**Description:** ${pathway.description || 'this addon has no description'}\n**Cost:** ${pathway.cost || 0} cents\n**Published:** ${pathway.published ? 'yes' : 'no'}`)
+			embed.setColor('Green').setTitle(`Addon ${pathway.name}!`).setDescription(`**Description:** ${pathway.description || 'this addon has no description'}\n**Cost:** ${pathway.cost || 0} cents\n**Published:** ${pathway.published ? 'yes' : 'no'}`);
 
 			/* Format responses */
 			let responses = [];
@@ -138,13 +138,13 @@ module.exports = {
 			const addon = {
 				name, cost: 0, description: '', author: interaction.user.id, published: false,
 				responses: ['The coin landed on heads', 'The coin landed on tails'],
-			}
+			};
 
 			/* Locate first avaliable addon */
 			let path = false;
-			if (userData.addons.customaddons['first'].name == 'none') path = 'first'
-			else if (userData.addons.customaddons['second'].name == 'none') path = 'second'
-			else if (userData.addons.customaddons['third'].name == 'none') path = 'third'
+			if (userData.addons.customaddons['first'].name == 'none') path = 'first';
+			else if (userData.addons.customaddons['second'].name == 'none') path = 'second';
+			else if (userData.addons.customaddons['third'].name == 'none') path = 'third';
 
 			/* Is there an avaliable addon */
 			if (!path || path == false) {
@@ -200,7 +200,7 @@ module.exports = {
 			pathway.cost = newCost;
 
 			/* Create the message to send */
-			embed.setColor('Green').setTitle('Changed the Addon Price!').setDescription(`You've successfully changed **${name}**'s price from \`${oldCost}\` to **${newCost} cents**.`)
+			embed.setColor('Green').setTitle('Changed the Addon Price!').setDescription(`You've successfully changed **${name}**'s price from \`${oldCost}\` to **${newCost} cents**.`);
 		}
 
 		if (subCommandName == 'setdescription') {
@@ -218,15 +218,15 @@ module.exports = {
 			pathway.description = newDesc;
 
 			/* Create the message to send */
-			embed.setColor('Green').setTitle('Changed the Addon Description!').setDescription(`You've successfully changed **${name}**'s description from \`${oldDesc}\` to **${newDesc}**.`)
+			embed.setColor('Green').setTitle('Changed the Addon Description!').setDescription(`You've successfully changed **${name}**'s description from \`${oldDesc}\` to **${newDesc}**.`);
 		}
 
-		if (subCommandName == 'inputs'){
+		if (subCommandName == 'inputs') {
 			/* Create the message to send */
 			embed.setColor('#cd7f32').setTitle('Addon Inputs!').setFooter({ text: 'Remember these when you use "/addon addresponse"' })
-				.setDescription('**{cents}**  - The user\'s main balance\n**{register}**  - The user\'s balance within their register\n**{multiplier}**  - The user\'s multiplier effect\n**{donator}**  - The user\'s donator status/tier (or \'none\')\n**{job}**  - The user\'s current job (or \'none\')\n**{flipped}**  - The number of coins the user flipped\n**{minigames}**  - The number of minigames the user has won')
+				.setDescription('**{cents}**  - The user\'s main balance\n**{register}**  - The user\'s balance within their register\n**{multiplier}**  - The user\'s multiplier effect\n**{donator}**  - The user\'s donator status/tier (or \'none\')\n**{job}**  - The user\'s current job (or \'none\')\n**{flipped}**  - The number of coins the user flipped\n**{minigames}**  - The number of minigames the user has won');
 		}
-		
+
 		if (subCommandName == 'addresponse') {
 			/* is the response valid */
 			const response = interaction.options.getString('response');
@@ -244,7 +244,7 @@ module.exports = {
 				.setFooter({ text: 'Remember to check out "/addon inputs" to include custom values' });
 		}
 
-		if (subCommandName == 'deleteresponse') { 
+		if (subCommandName == 'deleteresponse') {
 			/* is the response valid */
 			const index = Number(interaction.options.getInteger('response') - 1);
 			if (!index || index < 0 || !pathway?.responses || !pathway.responses[index]) {
@@ -257,7 +257,7 @@ module.exports = {
 			pathway.responses.splice(index, 1);
 
 			/* Create a message to send */
-			embed.setColor('Red').setTitle('Response Deleted').setDescription(`Successfully deleted the response: **${response}**.\nThis action cannot be reversed.`)
+			embed.setColor('Red').setTitle('Response Deleted').setDescription(`Successfully deleted the response: **${response}**.\nThis action cannot be reversed.`);
 		}
 
 		/* Response to user, and set values in the database */

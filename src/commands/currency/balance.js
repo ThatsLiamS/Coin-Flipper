@@ -24,10 +24,10 @@ module.exports = {
 
 	/**
 	 * View a user's balance.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, firestore }) => {

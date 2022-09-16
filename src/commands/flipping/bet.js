@@ -20,7 +20,7 @@ module.exports = {
 			.setDescription('Heads or tails!')
 			.setRequired(true)
 
-			.addChoices({ 'name': 'heads', 'value': 'heads' }, { 'name': 'tails', 'value': 'tails'}),
+			.addChoices({ 'name': 'heads', 'value': 'heads' }, { 'name': 'tails', 'value': 'tails' }),
 		)
 		.addIntegerOption(option => option
 			.setName('amount')
@@ -35,11 +35,11 @@ module.exports = {
 
 	/**
 	 * Bet cents on a coin flip.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
 	 * @param {object} userData - Discord User's data/information
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, firestore, userData }) => {
@@ -78,8 +78,8 @@ module.exports = {
 		}
 
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-		
-		
+
+
 		/* Returns true to enable the cooldown */
 		interaction.followUp({ embeds: [embed] });
 		return true;

@@ -12,11 +12,11 @@ module.exports = {
 
 	/**
 	 * Triggered when an interaction is used.
-	 * 
+	 *
 	 * @param {object} interaction - Discord interaction object
 	 * @param {object} client - Discord Client object
 	 * @param {object} firestore - Firestore database object
-	 * 
+	 *
 	 * @returns {void}
 	**/
 	execute: async (interaction, client, firestore) => {
@@ -68,7 +68,7 @@ module.exports = {
 
 			/* Execute the command file */
 			cmd.execute({ interaction, client, firestore, userData })
-			
+
 				.then((res) => {
 					if (res == true) {
 						/* Set and delete the cooldown */
@@ -76,7 +76,7 @@ module.exports = {
 						setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 					}
 				})
-				
+
 				.catch((err) => {
 					console.log(err);
 				});

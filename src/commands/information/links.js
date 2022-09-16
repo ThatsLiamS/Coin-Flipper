@@ -18,9 +18,9 @@ module.exports = {
 
 	/**
 	 * Useful Coin Flipper links.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction }) => {

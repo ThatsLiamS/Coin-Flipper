@@ -19,11 +19,11 @@ module.exports = {
 
 	/**
 	 * Dropship an item and try to earn some cents.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
 	 * @param {object} userData - Discord User's data/information
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, firestore, userData }) => {

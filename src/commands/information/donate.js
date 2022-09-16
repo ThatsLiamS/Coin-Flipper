@@ -19,9 +19,9 @@ module.exports = {
 
 	/**
 	 * Information about our donator tiers.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction }) => {

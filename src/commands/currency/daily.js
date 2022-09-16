@@ -1,5 +1,5 @@
 /* Import required modules and files */
-const { EmbedBuilder, SlashCommandBuilder} = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	name: 'daily',
@@ -18,11 +18,11 @@ module.exports = {
 
 	/**
 	 * Claim your daily cents.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
 	 * @param {object} userData - Discord User's data/information
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, firestore, userData }) => {

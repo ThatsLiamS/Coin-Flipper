@@ -18,11 +18,11 @@ module.exports = {
 
 	/**
 	 * Shows the leaderboard of the top 10 flippers.
-	 * 
+	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
 	 * @param {object} userData - Discord User's data/information
-	 * 
+	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, firestore, client }) => {

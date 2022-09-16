@@ -7,10 +7,10 @@ module.exports = {
 
 	/**
 	 * Triggered when the bot leaves a server.
-	 * 
+	 *
 	 * @param {object} guild - Discord Server object
 	 * @param {object} client - Discord Client object
-	 * 
+	 *
 	 * @returns {void}
 	**/
 	execute: async (guild, client) => {
