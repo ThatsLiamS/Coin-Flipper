@@ -61,7 +61,7 @@ module.exports = {
 		}
 
 		/* Filter through the files and get the commands from the selected category */
-		const categories = ['flipping', 'currency', 'information', 'donator', 'addons'];
+		const categories = ['flipping', 'currency', 'information', 'donator', 'addons', 'customisation'];
 		if (categories.includes(cmdName)) {
 			let description = '__**General**__\n';
 
@@ -105,6 +105,7 @@ module.exports = {
 				{ name: '💸 Currency', value: 'A variety of commands for getting and spending cents', inline: true },
 				{ name: '🛎️ Information', value: 'Invite, support server, privacy policy, and other info', inline: true },
 				{ name: '📄 Addons', value: 'Create your own addons for flipping and publish them to the worldwide addon shop', inline: true },
+				{ name: "⚙️ Customisation", value: "Commands that let you customise Coin Flipper and its features", inline: true },
 			)
 			.setColor('#cd7f32');
 

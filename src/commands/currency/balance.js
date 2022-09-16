@@ -27,7 +27,6 @@ module.exports = {
 	 * 
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
 	 * 
 	 * @returns {boolean}
 	**/
