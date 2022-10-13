@@ -1,6 +1,6 @@
 /* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const defaultData = require('../../util/defaultData/guilds.js');
+const defaultData = require('../../util/defaultData/users.js');
 const emojis = require('../../util/emojis.js');
 
 /* Convert boolean to emoji */
@@ -8,21 +8,21 @@ const convert = (boolean) => boolean ? emojis.true : emojis.false;
 
 /* Allow for dynamic customisation */
 const features = {
-	'flipping': 'Flipping', 'minigames': 'Minigame', 'trash': 'Trash', 'customaddons': 'Custom Addon',
+	'evil': 'Evil', 'compact': 'Compact',
 };
 
 module.exports = {
-	name: 'server',
-	description: 'View and customise server settings!',
-	usage: '`/server settings`\n`/server enable <feature>`\n`/server disable <feature>`',
+	name: 'user',
+	description: 'View and customise user settings!',
+	usage: '`/user settings`\n`/user enable <feature>`\n`/user disable <feature>`',
 
-	permissions: ['Manage Guild'],
+	permissions: [],
 	guildOnly: true,
 
 	data: new SlashCommandBuilder()
-		.setName('server')
-		.setDescription('View and customise server settings!')
-		.setDMPermission(false)
+		.setName('user')
+		.setDescription('View and customise user settings!')
+		.setDMPermission(true)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('settings')
@@ -34,8 +34,7 @@ module.exports = {
 			.setDescription('Select a feature to enable!')
 			.addStringOption(option => option.setName('feature').setDescription('Select a feature to enable').setRequired(true)
 				.addChoices(
-					{ name: 'Flipping', value: 'flipping' }, { name: 'Minigames', value: 'minigames' },
-					{ name: 'Trash', value: 'trash' }, { name: 'Custom Addons', value: 'customaddons' },
+					{ name: 'Evil Mode', value: 'evil' }, { name: 'Compact Mode', value: 'compact' },
 				)),
 		)
 
@@ -44,8 +43,7 @@ module.exports = {
 			.setDescription('Select a feature to disable!')
 			.addStringOption(option => option.setName('feature').setDescription('Select a feature to disable').setRequired(true)
 				.addChoices(
-					{ name: 'Flipping', value: 'flipping' }, { name: 'Minigames', value: 'minigames' },
-					{ name: 'Trash', value: 'trash' }, { name: 'Custom Addons', value: 'customaddons' },
+					{ name: 'Evil Mode', value: 'evil' }, { name: 'Compact Mode', value: 'compact' },
 				)),
 		),
 
@@ -70,7 +68,7 @@ module.exports = {
 
 		/* Grab the user's information */
 		const collection = await firestore.collection('users').doc(interaction.user.id).get();
-		const userData = collection.data() || defaultData;
+		const userData = collection.data() || defaultData.main;
 
 		/* Which subcommand was selected */
 		if (subCommandName == 'enable') {
@@ -122,8 +120,8 @@ module.exports = {
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username}'s Settings!`)
 				.addFields(
-					{ name: 'Evil', value: `${convert(userData?.evil || true)}` },
-					{ name: 'Compact', value: `${convert(userData?.compact || true)}` },
+					{ name: 'Evil', value: `${convert(userData?.evil || false)}` },
+					{ name: 'Compact', value: `${convert(userData?.compact || false)}` },
 				)
 				.setTimestamp()
 				.setFooter({ text: 'Use "/user enable" and "/user disable" to change these settings' });
