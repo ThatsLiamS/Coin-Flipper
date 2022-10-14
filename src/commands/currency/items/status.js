@@ -15,6 +15,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Check your status and see how your items help you.

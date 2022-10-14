@@ -15,6 +15,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
+	defer: false,
 
 	/**
 	 * Claim your daily cents.
@@ -46,7 +47,7 @@ module.exports = {
 		}
 
 		if (thisDate == lastDate && pass == false) {
-			interaction.followUp({ content: 'You can only claim your reward once a day!' });
+			interaction.reply({ content: 'You can only claim your reward once a day!' });
 			return false;
 		}
 
@@ -56,16 +57,18 @@ module.exports = {
 		let randomAmt = Math.floor(Math.random() * (6000 - 4000 + 1)) + 1000;
 		if (userData.donator > 0) randomAmt = Math.ceil(randomAmt * 1.5);
 
-		/* Set the balance in the database */
-		userData.currencies.cents = Number(userData.currencies.cents) + Number(randomAmt);
-		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-
 		const embed = new EmbedBuilder()
 			.setTitle('You claimed your daily reward!')
 			.setDescription(`You got \`${randomAmt}\` cents!\nMake sure to come back tomorrow to claim your next one!`)
 			.setColor('Green');
 
-		interaction.followUp({ embeds: [embed] });
+		interaction.reply({ embeds: [embed] });
+
+		/* Set the balance in the database */
+		userData.currencies.cents = Number(userData.currencies.cents) + Number(randomAmt);
+		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+
+		/* Returns true */
 		return true;
 	},
 };

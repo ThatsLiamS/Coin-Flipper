@@ -25,6 +25,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Use an intem in your inventory.

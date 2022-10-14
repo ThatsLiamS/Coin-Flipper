@@ -35,6 +35,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Help out and support another user.

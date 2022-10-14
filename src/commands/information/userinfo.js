@@ -22,6 +22,7 @@ module.exports = {
 			.setRequired(false)),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Collection of user-based, custom addons.

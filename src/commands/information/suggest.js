@@ -21,6 +21,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: false,
 
 	/**
 	 * Suggest an improvement, command or feature.
@@ -45,7 +46,7 @@ module.exports = {
 		webhook.send({ username: interaction.guild.name, avatarURL, embeds: [embed] });
 
 		/* Returns true to enable the cooldown */
-		interaction.followUp({ content: 'Your suggestion has been sent to my developers.', ephemeral: true });
+		interaction.reply({ content: 'Your suggestion has been sent to my developers.', ephemeral: true });
 		return true;
 	},
 };

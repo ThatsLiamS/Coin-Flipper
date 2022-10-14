@@ -36,6 +36,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * View and claim jobs.

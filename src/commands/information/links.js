@@ -15,6 +15,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
+	defer: false,
 
 	/**
 	 * Useful Coin Flipper links.
@@ -47,7 +48,7 @@ module.exports = {
 			);
 
 		/* Returns true to enable the cooldown */
-		interaction.followUp({ embeds: [embed], components: [row] });
+		interaction.reply({ embeds: [embed], components: [row] });
 		return true;
 
 	},

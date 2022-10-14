@@ -19,6 +19,7 @@ module.exports = {
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to take:').setRequired(false)),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * View the shop and all the items in it.

@@ -24,20 +24,19 @@ module.exports = {
 
 		/* Is interaction a command? */
 		if (interaction.type === InteractionType.ApplicationCommand) {
-			await interaction.deferReply();
 
 			const cmd = client.commands.get(interaction.commandName);
 			if (!cmd) return;
 
 			/* Is the database available? */
 			if (quotaExceeded == true) {
-				interaction.followUp({ content: 'Sorry, we are experiencing some technical difficulties, please try again later.', ephemeral: true });
+				interaction.reply({ content: 'Sorry, we are experiencing some technical difficulties, please try again later.', ephemeral: true });
 				return;
 			}
 
 			/* Is the command working? */
 			if (cmd['error'] == true) {
-				interaction.followUp({ content: 'Sorry, this command is currently unavailable. Please try again later.', ephemeral: true });
+				interaction.reply({ content: 'Sorry, this command is currently unavailable. Please try again later.', ephemeral: true });
 				return;
 			}
 
@@ -45,11 +44,14 @@ module.exports = {
 				for (const permission of cmd['permissions']) {
 					/* Loops through and check permissions agasint the user */
 					if (!interaction.member.permissions.has(permission)) {
-						interaction.followUp({ content: 'Sorry, you do not have permission to run this command.', ephemeral: true });
+						interaction.reply({ content: 'Sorry, you do not have permission to run this command.', ephemeral: true });
 						return;
 					}
 				}
 			}
+
+			/* Does the command need referring? */
+			if (cmd['defer'] == true) await interaction.deferReply({ ephemeral: cmd['ephemeral'] ? true : false });
 
 
 			/* Receive userdata from the Firestore Database */

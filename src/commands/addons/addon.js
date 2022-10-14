@@ -72,6 +72,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Collection of user-based, custom addons.

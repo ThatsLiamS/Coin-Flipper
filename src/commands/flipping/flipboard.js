@@ -15,6 +15,7 @@ module.exports = {
 		.setDMPermission(false),
 
 	error: true,
+	defer: true,
 
 	/**
 	 * Shows the leaderboard of the top 10 flippers.

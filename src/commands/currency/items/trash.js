@@ -37,6 +37,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Place and take items from the trash.

@@ -32,6 +32,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: false,
 
 	/**
 	 * Bet cents on a coin flip.
@@ -77,11 +78,11 @@ module.exports = {
 
 		}
 
+
+		interaction.reply({ embeds: [embed] });
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 
-
 		/* Returns true to enable the cooldown */
-		interaction.followUp({ embeds: [embed] });
 		return true;
 
 	},

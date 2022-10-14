@@ -16,6 +16,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Dropship an item and try to earn some cents.

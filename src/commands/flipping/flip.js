@@ -23,6 +23,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Flip a code or spice it up with an addon

@@ -50,6 +50,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * View and customise server settings.

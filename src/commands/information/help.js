@@ -21,6 +21,7 @@ module.exports = {
 			.setRequired(false)),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Get a list of my commands.

@@ -16,6 +16,7 @@ module.exports = {
 		.setDMPermission(false),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Shows lots of cool information about the bot.

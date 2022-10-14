@@ -32,6 +32,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * View or edit your register balance.

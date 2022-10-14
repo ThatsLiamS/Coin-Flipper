@@ -15,6 +15,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
+	defer: false,
 
 	/**
 	 * Claim your weekly donator cents.
@@ -29,8 +30,8 @@ module.exports = {
 
 		/* Are they a donator? */
 		if (userData.donator == 0) {
-			interaction.followUp({ content: 'You must be a donator to use this command!' });
-			return;
+			interaction.reply({ content: 'You must be a donator to use this command!' });
+			return false;
 		}
 
 		/* How much do they get? */
@@ -45,16 +46,19 @@ module.exports = {
 		const lastWeek = userData.cooldowns.weekly;
 
 		if (thisWeek == lastWeek) {
-			interaction.followUp({ content: 'You can only claim your weekly reward once per week! You can claim it on Sunday.' });
-			return;
+			interaction.reply({ content: 'You can only claim your weekly reward once per week! You can claim it on Sunday.' });
+			return false;
 		}
 
 		/* Add the values to the database */
 		userData.cooldowns.weekly = thisWeek;
 		userData.currencies.cents = Number(userData.currencies.cents) + Number(amt);
 
+		interaction.reply({ content: `You claimed your weekly ${amt} cents! Thanks for donating to Coin Flipper!` });
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-		interaction.followUp({ content: `You claimed your weekly ${amt} cents! Thanks for donating to Coin Flipper!` });
+
+		/* Returns true */
+		return true;
 
 	},
 };

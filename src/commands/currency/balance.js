@@ -21,6 +21,7 @@ module.exports = {
 			.setName('user').setDescription('Select a user').setRequired(false)),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * View a user's balance.

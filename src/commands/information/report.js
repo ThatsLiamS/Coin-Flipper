@@ -21,6 +21,7 @@ module.exports = {
 		),
 
 	error: false,
+	defer: false,
 
 	/**
 	 * Report a bug/issue to the developers.
@@ -45,7 +46,7 @@ module.exports = {
 		webhook.send({ username: interaction.guild.name, avatarURL, embeds: [embed] });
 
 		/* Returns true to enable the cooldown */
-		interaction.followUp({ content: 'Thank you for helping us make Coin Flipper even better.', ephemeral: true });
+		interaction.reply({ content: 'Thank you for helping us make Coin Flipper even better.', ephemeral: true });
 		return true;
 	},
 };

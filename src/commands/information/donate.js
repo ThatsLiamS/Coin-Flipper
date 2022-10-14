@@ -16,6 +16,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
+	defer: false,
 
 	/**
 	 * Information about our donator tiers.
@@ -47,7 +48,7 @@ module.exports = {
 			);
 
 		/* Returns true to enable the cooldown */
-		interaction.followUp({ embeds: [embed], components: [row] });
+		interaction.reply({ embeds: [embed], components: [row] });
 		return true;
 
 	},

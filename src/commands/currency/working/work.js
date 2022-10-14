@@ -17,6 +17,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Work at your job and collect your pay cheque!

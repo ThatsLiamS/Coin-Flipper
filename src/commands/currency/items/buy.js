@@ -18,6 +18,7 @@ module.exports = {
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to buy:').setRequired(true)),
 
 	error: false,
+	defer: true,
 
 	/**
 	 * Buy an item from the shop.
