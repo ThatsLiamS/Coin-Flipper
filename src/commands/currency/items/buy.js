@@ -5,7 +5,7 @@ const { itemlist } = require('./../../../util/constants.js');
 module.exports = {
 	name: 'buy',
 	description: 'Buy an item from the shop!',
-	usage: '`/buy <item>`',
+	usage: '/buy <item>',
 
 	permissions: [],
 	guildOnly: false,

@@ -5,7 +5,7 @@ const { achievementAdd } = require('./../../util/functions.js');
 module.exports = {
 	name: 'bet',
 	description: 'Bet cents on a coinflip!',
-	usage: '`/bet <side> <amount>`',
+	usage: '/bet <side> <amount>',
 
 	permissions: [],
 	guildOnly: false,

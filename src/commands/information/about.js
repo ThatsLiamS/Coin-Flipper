@@ -5,7 +5,7 @@ const { makeGrid } = require('./../../util/functions.js');
 module.exports = {
 	name: 'about',
 	description: 'Shows lots of cool information about the bot!',
-	usage: '`/about`',
+	usage: '/about',
 
 	permissions: [],
 	guildOnly: true,

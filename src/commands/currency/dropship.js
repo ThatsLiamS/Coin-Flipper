@@ -5,7 +5,7 @@ const { dropshipItems } = require('./../../util/constants.js');
 module.exports = {
 	name: 'dropship',
 	description: 'Dropship an item and try to earn some cents!',
-	usage: '`/dropship`',
+	usage: '/dropship',
 
 	permissions: [],
 	guildOnly: false,

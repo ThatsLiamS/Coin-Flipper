@@ -5,7 +5,7 @@ const { exploreAreas } = require('./../../util/constants.js');
 module.exports = {
 	name: 'explore',
 	description: 'Explore the wilderness and find some cents!',
-	usage: '`/explore`',
+	usage: '/explore',
 
 	permissions: [],
 	guildOnly: false,

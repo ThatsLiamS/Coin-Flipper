@@ -6,7 +6,7 @@ const { gotItem, achievementAdd } = require('./../../util/functions.js');
 module.exports = {
 	name: 'flip',
 	description: 'Flip a coin, or spice it up with an addon!',
-	usage: '`/flip [addon]`',
+	usage: '/flip [addon]',
 
 	permissions: [],
 	guildOnly: false,

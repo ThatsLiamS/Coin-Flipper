@@ -4,7 +4,7 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	name: 'addon',
 	description: 'Collection of user-based, custom addons.',
-	usage: '`/addon view <name>`\n`/addon create <name>`\n`/addon rename <name> <newName>`\n`/addon delete <name>`\n`/addon setcost <name> <cost>`\n`/addon setdescription <name> <description>`\n`/addon inputs`\n`/addon addresponse <name> <response>`\n`/addon deleteresponse <name> <response>`',
+	usage: '/addon view <name>\n/addon create <name>\n/addon rename <name> <newName>\n/addon delete <name>\n/addon setcost <name> <cost>\n/addon setdescription <name> <description>\n/addon inputs\n/addon addresponse <name> <response>\n/addon deleteresponse <name> <response>',
 
 	permissions: [],
 	guildOnly: false,

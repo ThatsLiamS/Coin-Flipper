@@ -14,7 +14,7 @@ const features = {
 module.exports = {
 	name: 'user',
 	description: 'View and customise user settings!',
-	usage: '`/user settings`\n`/user enable <feature>`\n`/user disable <feature>`',
+	usage: '/user settings\n/user enable <feature>\n/user disable <feature>',
 
 	permissions: [],
 	guildOnly: true,

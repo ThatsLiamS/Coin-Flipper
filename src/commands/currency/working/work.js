@@ -6,7 +6,7 @@ const { joblist } = require('./../../../util/constants.js');
 module.exports = {
 	name: 'work',
 	description: 'Work at your job and collect your pay cheque!',
-	usage: '`/work`',
+	usage: '/work',
 
 	permissions: [],
 	guildOnly: false,

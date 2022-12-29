@@ -9,7 +9,7 @@ const requirements = [0, 0, 15, 30];
 module.exports = {
 	name: 'job',
 	description: 'View and claim jobs!',
-	usage: '`/job centre`\n`/job quit`\n`/job claim <job>`',
+	usage: '/job centre\n/job quit\n/job claim <job>',
 
 	permissions: [],
 	guildOnly: false,

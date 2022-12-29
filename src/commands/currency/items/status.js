@@ -4,7 +4,7 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	name: 'status',
 	description: 'Check your status and see how your items help you!',
-	usage: '`/status`',
+	usage: '/status',
 
 	permissions: [],
 	guildOnly: false,

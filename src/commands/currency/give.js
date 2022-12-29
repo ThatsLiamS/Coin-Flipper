@@ -7,7 +7,7 @@ const { itemlist } = require('./../../util/constants.js');
 module.exports = {
 	name: 'give',
 	description: 'Help out and support another user!',
-	usage: '`/give cents <user> <amount>`\n`/give item <user> <item>`',
+	usage: '/give cents <user> <amount>\n/give item <user> <item>',
 
 	permissions: [],
 	guildOnly: true,

@@ -4,7 +4,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	name: 'monthly',
 	description: 'Claim your monthly cents!',
-	usage: '`/monthly`',
+	usage: '/monthly',
 
 	permissions: [],
 	guildOnly: false,

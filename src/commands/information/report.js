@@ -6,7 +6,7 @@ const format = (string) => string.split('\n').map((line) => '> ' + line).join('\
 module.exports = {
 	name: 'report',
 	description: 'Submit a bug report to the developers!',
-	usage: '`/report <description>`',
+	usage: '/report',
 
 	permissions: [],
 	guildOnly: false,

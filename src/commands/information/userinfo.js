@@ -6,7 +6,7 @@ const defaultData = require('./../../util/defaultData/users').main;
 module.exports = {
 	name: 'userinfo',
 	description: 'View a user\'s stats!',
-	usage: '`/userinfo [user]`',
+	usage: '/userinfo [user]',
 
 	permissions: [],
 	guildOnly: false,

@@ -4,7 +4,7 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	name: 'register',
 	description: 'View or edit your register balance!',
-	usage: '`/register balance`\n`/register withdraw <amount>`\n`/register deposit <amount>`',
+	usage: '/register balance\n/register withdraw <amount>\n/register deposit <amount>',
 
 	permissions: [],
 	guildOnly: false,

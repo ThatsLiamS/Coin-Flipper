@@ -14,7 +14,7 @@ const features = {
 module.exports = {
 	name: 'server',
 	description: 'View and customise server settings!',
-	usage: '`/server settings`\n`/server enable <feature>`\n`/server disable <feature>`',
+	usage: '/server settings\n/server enable <feature>\n/server disable <feature>',
 
 	permissions: ['Manage Guild'],
 	guildOnly: true,

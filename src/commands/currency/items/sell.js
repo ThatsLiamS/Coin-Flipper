@@ -5,7 +5,7 @@ const { itemlist } = require('./../../../util/constants.js');
 module.exports = {
 	name: 'sell',
 	description: 'Sell an item to the shop!',
-	usage: '`/sell <item>`',
+	usage: '/sell <item>',
 
 	permissions: [],
 	guildOnly: false,

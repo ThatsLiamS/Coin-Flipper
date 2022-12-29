@@ -4,7 +4,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
 	name: 'flipboard',
 	description: 'Shows the leaderboard of the top 10 flippers!',
-	usage: '`/flipboard`',
+	usage: '/flipboard',
 
 	permissions: [],
 	guildOnly: true,

@@ -4,7 +4,7 @@ const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	name: 'daily',
 	description: 'Claim your daily cents!',
-	usage: '`/daily`',
+	usage: '/daily',
 
 	permissions: [],
 	guildOnly: false,

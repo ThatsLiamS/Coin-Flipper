@@ -6,7 +6,7 @@ const { achievementAdd } = require('./../../../util/functions.js');
 module.exports = {
 	name: 'use',
 	description: 'Use an item in your inventory!',
-	usage: '`/use <item>`',
+	usage: '/use <item>',
 
 	permissions: [],
 	guildOnly: false,

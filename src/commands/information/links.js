@@ -4,7 +4,7 @@ const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRow
 module.exports = {
 	name: 'links',
 	description: 'Useful Coin Flipper links!',
-	usage: '`/links`',
+	usage: '/links',
 
 	permissions: [],
 	guildOnly: false,

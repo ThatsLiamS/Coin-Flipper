@@ -5,7 +5,7 @@ const { itemlist, badgelist } = require('./../../../util/constants.js');
 module.exports = {
 	name: 'badges',
 	description: 'View and claim badges!',
-	usage: '`/badges list`\n`/badges claim <badge>`',
+	usage: '/badges list\n/badges claim <badge>',
 
 	permissions: [],
 	guildOnly: false,

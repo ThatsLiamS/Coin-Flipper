@@ -6,7 +6,7 @@ const format = (string) => string.split('\n').map((line) => '> ' + line).join('\
 module.exports = {
 	name: 'suggest',
 	description: 'Suggest an improvement, command or feature!',
-	usage: '`/suggest',
+	usage: '/suggest',
 
 	permissions: [],
 	guildOnly: false,

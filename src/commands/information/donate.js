@@ -5,7 +5,7 @@ const emojis = require('./../../util/emojis');
 module.exports = {
 	name: 'donate',
 	description: 'Information about our donator tiers!',
-	usage: '`/donate`',
+	usage: '/donate',
 
 	permissions: [],
 	guildOnly: false,

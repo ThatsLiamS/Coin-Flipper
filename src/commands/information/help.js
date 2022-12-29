@@ -2,10 +2,13 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const { readdirSync } = require('fs');
 
+/* Formats command usage */
+const formatUsage = (string) => string.split('\n').map((str) => '`' + str + '`').join('\n');
+
 module.exports = {
 	name: 'help',
 	description: 'Get a list of my commands',
-	usage: '`/help [command]`',
+	usage: '/help [command]',
 
 	permissions: [],
 	guildOnly: false,
@@ -44,7 +47,7 @@ module.exports = {
 				.setTitle(cmd.name.charAt(0).toUpperCase() + cmd.name.slice(1) + ' Command')
 				.setDescription(cmd.description)
 				.setTimestamp()
-				.addField('__Usage:__', `${cmd.usage}`, false);
+				.addField('__Usage:__', `${formatUsage(cmd.usage)}`, false);
 
 			if (cmd?.cooldown?.text) {
 				embed.addFields({ name: '__Cooldown:__', value: `**${cmd.cooldown.text}**`, inline: false });
@@ -73,7 +76,7 @@ module.exports = {
 			const commandFiles = readdirSync(`${__dirname}/../../commands/${cmdName}`).filter(file => file.endsWith('.js'));
 			for (const file of commandFiles) {
 				const command = require(`${__dirname}/../../commands/${cmdName}/${file}`);
-				description = description + `${command.usage}\n`;
+				description = description + `${formatUsage(command.usage)}\n`;
 			}
 
 			const commandFolders = readdirSync(`${__dirname}/../../commands/${cmdName}`).filter(file => !file.endsWith('.js'));
@@ -84,7 +87,7 @@ module.exports = {
 
 					for (const file of cmdFiles) {
 						const command = require(`${__dirname}/../../commands/${cmdName}/${subCommandFolders}/${file}`);
-						description = description + `${command.usage}\n`;
+						description = description + `${formatUsage(command.usage)}\n`;
 					}
 
 				}

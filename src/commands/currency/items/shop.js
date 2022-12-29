@@ -5,7 +5,7 @@ const { itemlist } = require('./../../../util/constants.js');
 module.exports = {
 	name: 'shop',
 	description: 'View the shop and all the items in it!',
-	usage: '`/shop [page] [item]`',
+	usage: '/shop [page] [item]',
 
 	permissions: [],
 	guildOnly: false,

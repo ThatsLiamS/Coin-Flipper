@@ -7,7 +7,7 @@ const defaultData = require('./../../util/defaultData/users').main;
 module.exports = {
 	name: 'balance',
 	description: 'View a user\'s balance!',
-	usage: '`/balance [user]`',
+	usage: '/balance [user]',
 
 	permissions: [],
 	guildOnly: false,

@@ -9,7 +9,7 @@ const defaultData = require('../../../util/defaultData/guilds');
 module.exports = {
 	name: 'trash',
 	description: 'Place and take items from the trash!',
-	usage: '`/trash items`\n`/trash take <item>`\n`/trash throw <item>`',
+	usage: '/trash items\n/trash take <item>\n/trash throw <item>',
 
 	permissions: [],
 	guildOnly: true,
