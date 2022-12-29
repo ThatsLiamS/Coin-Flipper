@@ -15,7 +15,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
-	defer: false,
+	defer: true,
 
 	/**
 	 * Claim your weekly donator cents.
@@ -30,7 +30,7 @@ module.exports = {
 
 		/* Are they a donator? */
 		if (userData.donator == 0) {
-			interaction.reply({ content: 'You must be a donator to use this command!' });
+			interaction.followUp({ content: 'You must be a donator to use this command!' });
 			return false;
 		}
 
@@ -54,7 +54,7 @@ module.exports = {
 		userData.cooldowns.weekly = thisWeek;
 		userData.currencies.cents = Number(userData.currencies.cents) + Number(amt);
 
-		interaction.reply({ content: `You claimed your weekly ${amt} cents! Thanks for donating to Coin Flipper!` });
+		interaction.followUp({ content: `You claimed your weekly ${amt} cents! Thanks for donating to Coin Flipper!` });
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 
 		/* Returns true */

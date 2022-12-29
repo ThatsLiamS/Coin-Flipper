@@ -67,6 +67,13 @@ module.exports = {
 			if (userData.donator == 1) cooldownAmount = Math.floor(cooldownAmount * 0.75);
 			if (userData.donator == 2) cooldownAmount = Math.floor(cooldownAmount * 0.5);
 
+			if (timestamps.has(interaction.user.id)) {
+				if (cmd['defer'] == true) await interaction.followUp({ content: 'Please wait to use that command again!' });
+				else await interaction.reply({ content: 'Please wait to use that command again' });
+
+				return false;
+			}
+
 
 			/* Execute the command file */
 			cmd.execute({ interaction, client, firestore, userData })

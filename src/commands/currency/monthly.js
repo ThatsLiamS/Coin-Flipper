@@ -15,7 +15,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
-	defer: false,
+	defer: true,
 
 	/**
 	 * Claim your monthly cents.
@@ -33,11 +33,11 @@ module.exports = {
 
 		/* Can they use the command */
 		if (userData.inv.calendar < 1) {
-			interaction.reply({ content: 'You need a calendar to use this command!' });
+			interaction.followUp({ content: 'You need a calendar to use this command!' });
 			return false;
 		}
 		if (thisMonth == userData.cooldowns.monthly) {
-			interaction.reply({ content: 'You can only claim your reward once a month!' });
+			interaction.followUp({ content: 'You can only claim your reward once a month!' });
 			return false;
 		}
 
@@ -49,7 +49,7 @@ module.exports = {
 		userData.currencies.cents = Number(userData.currencies.cents) + Number(monthAmt);
 		userData.cooldowns.monthly = thisMonth;
 
-		interaction.reply({ content: `You claimed your monthly \`${monthAmt}\` cents!` });
+		interaction.followUp({ content: `You claimed your monthly \`${monthAmt}\` cents!` });
 
 		/* returns true, cooldown set within the database */
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);

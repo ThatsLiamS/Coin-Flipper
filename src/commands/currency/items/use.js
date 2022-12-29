@@ -46,12 +46,12 @@ module.exports = {
 			return false;
 		}
 
-		if (itemName == 'dynamite') {
+		if (userData?.inv[item.id] && userData.inv[item.id] < 1) {
+			interaction.followUp({ content: `You do not have ${item.prof}!` });
+			return false;
+		}
 
-			if (userData?.inv?.dynamite < 1) {
-				interaction.followUp({ content: 'You do not have a stick of **Dynamite**!' });
-				return false;
-			}
+		if (itemName == 'dynamite') {
 
 			const embed = new EmbedBuilder()
 				.setTitle('KABOOM')
@@ -69,11 +69,6 @@ module.exports = {
 
 		if (itemName == 'partypopper') {
 
-			if (userData?.inv?.partypopper < 1) {
-				interaction.followUp({ content: 'You do not have a **Party Popper**!' });
-				return false;
-			}
-
 			const embed = new EmbedBuilder()
 				.setTitle('Woooooooo!!')
 				.setDescription('1000 servers! Time to celebrate!')
@@ -86,11 +81,6 @@ module.exports = {
 
 		if (itemName == 'goldtrophy') {
 
-			if (userData?.inv?.goldtrophy < 1) {
-				interaction.followUp({ content: '' });
-				return false;
-			}
-
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username} flexes on all of you!`)
 				.setImage('https://imgur.com/iqooiDn.jpg')
@@ -101,11 +91,6 @@ module.exports = {
 		}
 
 		if (itemName == 'briefcase') {
-
-			if (userData?.inv?.briefcase < 1) {
-				interaction.followUp({ content: 'You do not have a **briefcase**!' });
-				return false;
-			}
 
 			userData.inv.briefcase = Number(userData.inv.briefcase) - Number(1);
 
@@ -120,11 +105,6 @@ module.exports = {
 		}
 
 		if (itemName == 'broken8ball') {
-
-			if (userData?.inv?.broken8ball < 1) {
-				interaction.followUp({ content: '' });
-				return false;
-			}
 
 			const responses = ['Ask again later', 'Idk', 'Sorry I don\'t know', 'Why would I know', 'Yes... or no... yeah idk', 'Signs point to nowhere', 'As I see it... i forgot', 'Better not tell you now', 'Cannot predict now', 'Concentrate and ask again', 'Don\'t count on me knowing', 'It is uncertain', 'My reply is maybe', 'My sources are not credible so idk', 'Outlook blank', 'Reply hazy, try again', 'Without a doubt I have no idea', '50% yes, 50% no'];
 

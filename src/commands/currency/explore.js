@@ -16,7 +16,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
-	defer: false,
+	defer: true,
 
 	/**
 	 * Explroe the wilderness and find some cents.
@@ -65,7 +65,7 @@ module.exports = {
 
 		}
 
-		interaction.reply({ embeds: [embed] });
+		interaction.followUp({ embeds: [embed] });
 
 		/* Returns true to enable the cooldown */
 		await firestore.doc(`/users/${interaction.user.id}`).set(userData);

@@ -15,7 +15,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	error: false,
-	defer: false,
+	defer: true,
 
 	/**
 	 * Claim your daily cents.
@@ -47,7 +47,7 @@ module.exports = {
 		}
 
 		if (thisDate == lastDate && pass == false) {
-			interaction.reply({ content: 'You can only claim your reward once a day!' });
+			interaction.followUp({ content: 'You can only claim your reward once a day!' });
 			return false;
 		}
 
@@ -62,7 +62,7 @@ module.exports = {
 			.setDescription(`You got \`${randomAmt}\` cents!\nMake sure to come back tomorrow to claim your next one!`)
 			.setColor('Green');
 
-		interaction.reply({ embeds: [embed] });
+		interaction.followUp({ embeds: [embed] });
 
 		/* Set the balance in the database */
 		userData.currencies.cents = Number(userData.currencies.cents) + Number(randomAmt);
