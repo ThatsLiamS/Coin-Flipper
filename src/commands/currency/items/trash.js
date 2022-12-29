@@ -13,6 +13,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: true,
+	cooldown: { time: 15, text: '15 Seconds' },
 
 	data: new SlashCommandBuilder()
 		.setName('trash')

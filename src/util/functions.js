@@ -71,10 +71,33 @@ const makeGrid = (results) => {
 };
 
 
+/**
+ * Format seconds in it's highest denomination
+ * @function
+ * @author Liam Skinner <me@liamskinner.co.uk>
+ *
+ * @param {number} seconds - time in seconds
+ *
+ * @returns {string}
+**/
+const formatTime = (seconds) => {
+
+	const denominations = [
+		[1, 'Second'],
+		[60, 'Minute'],
+		[60 * 60, 'Hour'],
+	];
+	const type = (seconds < 61 ? 0 : (seconds < 3600 ? 1 : 2));
+	const num = Math.floor(seconds / denominations[type][0]);
+
+	return `${num} ${denominations[type][1]}${num != 1 ? 's' : ''}`;
+};
+
 /* Export all functions */
 module.exports = {
 	achievementAdd,
 	gotItem,
 	fitString,
 	makeGrid,
+	formatTime,
 };

@@ -9,6 +9,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: false,
+	cooldown: { time: 0, text: 'None (0)' },
 
 	data: new SlashCommandBuilder()
 		.setName('help')
@@ -45,14 +46,17 @@ module.exports = {
 				.setTimestamp()
 				.addField('__Usage:__', `${cmd.usage}`, false);
 
+			if (cmd?.cooldown?.text) {
+				embed.addFields({ name: '__Cooldown:__', value: `**${cmd.cooldown.text}**`, inline: false });
+			}
 			if (cmd.permissions[0] && cmd.ownerOnly == false) {
-				embed.addField('__Permissions:__', '`' + cmd.permissions.join('` `') + '`', false);
+				embed.addFields({ name: '__Permissions:__', value: '`' + cmd.permissions.join('` `') + '`', inline: false });
 			}
 			if (!cmd.permissions[0] && cmd.ownerOnly == true) {
-				embed.addField('__Permissions:__', '**Server Owner Only**', false);
+				embed.addFields({ name: '__Permissions:__', value: '**Server Owner Only**', inline: false });
 			}
 			if (cmd.error == true) {
-				embed.addField('__Error:__', 'This command is currently unavailable, please try again later.', false)
+				embed.addFields({ name: '__Error:__', value: 'This command is currently unavailable, please try again later.', inline: false })
 					.setColor('Red');
 			}
 

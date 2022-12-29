@@ -11,6 +11,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: true,
+	cooldown: { time: 60, text: '60 Seconds' },
 
 	data: new SlashCommandBuilder()
 		.setName('give')

@@ -9,6 +9,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: false,
+	cooldown: { time: 60, text: '60 Seconds' },
 
 	data: new SlashCommandBuilder()
 		.setName('dropship')

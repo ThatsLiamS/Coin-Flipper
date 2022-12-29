@@ -9,9 +9,8 @@ module.exports = {
 	usage: '`/suggest',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
+	cooldown: { time: 10 * 60, text: '10 Minutes' },
 
 	data: new SlashCommandBuilder()
 		.setName('suggest')

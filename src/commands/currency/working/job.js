@@ -13,6 +13,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: false,
+	cooldown: { time: 5, text: '5 Seconds' },
 
 	data: new SlashCommandBuilder()
 		.setName('job')

@@ -18,6 +18,7 @@ module.exports = {
 
 	permissions: ['Manage Guild'],
 	guildOnly: true,
+	cooldown: { time: 30, text: '30 Seconds' },
 
 	data: new SlashCommandBuilder()
 		.setName('server')

@@ -8,6 +8,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: true,
+	cooldown: { time: 15 * 60, text: '15 Minutes' },
 
 	data: new SlashCommandBuilder()
 		.setName('flipboard')

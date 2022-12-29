@@ -9,9 +9,8 @@ module.exports = {
 	usage: '`/report <description>`',
 
 	permissions: [],
-	ownerOnly: false,
 	guildOnly: false,
-	developerOnly: false,
+	cooldown: { time: 10 * 60, text: '10 Minutes' },
 
 	data: new SlashCommandBuilder()
 		.setName('report')

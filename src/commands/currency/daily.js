@@ -8,6 +8,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: false,
+	cooldown: { time: 0, text: '1 Day' },
 
 	data: new SlashCommandBuilder()
 		.setName('daily')

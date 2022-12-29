@@ -1,6 +1,7 @@
 /* Import required modules and files */
 const { Collection, InteractionType } = require('discord.js');
 const defaultData = require('./../util/defaultData/users').main;
+const { formatTime } = require('./../util/functions.js');
 
 /* Global variable definitions */
 const cooldowns = new Collection();
@@ -20,7 +21,6 @@ module.exports = {
 	 * @returns {void}
 	**/
 	execute: async (interaction, client, firestore) => {
-		const now = Date.now();
 
 		/* Is interaction a command? */
 		if (interaction.type === InteractionType.ApplicationCommand) {
@@ -68,8 +68,12 @@ module.exports = {
 			if (userData.donator == 2) cooldownAmount = Math.floor(cooldownAmount * 0.5);
 
 			if (timestamps.has(interaction.user.id)) {
-				if (cmd['defer'] == true) await interaction.followUp({ content: 'Please wait to use that command again!' });
-				else await interaction.reply({ content: 'Please wait to use that command again' });
+
+				const expiration = Number(timestamps.get(interaction.user.id)) + Number(cooldownAmount);
+				const secondsLeft = Math.floor((Number(expiration) - Number(Date.now())) / 1000);
+
+				if (cmd['defer'] == true) await interaction.followUp({ content: `Please wait **${formatTime(secondsLeft > 1 ? secondsLeft : 1)}** to use that command again!` });
+				else await interaction.reply({ content: `Please wait **${formatTime(secondsLeft > 1 ? secondsLeft : 1)}** to use that command again` });
 
 				return false;
 			}
@@ -81,7 +85,7 @@ module.exports = {
 				.then((res) => {
 					if (res == true) {
 						/* Set and delete the cooldown */
-						timestamps.set(interaction.user.id, now);
+						timestamps.set(interaction.user.id, Date.now());
 						setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 					}
 				})

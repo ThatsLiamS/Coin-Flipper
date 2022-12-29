@@ -9,6 +9,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: true,
+	cooldown: { time: 0, text: 'None (0)' },
 
 	data: new SlashCommandBuilder()
 		.setName('about')

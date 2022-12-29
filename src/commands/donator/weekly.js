@@ -16,6 +16,7 @@ module.exports = {
 
 	error: false,
 	defer: true,
+	cooldown: { time: 0, text: '1 Week' },
 
 	/**
 	 * Claim your weekly donator cents.

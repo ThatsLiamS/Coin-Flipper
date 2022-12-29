@@ -9,6 +9,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: false,
+	cooldown: { time: 10, text: '10 Seconds' },
 
 	data: new SlashCommandBuilder()
 		.setName('sell')

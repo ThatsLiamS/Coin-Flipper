@@ -18,6 +18,7 @@ module.exports = {
 
 	permissions: [],
 	guildOnly: true,
+	cooldown: { time: 30, text: '30 Seconds' },
 
 	data: new SlashCommandBuilder()
 		.setName('user')
