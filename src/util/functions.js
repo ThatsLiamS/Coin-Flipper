@@ -2,6 +2,7 @@
 const { Collection } = require('discord.js');
 const { GuildSchema, UserSchema } = require('./Database Schema.js');
 const { achievements, itemlist } = require('./constants.js');
+const reformatData = require('./reformatData.js');
 
 /* Connection to the Firestore Database */
 const admin = require('firebase-admin');
@@ -37,10 +38,12 @@ const database = {
 		const collection = await firestore.collection(collectionID).doc(documentID).get();
 		const firestoreData = collection.data() || (collectionID == 'users' ? UserSchema : GuildSchema);
 
+		/* Reformat firestoreData into the new Schema */
+		const formattedData = reformatData[collectionID](firestoreData);
+
 		/* Set the values in the cache */
-		cache[collectionID].delete(documentID);
-		cache[collectionID].set(documentID, firestoreData);
-		return firestoreData;
+		cache[collectionID].set(documentID, formattedData);
+		return formattedData;
 	},
 
 	/**

@@ -45,7 +45,7 @@ const UserSchema = {
 
 const GuildSchema = {
 
-	enabled: {
+	features: {
 		trash: true,
 		minigames: true,
 		addons: true,
