@@ -1,6 +1,6 @@
 /* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const emojis = require('../../util/emojis.js');
+const { emojis } = require('./../../util/constants.js');
 const { database } = require('./../../util/functions.js');
 
 /* Convert boolean to emoji */

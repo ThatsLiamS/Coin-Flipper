@@ -12,8 +12,11 @@ const UserSchema = {
 	stats: {
 		flips: 0,
 		minigames: 0,
-		worked: 0,
 		given: 0,
+		battles: 0,
+		training: 0,
+
+		worked: 0,
 		job: '',
 
 		donator: 0,

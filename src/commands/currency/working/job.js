@@ -1,6 +1,6 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { joblist } = require('./../../../util/constants');
+const { joblist } = require('./../../../util/constants.js');
 const { database } = require('./../../../util/functions.js');
 
 /* Global variable definitions */

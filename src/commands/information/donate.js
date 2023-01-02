@@ -1,6 +1,6 @@
 /* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
-const emojis = require('./../../util/emojis');
+const { emojis } = require('./../../util/constants.js');
 
 module.exports = {
 	name: 'donate',

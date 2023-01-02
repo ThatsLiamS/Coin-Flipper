@@ -26,10 +26,10 @@ const reformatAddons = (data) => {
 		if (addon?.name != '' && addon?.name != 'none') {
 			newAddons.push({
 				name: addon.name,
-				description: ((typeof addon.description == String) && addon.description != '') ? addon.description : '',
-				cost: (addon.cost != 0 && typeof addon.cost == Number) ? addon.cost : 0,
+				description: ((typeof addon.description == 'string') && addon.description != '') ? addon.description : '',
+				cost: (addon.cost != 0 && typeof addon.cost == 'number') ? addon.cost : 0,
 				published: false,
-				responses: (typeof addon?.responses == Array) ? addon.responses : [],
+				responses: (typeof addon?.responses == 'object') ? addon.responses : [],
 			});
 		}
 	});
@@ -46,18 +46,19 @@ const reformatAddons = (data) => {
  * @returns {object}
 **/
 const reformatUser = (data) => {
-	if (data?.stats?.lifeEarnings >= 0 && (typeof data?.addons == Array)) return data;
+	if (data?.stats?.lifeEarnings >= 0 && (typeof data?.settings == 'object')) return data;
 	const newData = {};
 
 	newData.stats = {
-		flips: (typeof data?.stats?.flipped == Number) ? data.stats.flipped : 0,
-		minigames: (typeof data?.stats?.minigames_won == Number) ? data.stats.minigames_won : 0,
-		worked: (typeof data?.stats?.timesWorked == Number) ? data.stats.timesWorked : 0,
+		flips: (typeof data?.stats?.flipped == 'number') ? data.stats.flipped : 0,
+		minigames: (typeof data?.stats?.minigames_won == 'number') ? data.stats.minigames_won : 0,
+		worked: (typeof data?.stats?.timesWorked == 'number') ? data.stats.timesWorked : 0,
+		given: (typeof data?.giveData?.cents == 'number') ? data.giveData.cents : 0,
 		job: (data?.job && (joblist.filter(i => i.id == data?.job)[0])) ? data.job : '',
 
-		donator: (typeof data.donator == Number) ? data.donator : 0,
-		balance: (typeof data.currencies.cents == Number) ? data.currencies.cents : 0,
-		bank: (typeof data.currencies.cents == Number) ? data.currencies.cents : 0,
+		donator: (typeof data.donator == 'number') ? data.donator : 0,
+		balance: (typeof data.currencies.cents == 'number') ? data.currencies.cents : 0,
+		bank: (typeof data.currencies.cents == 'number') ? data.currencies.cents : 0,
 		lifeEarnings: Number(this.balance + this.bank) || 0,
 	};
 
@@ -88,7 +89,7 @@ const reformatUser = (data) => {
 		return newInv;
 	};
 	newData.badges = sortBadges(data.badges);
-	newData.achievements = (typeof data?.achievements == Object) ? data.achievements : {};
+	newData.achievements = (typeof data?.achievements == 'object') ? data.achievements : {};
 
 
 	return newData;
@@ -103,7 +104,7 @@ const reformatUser = (data) => {
  * @returns {object}
 **/
 const reformatGuild = (data) => {
-	if (data?.features && (typeof data?.addons == Array)) return data;
+	if (data?.features) return data;
 
 	return {
 		features: {

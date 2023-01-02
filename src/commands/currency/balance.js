@@ -1,7 +1,6 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const emojis = require('./../../util/emojis');
-const { itemlist, joblist } = require('./../../util/constants');
+const { itemlist, joblist, badgelist } = require('./../../util/constants.js');
 const { database } = require('./../../util/functions.js');
 
 module.exports = {
@@ -49,17 +48,12 @@ module.exports = {
 
 
 		/* Sort and organise the user's badges */
-		const badgeOrder = ['dev', 'partnered_dev', 'support', 'flip', 'flip_plus', 'minigame', 'minigame_plus', 'register', 'collector', 'collector_plus', 'rich', 'rich_plus', 'niceness', 'bughunter', 'bughunter_plus' ];
-		const badgesList = [`${emojis.dev} Developer`, `${emojis.partnered_dev} Partnered Developer`, `${emojis.support} Supporter`, `${emojis.flip} Flipper`, `${emojis.flip_plus} Avid Flipper`, `${emojis.gamer} Gamer`, `${emojis.pro_gamer} Pro Gamer`, `${emojis.register} Registered`, `${emojis.rich} Wealthy`, `${emojis.rich_plus} Millionaire`, `${emojis.niceness} Niceness`, `${emojis.bughunter} Bug Hunter`, `${emojis.bughunter_plus} Bug Poacher`];
-
 		const badges = [];
-		for (const badgeId of badgeOrder) {
-			if (userData?.badges[badgeId] == true && userData?.badges[`${badgeId}_plus`] != true) {
-				badges.push(badgesList[badgeOrder.indexOf(badgeId)]);
-			}
+		for (const badge of badgelist) {
+			if (userData.badges[badge.id] == true) items.push(`${badge.prof}`);
 		}
-		if (userData.stats.donator == 1) badges.push(`${emojis.gold_tier} Gold Tier`);
-		if (userData.stats.donator == 2) badges.push(`${emojis.platinum_tier} Platinum Tier`);
+		if (userData.stats.donator == 1) badges.push(`${badgelist.filter(b => b.id == 'gold_tier')[0].prof} Gold Tier`);
+		if (userData.stats.donator == 2) badges.push(`${badgelist.filter(b => b.id == 'platinum_tier')[0].prof} Platinum Tier`);
 		if (badges.length == 0) badges.push('There are no badges');
 
 
