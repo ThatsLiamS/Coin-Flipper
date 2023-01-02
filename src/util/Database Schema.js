@@ -9,6 +9,8 @@ const AddonSchema = {
 
 const UserSchema = {
 
+	id: '',
+
 	stats: {
 		flips: 0,
 		minigames: 0,

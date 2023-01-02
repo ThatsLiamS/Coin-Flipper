@@ -39,7 +39,7 @@ const database = {
 		const firestoreData = collection.data() || (collectionID == 'users' ? UserSchema : GuildSchema);
 
 		/* Reformat firestoreData into the new Schema */
-		const formattedData = reformatData[collectionID](firestoreData);
+		const formattedData = reformatData[collectionID](firestoreData, documentID);
 
 		/* Set the values in the cache */
 		cache[collectionID].set(documentID, formattedData);

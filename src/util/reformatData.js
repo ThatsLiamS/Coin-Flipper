@@ -43,11 +43,14 @@ const reformatAddons = (data) => {
  * @author Liam Skinner <me@liamskinner.co.uk>
  *
  * @param {object} data - UserData from the cache/database
+ * @param {string} documentID - documentID
  * @returns {object}
 **/
-const reformatUser = (data) => {
+const reformatUser = (data, documentID) => {
 	if (data?.stats?.lifeEarnings >= 0 && (typeof data?.settings == 'object')) return data;
 	const newData = {};
+
+	newData.id = documentID;
 
 	newData.stats = {
 		flips: (typeof data?.stats?.flipped == 'number') ? data.stats.flipped : 0,
@@ -103,12 +106,15 @@ const reformatUser = (data) => {
  * @author Liam Skinner <me@liamskinner.co.uk>
  *
  * @param {object} data - GuildData from the cache/database
+ * @param {string} documentID - documentID
  * @returns {object}
 **/
-const reformatGuild = (data) => {
+const reformatGuild = (data, documentID) => {
 	if (data?.features) return data;
 
 	return {
+		id: documentID,
+
 		features: {
 			trash: data.enabled.trash == true ? true : false,
 			minigames: data.enabled.minigames == true ? true : false,
