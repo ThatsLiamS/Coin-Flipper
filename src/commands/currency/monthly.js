@@ -1,5 +1,6 @@
 /* Import required modules and files */
 const { SlashCommandBuilder } = require('discord.js');
+const { database } = require('./../../util/functions.js');
 
 module.exports = {
 	name: 'monthly',
@@ -22,38 +23,38 @@ module.exports = {
 	 * Claim your monthly cents.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction }) => {
 
-		const date = new Date();
-		const thisMonth = date.getMonth();
+		/* Fetch the user's data */
+		const userData = await database.getValue('users', interaction.user.id);
 
 		/* Can they use the command */
-		if (userData.inv.calendar < 1) {
+		if (!userData?.items?.calendar || userData.items?.calendar < 1) {
 			interaction.followUp({ content: 'You need a calendar to use this command!' });
 			return false;
 		}
-		if (thisMonth == userData.cooldowns.monthly) {
-			interaction.followUp({ content: 'You can only claim your reward once a month!' });
+
+		/* Calculate the month */
+		const date = new Date();
+		const today = `${date.getMonth() + 1}|${date.getFullYear()}`;
+
+		if (today == userData.cooldowns.monthly) {
+			interaction.followUp({ content: 'You have already claimed it this month!' });
 			return false;
 		}
-
-		/* How much can they claim */
-		let monthAmt = 20000;
-		if (userData.donator > 0) monthAmt = 25000;
+		userData.cooldowns.monthly = today;
 
 		/* Add the money to their balance */
-		userData.currencies.cents = Number(userData.currencies.cents) + Number(monthAmt);
-		userData.cooldowns.monthly = thisMonth;
+		const amount = (userData.stats.donator > 0) ? 25_000 : 20_000;
+		userData.stats.balance = Number(userData.stats.balance) + Number(amount);
+		userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(amount);
 
-		interaction.followUp({ content: `You claimed your monthly \`${monthAmt}\` cents!` });
+		interaction.followUp({ content: `You claimed your monthly \`${amount}\` cents!` });
 
 		/* returns true, cooldown set within the database */
-		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+		await database.setValue('users', interaction.user.id, userData);
 		return true;
 
 	},

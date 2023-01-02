@@ -25,7 +25,6 @@ module.exports = {
 	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} client - Discord Client object
-	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, client }) => {
@@ -85,5 +84,6 @@ module.exports = {
 
 		/* Returns boolean to enable the cooldown */
 		return res;
+
 	},
 };

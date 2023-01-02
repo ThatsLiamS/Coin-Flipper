@@ -1,6 +1,7 @@
 /* Import required modules and packages */
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { exploreAreas } = require('./../../util/constants.js');
+const { database } = require('./../../util/functions.js');
 
 module.exports = {
 	name: 'explore',
@@ -18,23 +19,24 @@ module.exports = {
 
 	error: false,
 	defer: true,
+	ephemeral: true,
 
 	/**
 	 * Explroe the wilderness and find some cents.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction }) => {
 
 		const area = exploreAreas[Math.floor(Math.random() * exploreAreas.length)];
 		const chance = Math.floor(Math.random() * 10);
 
+		/* Fetch the user's data */
+		const userData = await database.getValue('users', interaction.user.id);
+
 		/* How did they do */
-		const result = userData.inv.compass > 0 ?
+		const result = userData.items.compass > 0 ?
 			(chance > 2 ? 'win' : 'draw') :
 			(chance > 4 ? 'win' : (chance > 2 ? 'draw' : 'loss'));
 
@@ -43,8 +45,10 @@ module.exports = {
 		/* Create the embed based on the result */
 		if (result == 'win') {
 			let amount = Math.floor(Math.random() * (80 - 40 + 1)) + 40;
-			if (userData?.evil == true) amount = Math.ceil(amount * 0.5);
-			userData.currencies.cents = Number(userData.currencies.cents) + Number(amount);
+			if (userData?.settings.evil == true) amount = Math.ceil(amount * 0.5);
+
+			userData.stats.balance = Number(userData.stats.balance) + Number(amount);
+			userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(amount);
 
 			embed.setTitle('You explored and found..')
 				.setDescription(`You explored the ${area.name}, and ${area.got.replace('{earned}', amount)}`)
@@ -58,7 +62,7 @@ module.exports = {
 		}
 		if (result == 'loss') {
 			const amount = Math.floor(Math.random() * (40 - 10 + 1)) + 10;
-			userData.currencies.cents = Number(userData.currencies.cents) - Number(amount);
+			userData.stats.balance = Number(userData.stats.balance) - Number(amount);
 
 			embed.setTitle('Aw, you lost cents')
 				.setDescription(`You explored ${area.name}, but ${area.lost.replace('{lost}', amount)}`)
@@ -68,8 +72,7 @@ module.exports = {
 
 		interaction.followUp({ embeds: [embed] });
 
-		/* Returns true to enable the cooldown */
-		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+		await database.setValue('users', interaction.user.id, userData);
 		return true;
 
 	},

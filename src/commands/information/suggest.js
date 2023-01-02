@@ -25,7 +25,6 @@ module.exports = {
 	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} client - Discord Client object
-	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, client }) => {
@@ -62,15 +61,12 @@ module.exports = {
 
 				const embed = new EmbedBuilder()
 					.setColor('#0099ff')
+					.setAuthor({ name: modal.user.username, iconURL: modal.user.displayAvatarURL() })
 					.setTitle(`${modal.fields.getTextInputValue('title')}`)
 					.setDescription(`**Description:**\n${format(modal.fields.getTextInputValue('description'))}`)
-					.setAuthor({ name: modal.user.username, iconURL: modal.user.displayAvatarURL() })
+					.addFields({ name: '__Does it solve a bug?__', value: `${format(modal.fields.getTextInputValue('solve'))}` })
 					.setFooter({ text: `User ID: ${modal.member.id}` })
 					.setTimestamp();
-
-				if (modal.fields.getTextInputValue('description')) {
-					embed.addFields({ name: '__Does it solve a bug?__', value: `${format(modal.fields.getTextInputValue('solve'))}` });
-				}
 
 				/* Locate and send the webhook */
 				const webhook = new WebhookClient({ url: process.env['SuggestionWebhook'] });
@@ -89,5 +85,6 @@ module.exports = {
 
 		/* Returns boolean to enable the cooldown */
 		return res;
+
 	},
 };

@@ -1,14 +1,14 @@
 /* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const defaultData = require('../../util/defaultData/guilds.js');
-const emojis = require('../../util/emojis.js');
+const { emojis } = require('./../../util/constants.js');
+const { database } = require('./../../util/functions.js');
 
 /* Convert boolean to emoji */
 const convert = (boolean) => boolean ? emojis.true : emojis.false;
 
 /* Allow for dynamic customisation */
 const features = {
-	'flipping': 'Flipping', 'minigames': 'Minigame', 'trash': 'Trash', 'customaddons': 'Custom Addon',
+	'minigames': 'Minigame', 'trash': 'Trash', 'addons': 'Custom Addon',
 };
 
 module.exports = {
@@ -35,8 +35,7 @@ module.exports = {
 			.setDescription('Select a feature to enable!')
 			.addStringOption(option => option.setName('feature').setDescription('Select a feature to enable').setRequired(true)
 				.addChoices(
-					{ name: 'Flipping', value: 'flipping' }, { name: 'Minigames', value: 'minigames' },
-					{ name: 'Trash', value: 'trash' }, { name: 'Custom Addons', value: 'customaddons' },
+					{ name: 'Minigames', value: 'minigames' }, { name: 'Trash', value: 'trash' }, { name: 'Custom Addons', value: 'addons' },
 				)),
 		)
 
@@ -45,8 +44,7 @@ module.exports = {
 			.setDescription('Select a feature to disable!')
 			.addStringOption(option => option.setName('feature').setDescription('Select a feature to disable').setRequired(true)
 				.addChoices(
-					{ name: 'Flipping', value: 'flipping' }, { name: 'Minigames', value: 'minigames' },
-					{ name: 'Trash', value: 'trash' }, { name: 'Custom Addons', value: 'customaddons' },
+					{ name: 'Minigames', value: 'minigames' }, { name: 'Trash', value: 'trash' }, { name: 'Custom Addons', value: 'addons' },
 				)),
 		),
 
@@ -57,11 +55,9 @@ module.exports = {
 	 * View and customise server settings.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore }) => {
+	execute: async ({ interaction }) => {
 
 		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
@@ -71,8 +67,7 @@ module.exports = {
 		}
 
 		/* Grab the server's information */
-		const collection = await firestore.collection('guilds').doc(interaction.guild.id).get();
-		const guildData = collection.data() || defaultData;
+		const guildData = await database.getValue('guilds', interaction.guild.id);
 
 		/* Which subcommand was selected */
 		if (subCommandName == 'enable') {
@@ -84,16 +79,16 @@ module.exports = {
 			}
 
 			/* Is it already enabled? */
-			if (guildData?.enabled[feature] == true) {
+			if (guildData?.features[feature] == true) {
 				interaction.followUp({ content: 'That feature is already enabled' });
 				return false;
 			}
 
-			guildData.enabled[feature] = true;
+			guildData.features[feature] = true;
 			interaction.followUp({ content: `Successfully enabled the **${features[feature]} System!**` });
 
 			/* Save the new setting in the database */
-			await firestore.doc(`/guilds/${interaction.guild.id}`).set(guildData);
+			await database.setValue('guilds', interaction.guild.id, guildData);
 			return true;
 		}
 
@@ -106,16 +101,16 @@ module.exports = {
 			}
 
 			/* Is it already enabled? */
-			if (guildData?.enabled[feature] == false) {
+			if (guildData?.features[feature] == false) {
 				interaction.followUp({ content: 'That feature is already disabled' });
 				return false;
 			}
 
-			guildData.enabled[feature] = false;
+			guildData.features[feature] = false;
 			interaction.followUp({ content: `Successfully disabled the **${features[feature]} System!**` });
 
 			/* Save the new setting in the database */
-			await firestore.doc(`/guilds/${interaction.guild.id}`).set(guildData);
+			await database.setValue('guilds', interaction.guild.id, guildData);
 			return true;
 		}
 
@@ -124,10 +119,9 @@ module.exports = {
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.guild.name}'s Settings!`)
 				.addFields(
-					{ name: 'Flipping', value: `${convert(guildData?.enabled?.flipping || true)}` },
-					{ name: 'Minigames', value: `${convert(guildData?.enabled?.minigames || true)}` },
-					{ name: 'Trash', value: `${convert(guildData?.enabled?.trash || true)}` },
-					{ name: 'Custom Addons', value: `${convert(guildData?.enabled?.customaddons || true)}` },
+					{ name: 'Minigames', value: `${convert(guildData?.features?.minigames ?? true)}` },
+					{ name: 'Trash', value: `${convert(guildData?.features?.trash ?? true)}` },
+					{ name: 'Custom Addons', value: `${convert(guildData?.features?.addons ?? true)}` },
 				)
 				.setTimestamp()
 				.setFooter({ text: 'Use "/server enable" and "/server disable" to change these settings' });

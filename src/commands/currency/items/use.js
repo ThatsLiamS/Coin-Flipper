@@ -1,7 +1,7 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { itemlist } = require('./../../../util/constants.js');
-const { achievementAdd } = require('./../../../util/functions.js');
+const { achievementAdd, database } = require('./../../../util/functions.js');
 
 module.exports = {
 	name: 'use',
@@ -32,12 +32,10 @@ module.exports = {
 	 * Use an intem in your inventory.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
+	 * @param {object} client - Discord bot client
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction, client }) => {
 
 		/* Locate the selected item */
 		const itemName = interaction.options.getString('item');
@@ -47,7 +45,10 @@ module.exports = {
 			return false;
 		}
 
-		if (userData?.inv[item.id] && userData.inv[item.id] < 1) {
+		/* Fetch the user's data */
+		const userData = await database.getValue('users', interaction.user.id);
+
+		if (!userData?.items[item.id] || (userData.items[item.id] || 0) < 1) {
 			interaction.followUp({ content: `You do not have ${item.prof}!` });
 			return false;
 		}
@@ -60,11 +61,12 @@ module.exports = {
 				.setImage('https://media.giphy.com/media/HhTXt43pk1I1W/giphy.gif')
 				.setColor('Red');
 
-			userData.currencies.cents = Number(userData.currencies.cents) + Number(250);
-			userData = achievementAdd(userData, 'kaboom');
+			userData.stats.balance = Number(userData.stats.balance) + Number(250);
+			userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(250);
 
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
 			interaction.followUp({ embeds: [embed] });
+
+			await database.setValue('users', interaction.user.id, await achievementAdd(userData, 'kaboom', client));
 			return true;
 		}
 
@@ -93,15 +95,18 @@ module.exports = {
 
 		if (itemName == 'briefcase') {
 
-			userData.inv.briefcase = Number(userData.inv.briefcase) - Number(1);
+			userData.items.briefcase = Number(userData.items.briefcase) - Number(1);
 
 			/* Generate random winnings to add to the user */
 			let winnings = Math.ceil(Math.random() * (750 - 250) + 250);
-			if (userData?.evil == true) winnings = Math.ceil(winnings * 0.9);
-			userData.currencies.cents = Number(userData.currencies.cents) + Number(winnings);
+			if (userData.settings.evil == true) winnings = Math.ceil(winnings * 0.9);
 
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+			userData.stats.balance = Number(userData.stats.balance) + Number(winnings);
+			userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(winnings);
+
 			interaction.followUp({ content: `You opened the briefcase and got ${winnings} cents!` });
+
+			await database.setValue('users', interaction.user.id, userData);
 			return true;
 		}
 
@@ -115,13 +120,13 @@ module.exports = {
 				.setFooter({ text: 'Well what do you expect its a broken 8ball' })
 				.setColor('#828282');
 
-			userData = achievementAdd(userData, 'whatAWaste', true);
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-
 			interaction.followUp({ embeds: [embed] });
+
+			await database.setValue('users', interaction.user.id, await achievementAdd(userData, 'whatAWaste', client));
 			return true;
 		}
 
 		return false;
+
 	},
 };

@@ -1,6 +1,7 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { itemlist, badgelist } = require('./../../../util/constants.js');
+const { database } = require('./../../../util/functions.js');
 
 module.exports = {
 	name: 'badges',
@@ -17,13 +18,11 @@ module.exports = {
 		.setDMPermission(true)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('list')
-			.setDescription('View the badges you can earn!'),
+			.setName('list').setDescription('View the badges you can earn!'),
 		)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('claim')
-			.setDescription('Claim a badge to show off on your profile!')
+			.setName('claim').setDescription('Claim a badge to show off on your profile!')
 			.addStringOption(option => option.setName('badge').setDescription('Select a badge').setRequired(true).addChoices(
 				{ 'name': 'Supporter', 'value': 'support' }, { 'name': 'Flipper', 'value': 'flip' },
 				{ 'name': 'Avid Flipper', 'value': 'flip_pro' }, { 'name': 'Gamer', 'value': 'minigame' },
@@ -40,12 +39,9 @@ module.exports = {
 	 * View and claim badges.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction }) => {
 
 		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
@@ -53,6 +49,8 @@ module.exports = {
 			interaction.followUp({ content: 'Woah, an unexpected error has occurred. Please try again!' });
 			return false;
 		}
+		/* Fetch the user's data */
+		const userData = await database.getValue('users', interaction.user.id);
 
 		if (subCommandName == 'list') {
 
@@ -73,7 +71,7 @@ module.exports = {
 				return true;
 			});
 			if (!badges || badges == []) embed.setDescription('Looks like you have claimed all the badges!');
-			for (const badge of badges) embed.addFields({ name: badge.prof, value: badge.req });
+			for (const badge of badges) embed.addFields({ name: badge.prof, value: badge.req, inline: true });
 
 			/* Response to user, and return true to enable cooldown */
 			interaction.followUp({ embeds: [embed] });
@@ -82,16 +80,17 @@ module.exports = {
 
 		if (subCommandName == 'claim') {
 			const badgeId = interaction.options.getString('badge');
-			/* Already claimed badge */
-			if (userData.badges[badgeId] == true) {
-				interaction.followUp({ content: 'You have already claimed that badge! ' });
-				return false;
-			}
 
 			/* Locate badge object */
 			const badge = badgelist.filter((b) => b.id == badgeId);
-			if (!badge.condition) {
+			if (!badge || !badge.condition) {
 				interaction.followUp({ content: 'You can not claim this badge.' });
+				return false;
+			}
+
+			/* Already claimed badge */
+			if (userData.badges[badgeId] == true) {
+				interaction.followUp({ content: 'You have already claimed that badge! ' });
 				return false;
 			}
 
@@ -99,21 +98,20 @@ module.exports = {
 			const [type, compare, value] = badge.condition;
 			let allowed = false;
 			if (type == 'support') {
-				if (interaction?.guild?.id != '821152669141565480' && interaction?.guild?.id != '832245298578849822') {
+				if (interaction?.guild?.id != '821152669141565480') {
 					interaction.followUp({ content: 'This command needs to be ran in the support server.' });
 					return false;
 				}
+				allowed = true;
 			}
 			else if (type == 'collection') {
 
 				let total = 0;
-				itemlist.map((i) => total = total + (userData.inv[i.id] || 0));
-
+				itemlist.map((i) => total = total + (userData.items[i.id] || 0));
 				allowed = (total > value);
 			}
 			else if (type == 'niceness') {
-
-				allowed = (userData.giveData.users > 5 && userData.giveData.cents > 100_000);
+				allowed = (userData.stats.given > 5 && userData.stats.given > 100_000);
 			}
 			else {
 				if (compare == '>') allowed = (userData[type] > value);
@@ -128,16 +126,13 @@ module.exports = {
 
 			interaction.followUp({ content: `You have claimed: ${badge.prof}!` });
 
-			/* Update firestore database */
+			/* Update the database */
 			userData.badges[badge.id] = true;
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-
-			/* Return true to enable the cooldown */
+			await database.setValue('users', interaction.user.id, userData);
 			return true;
 		}
 
 		return false;
-
 
 	},
 };

@@ -1,6 +1,7 @@
 /* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const { dropshipItems } = require('./../../util/constants.js');
+const { database } = require('./../../util/functions.js');
 
 module.exports = {
 	name: 'dropship',
@@ -18,17 +19,15 @@ module.exports = {
 
 	error: false,
 	defer: true,
+	ephemeral: true,
 
 	/**
 	 * Dropship an item and try to earn some cents.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction }) => {
 
 		const chance = Math.floor(Math.random() * 30);
 
@@ -62,13 +61,18 @@ module.exports = {
 		const accepted = await interaction.channel.awaitMessageComponent({ filter, time: 45_000, componentType: 2 })
 			.then(async (button) => {
 
+				/* Fetch the user's data */
+				const userData = await database.getValue('users', interaction.user.id);
+
 				/* Award the prize to the user */
 				const values = button.customId.split('-');
-				userData.currencies.cents = Number(userData.currencies.cents) + Number(values[1]);
+				userData.stats.balance = Number(userData.stats.balance) + Number(values[1]);
+				userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(values[1]);
 
-				interaction.editReply({ embeds: [new EmbedBuilder().setTitle('Dropship!').setDescription(`You dropshipped the ${values[2]} for \`${values[1]}\` cents!`)] });
-				await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-				/* return true to enable the cooldown */
+				await interaction.deleteReply().catch(() => false);
+				await button.reply({ ephemeral: true, embeds: [new EmbedBuilder().setTitle('Dropship!').setDescription(`You dropshipped the ${values[2]} for \`${values[1]}\` cents!`)] });
+
+				await database.setValue('users', interaction.user.id, userData);
 				return true;
 			})
 			.catch(async () => {
@@ -76,6 +80,7 @@ module.exports = {
 				return false;
 			});
 
-		return !accepted ? false : true;
+		return (accepted ? true : false);
+
 	},
 };

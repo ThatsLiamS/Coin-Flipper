@@ -1,6 +1,5 @@
 /* Import required modules and files */
 const { Collection, InteractionType } = require('discord.js');
-const defaultData = require('./../util/defaultData/users').main;
 const { formatTime } = require('./../util/functions.js');
 
 /* Global variable definitions */
@@ -16,11 +15,10 @@ module.exports = {
 	 *
 	 * @param {object} interaction - Discord interaction object
 	 * @param {object} client - Discord Client object
-	 * @param {object} firestore - Firestore database object
 	 *
 	 * @returns {void}
 	**/
-	execute: async (interaction, client, firestore) => {
+	execute: async (interaction, client) => {
 
 		/* Is interaction a command? */
 		if (interaction.type === InteractionType.ApplicationCommand) {
@@ -54,21 +52,14 @@ module.exports = {
 			if (cmd['defer'] == true) await interaction.deferReply({ ephemeral: cmd['ephemeral'] ? true : false });
 
 
-			/* Receive userdata from the Firestore Database */
-			const collection = await firestore.collection('users').doc(interaction.user.id).get();
-			const userData = collection.data() || defaultData;
-
 			/* Work out the appropriate cooldown time */
 			if (!cooldowns.has(cmd.name)) cooldowns.set(cmd.name, new Collection());
 			const timestamps = cooldowns.get(cmd.name);
-			let cooldownAmount = (cmd.cooldown || 0) * 1000;
 
+			let cooldownAmount = (cmd?.cooldown?.time || 0) * 1000;
 			if (cmd.name == 'flip' && interaction.channel.id == '832245298969182246') cooldownAmount = 0;
-			if (userData.donator == 1) cooldownAmount = Math.floor(cooldownAmount * 0.75);
-			if (userData.donator == 2) cooldownAmount = Math.floor(cooldownAmount * 0.5);
 
 			if (timestamps.has(interaction.user.id)) {
-
 				const expiration = Number(timestamps.get(interaction.user.id)) + Number(cooldownAmount);
 				const secondsLeft = Math.floor((Number(expiration) - Number(Date.now())) / 1000);
 
@@ -80,7 +71,7 @@ module.exports = {
 
 
 			/* Execute the command file */
-			cmd.execute({ interaction, client, firestore, userData })
+			cmd.execute({ interaction, client })
 
 				.then((res) => {
 					if (res == true) {

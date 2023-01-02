@@ -1,5 +1,6 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { database } = require('./../../util/functions.js');
 
 module.exports = {
 	name: 'daily',
@@ -22,41 +23,35 @@ module.exports = {
 	 * Claim your daily cents.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction }) => {
 
-		/* Have they claimed it already */
-		const date = new Date();
-		const thisDate = date.getDate();
-		const lastDate = userData?.cooldowns?.daily;
-		let pass = false;
+		/* Fetch the user's data */
+		const userData = await database.getValue('users', interaction.user.id);
 
-		if (userData.inv.vault > 0) {
-			if (thisDate != lastDate) userData.cooldowns.claimed = 0;
-			const claimed = userData.cooldowns.claimed;
-			if (claimed == 0) {
-				userData.cooldowns.claimed = 1;
+		/* Get the date */
+		const dateConstruct = new Date();
+		let today = `${dateConstruct.getDate()}|${dateConstruct.getMonth() + 1}|${dateConstruct.getFullYear()}`;
+
+		const cooldown = userData.cooldowns.daily.split('-');
+		if (today == cooldown[0]) {
+			if (!cooldown[1] && (userData.items.vault || 0) < 1) {
+				interaction.followUp({ content: 'You have already claimed your daily reward!' });
+				return false;
 			}
-			else if (claimed == 1) {
-				userData.cooldowns.claimed = 2;
-				pass = true;
+
+			if (cooldown[1] == 'bonus') {
+				interaction.followUp({ content: 'You have already claimed your bonus daily reward!' });
+				return false;
 			}
+			today = `${today}-bonus`;
 		}
-
-		if (thisDate == lastDate && pass == false) {
-			interaction.followUp({ content: 'You can only claim your reward once a day!' });
-			return false;
-		}
-
-		userData.cooldowns.daily = thisDate;
+		userData.cooldowns.daily = today;
 
 		/* How much do they claim */
 		let randomAmt = Math.floor(Math.random() * (6000 - 4000 + 1)) + 1000;
-		if (userData.donator > 0) randomAmt = Math.ceil(randomAmt * 1.5);
+		if (userData.stats.donator > 0) randomAmt = Math.ceil(randomAmt * 1.5);
 
 		const embed = new EmbedBuilder()
 			.setTitle('You claimed your daily reward!')
@@ -66,10 +61,11 @@ module.exports = {
 		interaction.followUp({ embeds: [embed] });
 
 		/* Set the balance in the database */
-		userData.currencies.cents = Number(userData.currencies.cents) + Number(randomAmt);
-		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+		userData.stats.balance = Number(userData.stats.balance) + Number(randomAmt);
+		userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(randomAmt);
 
-		/* Returns true */
+		await database.setValue('users', interaction.user.id, userData);
 		return true;
+
 	},
 };

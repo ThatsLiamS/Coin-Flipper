@@ -1,6 +1,7 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { itemlist } = require('./../../../util/constants.js');
+const { database } = require('./../../../util/functions.js');
 
 module.exports = {
 	name: 'buy',
@@ -25,12 +26,9 @@ module.exports = {
 	 * Buy an item from the shop.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction }) => {
 
 		/* Locate the selected item */
 		const itemName = interaction.options.getString('item');
@@ -42,15 +40,18 @@ module.exports = {
 			return false;
 		}
 
+		/* Fetch the values from the database */
+		const userData = await database.getValue('users', interaction.user.id);
+
 		/* Can they afford it? */
-		const price = userData.donator == 2 ? Math.ceil(item.cost * 0.75) : item.cost;
-		if (price > userData?.currencies?.cents) {
+		const price = userData.stats.donator == 2 ? Math.ceil(item.cost * 0.75) : item.cost;
+		if (price > userData?.stats?.balance) {
 			interaction.followUp({ content: 'I\'m sorry, you cannot afford this item.' });
 			return false;
 		}
 
-		userData.currencies.cents = Number(userData.currencies.cents) - price;
-		userData.inv[item.id] = Number(userData.inv[item.id] || 0) + Number(1);
+		userData.stats.balance = Number(userData.stats.balance) - price;
+		userData.items[item.id] = Number(userData.items[item.id] || 0) + Number(1);
 
 		const embed = new EmbedBuilder()
 			.setTitle(`Congrats, ${interaction.user.username}!`)
@@ -59,10 +60,9 @@ module.exports = {
 
 		interaction.followUp({ embeds: [embed] });
 
-		/* Set the new value in the database */
-		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-
-		/* Return true to enable the cooldown */
+		/* Set the values in the database */
+		await database.setValue('users', interaction.user.id, userData);
 		return true;
+
 	},
 };
