@@ -19,10 +19,7 @@ module.exports = {
 		.setDescription('Get a list of my commands!')
 		.setDMPermission(true)
 
-		.addStringOption(option => option
-			.setName('command')
-			.setDescription('Which command or category?')
-			.setRequired(false)),
+		.addStringOption(option => option.setName('command').setDescription('Which command or category?').setRequired(false)),
 
 	error: false,
 	defer: true,
@@ -32,7 +29,6 @@ module.exports = {
 	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} client - Discord Client object
-	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction, client }) => {
@@ -79,6 +75,7 @@ module.exports = {
 				description = description + `${formatUsage(command.usage)}\n`;
 			}
 
+			/* Filter through the sub categories */
 			const commandFolders = readdirSync(`${__dirname}/../../commands/${cmdName}`).filter(file => !file.endsWith('.js'));
 			if (commandFolders) {
 				for (const subCommandFolders of commandFolders) {
@@ -117,7 +114,7 @@ module.exports = {
 			)
 			.setColor('#cd7f32');
 
-		/* Creates row on link buttons */
+		/* Creates row of external link buttons */
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()

@@ -1,6 +1,9 @@
 const AddonSchema = {
-	name: '', description: '', cost: 0,
-	published: false, responses: [],
+	name: '',
+	description: '',
+	cost: 0,
+	published: false,
+	responses: [],
 };
 
 
@@ -10,6 +13,7 @@ const UserSchema = {
 		flips: 0,
 		minigames: 0,
 		worked: 0,
+		given: 0,
 		job: '',
 
 		donator: 0,
@@ -56,6 +60,8 @@ const GuildSchema = {
 		 * @example [AddonSchema, AddonSchema, AddonSchema]
 		**/
 	],
+
+	trash: {},
 
 };
 

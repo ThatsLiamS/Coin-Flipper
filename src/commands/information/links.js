@@ -22,7 +22,6 @@ module.exports = {
 	 * Useful Coin Flipper links.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 *
 	 * @returns {boolean}
 	**/
 	execute: async ({ interaction }) => {
@@ -37,7 +36,7 @@ module.exports = {
 				{ name: '__Donator__', value: '[PayPal](https://paypal.me/ThatsLiamS)\n[Patreon](https://www.patreon.com/CoinFlipper)', inline: true },
 			);
 
-		/* Create row of link buttons */
+		/* Create row of external link buttons */
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()

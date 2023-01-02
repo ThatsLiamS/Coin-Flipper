@@ -99,9 +99,7 @@ module.exports = {
 
 		/* Select the correct page and send */
 		interaction.followUp({ embeds: [embed[pageNumber > 2 ? 0 : pageNumber - 1]] });
-
-
-		/* return true to enable the cooldown */
 		return true;
+
 	},
 };

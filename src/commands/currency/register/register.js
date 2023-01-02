@@ -1,5 +1,6 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+const { database } = require('./../../../util/functions.js');
 
 module.exports = {
 	name: 'register',
@@ -16,19 +17,16 @@ module.exports = {
 		.setDMPermission(true)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('balance')
-			.setDescription('View the cents in your register!'),
+			.setName('balance').setDescription('View the cents in your register!'),
 		)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('withdraw')
-			.setDescription('Withdraw cents into your register!')
+			.setName('withdraw').setDescription('Withdraw cents into your register!')
 			.addIntegerOption(option => option.setName('amount').setDescription('How much would you like to withdraw?').setRequired(true)),
 		)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('deposit')
-			.setDescription('Deposits cents into your register!')
+			.setName('deposit').setDescription('Deposits cents into your register!')
 			.addIntegerOption(option => option.setName('amount').setDescription('How much would you like to deposit?').setRequired(true)),
 		),
 
@@ -39,12 +37,9 @@ module.exports = {
 	 * View or edit your register balance.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction }) => {
 
 		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
@@ -53,18 +48,22 @@ module.exports = {
 			return false;
 		}
 
+		/* Fetch values from the database */
+		const userData = await database.getValue('users', interaction.user.id);
+
 		/* Can they use this command? */
-		if (userData.inv.key < 1) {
+		if (!userData?.items?.key || userData.items.key < 1) {
 			interaction.followUp({ content: 'Woah, you need a key for this command!' });
 			return false;
 		}
 
+		/* Subcommand specific code */
 		if (subCommandName == 'balance') {
 
 			/* Work out flip percentage */
-			let percent = userData.donator != 0 ? (userData.donator == 1 ? 15 : 25) : 10;
-			if (userData.inv.label > 0) percent += 10;
-			if (userData.evil == true) percent = 7.5;
+			let percent = userData.stats.donator > 0 ? (userData.stats.donator == 1 ? 15 : 25) : 10;
+			if (userData.items.label && userData.items.label > 0) percent += 10;
+			if (userData.settings.evil == true) percent = 7.5;
 
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username}'s cash register`)
@@ -75,7 +74,6 @@ module.exports = {
 				);
 
 			interaction.followUp({ embeds: [embed] });
-			/* return true to enable the cooldown */
 			return true;
 		}
 
@@ -83,41 +81,35 @@ module.exports = {
 
 			/* How much to withdraw? */
 			const amount = interaction.options.getInteger('amount');
-			if (amount > userData.currencies.register) {
+			if (amount > userData.stats.bank) {
 				interaction.followUp({ content: 'You don\'t have that much in your register.' });
 				return false;
 			}
 
-			userData.currencies.cents = Number(userData.currencies.cents) + amount;
-			userData.currencies.register = Number(userData.currencies.register) - amount;
-
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+			userData.stats.balance = Number(userData.stats.balance) + amount;
+			userData.stats.bank = Number(userData.stats.bank) - amount;
 
 			interaction.followUp({ content: `You successfully withdrew ${amount} cents.` });
-			/* returns true to enable the cooldown */
-			return true;
 		}
 
 		if (subCommandName == 'deposit') {
 
 			/* How much to deposit? */
 			const amount = interaction.options.getInteger('amount');
-			if (amount > userData.currencies.cents) {
+			if (amount > userData.stats.balance) {
 				interaction.followUp({ content: 'You don\'t have that much in your balance.' });
 				return false;
 			}
 
-			userData.currencies.cents = Number(userData.currencies.cents) - amount;
-			userData.currencies.register = Number(userData.currencies.register) + amount;
-
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+			userData.stats.balance = Number(userData.stats.balance) - amount;
+			userData.stats.bank = Number(userData.stats.bank) + amount;
 
 			interaction.followUp({ content: `You successfully deposited ${amount} cents.` });
-			/* returns true to enable the cooldown */
-			return true;
 		}
 
-		return false;
+		/* Set the values in the database */
+		await database.setValue('users', interaction.user.id, userData);
+		return true;
 
 	},
 };

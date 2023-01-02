@@ -1,10 +1,8 @@
 /* Import required modules and files */
-const admin = require('firebase-admin');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-
 const { itemlist } = require('../../../util/constants');
-const { achievementAdd, gotItem } = require('../../../util/functions.js');
-const defaultData = require('../../../util/defaultData/guilds');
+const { achievementAdd, gotItem, database } = require('../../../util/functions.js');
+
 
 module.exports = {
 	name: 'trash',
@@ -21,19 +19,16 @@ module.exports = {
 		.setDMPermission(false)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('items')
-			.setDescription('View the server\'s trash can!'),
+			.setName('items').setDescription('View the server\'s trash can!'),
 		)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('take')
-			.setDescription('Take an object out of the trash!')
+			.setName('take').setDescription('Take an object out of the trash!')
 			.addStringOption(option => option.setName('item').setDescription('Which item would you like to take:').setRequired(true)),
 		)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('throw')
-			.setDescription('Throw an item in the trash!')
+			.setName('throw').setDescription('Throw an item in the trash!')
 			.addStringOption(option => option.setName('item').setDescription('Which item would you like to throw:').setRequired(true)),
 		),
 
@@ -44,12 +39,9 @@ module.exports = {
 	 * Place and take items from the trash.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction }) => {
 
 		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
@@ -59,18 +51,21 @@ module.exports = {
 		}
 
 		/* Is Trash enabled in the server? */
-		const collection = await firestore.doc(`/guilds/${interaction.guild.id}`).get();
-		const guildData = collection.data() || defaultData;
-		if (guildData.enabled.trash == false) {
+		const guildData = await database.getValue('guilds', interaction.guild.id);
+		if (guildData.features.trash != true) {
 			interaction.followUp('The **trash** system has been disabled in this server.');
 			return false;
 		}
 
 		if (subCommandName == 'items') {
 
-			/* Format trash array to "<emoji> <Name>" */
-			const trash = guildData?.trash?.map((a) => itemlist.filter((b) => a == b.name)[0].prof);
-
+			/* Format trash array to "<emoji> <Name> [(amount)]" */
+			const trash = [];
+			for (const item of itemlist) {
+				if (guildData.trash[item.id] > 0) {
+					trash.push(`${item.prof}${guildData.trash[item.id] > 1 ? ` (${guildData.trash[item.id]})` : ''}`);
+				}
+			}
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.guild.name}'s Trash:`)
 				.setDescription(trash?.join('\n') || 'Nothing\'s here ;-;')
@@ -82,36 +77,27 @@ module.exports = {
 			return true;
 		}
 
+		/* Fetch the user's stats */
+		const userData = await database.getValue('users', interaction.user.id);
+
 		if (subCommandName == 'take') {
 
 			/* Locate the selected item */
 			const itemName = interaction.options.getString('item');
 			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
-			if (!item) {
-				interaction.followUp({ content: 'That is not a valid item name.' });
+			if (!item || item == [] || !guildData?.trash[item.id]) {
+				interaction.followUp({ content: 'That is not a valid item in the trash.' });
 				return false;
-			}
-
-			if (!guildData?.trash?.includes(item.name)) {
-				interaction.followUp({ content: 'That item is not in the trash.' });
-				return false;
-			}
-
-			/* Remove the item from the trash */
-			if (guildData.trash.length == 1) {
-				await firestore.doc(`/guilds/${interaction.guild.id}`).update({ 'trash': admin.firestore.FieldValue.delete() });
-			}
-			else {
-				await firestore.doc(`/guilds/${interaction.guild.id}`).update({ 'trash': admin.firestore.FieldValue.arrayRemove(item.name) });
 			}
 
 			/* Adds the item to the user */
-			userData.inv[item.id] = Number(userData.inv[item.id]) + 1;
-			userData = gotItem(userData);
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-
-			/* return true to enable the cooldown */
+			guildData.trash[item.id] = Number(Number(guildData.trash[item.id]) - 1) || 0;
+			userData.items[item.id] = Number(userData.items[item.id] || 0) + 1;
 			interaction.followUp({ content: `You took a ${item.prof} out of the trash!` });
+
+			/* Sets the value in the database */
+			await database.setValue('users', interaction.user.id, gotItem(userData));
+			await database.setValue('guilds', interaction.guild.id, guildData);
 			return true;
 		}
 
@@ -124,25 +110,23 @@ module.exports = {
 				interaction.followUp({ content: 'That is not a valid item name.' });
 				return false;
 			}
-			if (userData?.inv?.[item.id] < 1) {
+			if (!userData.items[item.id] || userData.items[item.id] < 1) {
 				interaction.followUp({ content: 'You do not have that item.' });
 				return false;
 			}
 
-			/* removing the item from the user */
-			userData.inv[item.id] = Number(userData.inv[item.id]) - 1;
-			userData = await achievementAdd(userData, 'throwItAway');
-
-			/* Add the item to the trash */
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-			await firestore.doc(`/guilds/${interaction.guild.id}`).update({ 'trash': admin.firestore.FieldValue.arrayUnion(item.name) });
-
+			/* Adds the item to the user */
+			guildData.trash[item.id] = Number(Number(guildData.trash[item.id] || 0) + 1) || 1;
+			userData.items[item.id] = (Number(userData.items[item.id]) - 1) || 0;
 			interaction.followUp({ content: `You threw away your ${item.prof}! Use \`/trash take\` if you want to get it back!` });
 
-			/* returns true to enable the cooldown */
+			/* Sets the value in the database */
+			await database.setValue('users', interaction.user.id, achievementAdd(userData, 'throwItAway'));
+			await database.setValue('guilds', interaction.guild.id, guildData);
 			return true;
 		}
 
 		return false;
+
 	},
 };

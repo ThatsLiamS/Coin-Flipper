@@ -2,7 +2,7 @@
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const emojis = require('./../../util/emojis');
 const { itemlist, joblist } = require('./../../util/constants');
-const defaultData = require('./../../util/defaultData/users').main;
+const { database } = require('./../../util/functions.js');
 
 module.exports = {
 	name: 'balance',
@@ -18,8 +18,7 @@ module.exports = {
 		.setDescription('View a user\'s balance!')
 		.setDMPermission(true)
 
-		.addUserOption(option => option
-			.setName('user').setDescription('Select a user').setRequired(false)),
+		.addUserOption(option => option.setName('user').setDescription('Select a user').setRequired(false)),
 
 	error: false,
 	defer: true,
@@ -28,24 +27,21 @@ module.exports = {
 	 * View a user's balance.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore }) => {
+	execute: async ({ interaction }) => {
 
 		/* Grab the user's information */
 		const user = interaction.options.getUser('user') || interaction.user;
-		const collection = await firestore.collection('users').doc(user.id).get();
-		const userData = collection.data() || defaultData;
+		const userData = await database.getValue('users', user.id);
 
 		const embed = new EmbedBuilder()
 			.setColor('Orange')
 			.setTitle(`${user.username}'s Balance!`);
 
 		/* Are they on compact mode? */
-		if (userData?.compact == true) {
-			embed.setDescription(`Cents: \`${userData?.currencies?.cents || 0}\`\nRegister: \`${userData?.currencies?.register || 0}\``);
+		if (userData.settings.compact == true) {
+			embed.setDescription(`Cents: \`${userData?.stats.balance || 0}\`\nRegister: \`${userData?.stats.bank || 0}\``);
 
 			interaction.followUp({ embeds: [embed] });
 			return true;
@@ -62,31 +58,31 @@ module.exports = {
 				badges.push(badgesList[badgeOrder.indexOf(badgeId)]);
 			}
 		}
-		if (userData.donator == 1) badges.push(`${emojis.gold_tier} Gold Tier`);
-		if (userData.donator == 2) badges.push(`${emojis.platinum_tier} Platinum Tier`);
+		if (userData.stats.donator == 1) badges.push(`${emojis.gold_tier} Gold Tier`);
+		if (userData.stats.donator == 2) badges.push(`${emojis.platinum_tier} Platinum Tier`);
 		if (badges.length == 0) badges.push('There are no badges');
 
 
 		/* Sort and organise the user's items */
 		const items = [];
 		for (const item of itemlist) {
-			if (userData?.inv[item.id] > 0) items.push(`${item.prof}${userData?.inv[item.id] > 1 ? ` (${userData?.inv[item.id]})` : ''}`);
+			if (userData?.items[item.id] > 0) items.push(`${item.prof}${userData?.items[item.id] > 1 ? ` (${userData?.items[item.id]})` : ''}`);
 		}
-		if (userData?.inv?.toolbox) items.push('🧰 toolbox');
+		if (userData?.items?.toolbox) items.push('🧰 toolbox');
 		if (items.length == 0) items.push('There\'s nothing here');
 
 		/* Do they have a job? */
-		const jobObject = joblist.filter(job => job.name.toLowerCase() == userData?.job?.toLowerCase());
+		const jobObject = joblist.filter(job => job.name.toLowerCase() == userData?.stats.job?.toLowerCase());
 		const job = jobObject.emoji ? `${jobObject.emoji} ${jobObject.name}` : 'none';
 
 		if (userData?.stats?.bio) embed.setDescription(userData.stats.bio);
 		embed.addFields(
-			{ name: 'Cents', value: `${userData?.currencies?.cents || 0}` },
+			{ name: 'Cents', value: `${userData?.stats?.balance || 0}` },
 			{ name: 'Inventory', value: items.join('\n') },
 			{ name: 'Job', value: `${job}` },
 
-			{ name: 'Coins Flipped', value: `${userData?.stats?.flipped || 0}` },
-			{ name: 'Minigames Won', value: `${userData?.stats?.minigames_won || 0}` },
+			{ name: 'Coins Flipped', value: `${userData?.stats?.flips || 0}` },
+			{ name: 'Minigames Won', value: `${userData?.stats?.minigames || 0}` },
 			{ name: 'Badges', value: badges.join('\n') },
 		);
 

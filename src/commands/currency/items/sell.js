@@ -1,6 +1,7 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { itemlist } = require('./../../../util/constants.js');
+const { database } = require('./../../../util/functions.js');
 
 module.exports = {
 	name: 'sell',
@@ -25,12 +26,9 @@ module.exports = {
 	 * Sell an item to the shop.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 * @param {object} userData - Discord User's data/information
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore, userData }) => {
+	execute: async ({ interaction }) => {
 
 		/* Locate the selected item */
 		const itemName = interaction.options.getString('item');
@@ -42,16 +40,19 @@ module.exports = {
 			return false;
 		}
 
-		if (userData?.inv[item.id] < 1) {
+		/* Fetch values from the database */
+		const userData = await database.getValue('users', interaction.user.id);
+
+		if (userData?.items[item.id] < 1) {
 			interaction.followUp({ content: 'You don\'t have that item to sell.' });
 			return false;
 		}
 
 		/* How much for? */
 		const price = item.sell ? item.sell : Math.ceil(item.cost / 2);
-		userData.currencies.cents = Number(userData.currencies.cents) + price;
+		userData.stats.balance = Number(userData.stats.balance) + price;
 
-		userData.inv[item.id] = Number(userData.inv[item.id]) - Number(1);
+		userData.items[item.id] = Number(userData.items[item.id]) - Number(1);
 
 		const embed = new EmbedBuilder()
 			.setTitle(`Congrats, ${interaction.user.username}!`)
@@ -61,9 +62,8 @@ module.exports = {
 		interaction.followUp({ embeds: [embed] });
 
 		/* Set the new values in the database */
-		await firestore.doc(`/users/${interaction.user.id}`).set(userData);
-
-		/* Return true to enable the cooldown */
+		await database.setValue('users', interaction.user.id, userData);
 		return true;
+
 	},
 };

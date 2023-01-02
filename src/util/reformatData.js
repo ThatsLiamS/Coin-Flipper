@@ -113,6 +113,8 @@ const reformatGuild = (data) => {
 		},
 
 		addons: reformatAddons(data.serveraddons),
+
+		trash: {},
 	};
 };
 

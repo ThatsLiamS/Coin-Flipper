@@ -1,7 +1,7 @@
 /* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const defaultData = require('../../util/defaultData/users.js');
 const emojis = require('../../util/emojis.js');
+const { database } = require('./../../util/functions.js');
 
 /* Convert boolean to emoji */
 const convert = (boolean) => boolean ? emojis.true : emojis.false;
@@ -55,11 +55,9 @@ module.exports = {
 	 * View and customise user settings.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} firestore - Firestore database object
-	 *
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction, firestore }) => {
+	execute: async ({ interaction }) => {
 
 		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
@@ -69,8 +67,7 @@ module.exports = {
 		}
 
 		/* Grab the user's information */
-		const collection = await firestore.collection('users').doc(interaction.user.id).get();
-		const userData = collection.data() || defaultData.main;
+		const userData = await database.getValue('users', interaction.user.id);
 
 		/* Which subcommand was selected */
 		if (subCommandName == 'enable') {
@@ -82,16 +79,16 @@ module.exports = {
 			}
 
 			/* Is it already enabled? */
-			if (userData[feature] == true) {
+			if (userData.settings[feature] == true) {
 				interaction.followUp({ content: 'That feature is already enabled' });
 				return false;
 			}
 
-			userData[feature] = true;
+			userData.settings[feature] = true;
 			interaction.followUp({ content: `Successfully enabled **${features[feature]} Mode.**` });
 
 			/* Save the new setting in the database */
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+			await database.setValue('users', interaction.user.id, userData);
 			return true;
 		}
 
@@ -104,16 +101,16 @@ module.exports = {
 			}
 
 			/* Is it already enabled? */
-			if (userData[feature] == false) {
+			if (userData.settings[feature] == false) {
 				interaction.followUp({ content: 'That feature is already disabled' });
 				return false;
 			}
 
-			userData[feature] = false;
+			userData.settings[feature] = false;
 			interaction.followUp({ content: `Successfully disabled **${features[feature]} Mode.**` });
 
 			/* Save the new setting in the database */
-			await firestore.doc(`/users/${interaction.user.id}`).set(userData);
+			await database.setValue('users', interaction.user.id, userData);
 			return true;
 		}
 
@@ -122,8 +119,8 @@ module.exports = {
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username}'s Settings!`)
 				.addFields(
-					{ name: 'Evil', value: `${convert(userData?.evil || false)}` },
-					{ name: 'Compact', value: `${convert(userData?.compact || false)}` },
+					{ name: 'Evil', value: `${convert(userData?.settings.evil || false)}` },
+					{ name: 'Compact', value: `${convert(userData?.settings.compact || false)}` },
 				)
 				.setTimestamp()
 				.setFooter({ text: 'Use "/user enable" and "/user disable" to change these settings' });
