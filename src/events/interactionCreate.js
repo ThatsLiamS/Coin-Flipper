@@ -55,8 +55,8 @@ module.exports = {
 			/* Work out the appropriate cooldown time */
 			if (!cooldowns.has(cmd.name)) cooldowns.set(cmd.name, new Collection());
 			const timestamps = cooldowns.get(cmd.name);
-			let cooldownAmount = (cmd.cooldown || 0) * 1000;
 
+			let cooldownAmount = (cmd?.cooldown?.time || 0) * 1000;
 			if (cmd.name == 'flip' && interaction.channel.id == '832245298969182246') cooldownAmount = 0;
 
 			if (timestamps.has(interaction.user.id)) {
