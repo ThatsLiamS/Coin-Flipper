@@ -39,9 +39,10 @@ module.exports = {
 	 * Help out and support another user.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} client - Discord bot client
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction }) => {
+	execute: async ({ interaction, client }) => {
 
 		/* Get all the users' information */
 		const target = interaction.options.getUser('user');
@@ -80,8 +81,8 @@ module.exports = {
 
 			/* Set the new balances in the database */
 			await database.setValue('users', interaction.user.id, (
-				amount >= 10000 ? achievementAdd(userData, 'generous') : (
-					amount == 5 ? achievementAdd(userData, 'ungenerous') : userData
+				amount >= 10000 ? await achievementAdd(userData, 'generous', client) : (
+					amount == 5 ? await achievementAdd(userData, 'ungenerous', client) : userData
 				)
 			));
 			await database.setValue('users', target.id, targetData);

@@ -42,14 +42,14 @@ module.exports = {
 		/* Get the date */
 		const dateConstruct = {
 			now: new Date(),
-			firstOfJan: new Date(dateConstruct.getFullYear(), 0, 1),
+			firstOfJan: new Date((new Date()).getFullYear(), 0, 1),
 		};
 		const daysPassed = (((dateConstruct.now.getTime() - dateConstruct.firstOfJan.getTime()) / 86400000) + dateConstruct.firstOfJan.getDay() + 1);
 		const weeksPassed = Math.ceil(daysPassed / 7);
 
 		const today = `${weeksPassed}|${dateConstruct.now.getFullYear()}`;
 		if (userData.cooldowns.weekly == today) {
-			interaction.reply({ content: 'You can only claim your weekly reward once per week! You can claim it on Sunday.' });
+			interaction.followUp({ content: 'You can only claim your weekly reward once per week! You can claim it on Sunday.' });
 			return false;
 		}
 		userData.cooldowns.weekly = today;

@@ -19,6 +19,7 @@ module.exports = {
 
 	error: false,
 	defer: true,
+	ephemeral: true,
 
 	/**
 	 * Dropship an item and try to earn some cents.
@@ -68,7 +69,8 @@ module.exports = {
 				userData.stats.balance = Number(userData.stats.balance) + Number(values[1]);
 				userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(values[1]);
 
-				interaction.editReply({ embeds: [new EmbedBuilder().setTitle('Dropship!').setDescription(`You dropshipped the ${values[2]} for \`${values[1]}\` cents!`)] });
+				await interaction.deleteReply().catch(() => false);
+				await button.reply({ ephemeral: true, embeds: [new EmbedBuilder().setTitle('Dropship!').setDescription(`You dropshipped the ${values[2]} for \`${values[1]}\` cents!`)] });
 
 				await database.setValue('users', interaction.user.id, userData);
 				return true;

@@ -119,8 +119,8 @@ module.exports = {
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username}'s Settings!`)
 				.addFields(
-					{ name: 'Evil', value: `${convert(userData?.settings.evil || false)}` },
-					{ name: 'Compact', value: `${convert(userData?.settings.compact || false)}` },
+					{ name: 'Evil', value: `${convert(userData?.settings.evil ?? false)}` },
+					{ name: 'Compact', value: `${convert(userData?.settings.compact ?? false)}` },
 				)
 				.setTimestamp()
 				.setFooter({ text: 'Use "/user enable" and "/user disable" to change these settings' });

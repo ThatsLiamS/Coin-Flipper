@@ -39,9 +39,10 @@ module.exports = {
 	 * Place and take items from the trash.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} client - Discord bot client
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction }) => {
+	execute: async ({ interaction, client }) => {
 
 		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
@@ -96,7 +97,7 @@ module.exports = {
 			interaction.followUp({ content: `You took a ${item.prof} out of the trash!` });
 
 			/* Sets the value in the database */
-			await database.setValue('users', interaction.user.id, gotItem(userData));
+			await database.setValue('users', interaction.user.id, await gotItem(userData, client));
 			await database.setValue('guilds', interaction.guild.id, guildData);
 			return true;
 		}
@@ -110,7 +111,7 @@ module.exports = {
 				interaction.followUp({ content: 'That is not a valid item name.' });
 				return false;
 			}
-			if (!userData.items[item.id] || userData.items[item.id] < 1) {
+			if (!userData.items[item.id] || (userData.items[item.id] || 0) < 1) {
 				interaction.followUp({ content: 'You do not have that item.' });
 				return false;
 			}
@@ -121,7 +122,7 @@ module.exports = {
 			interaction.followUp({ content: `You threw away your ${item.prof}! Use \`/trash take\` if you want to get it back!` });
 
 			/* Sets the value in the database */
-			await database.setValue('users', interaction.user.id, achievementAdd(userData, 'throwItAway'));
+			await database.setValue('users', interaction.user.id, await achievementAdd(userData, 'throwItAway', client));
 			await database.setValue('guilds', interaction.guild.id, guildData);
 			return true;
 		}

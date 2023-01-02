@@ -36,12 +36,12 @@ module.exports = {
 
 		const cooldown = userData.cooldowns.daily.split('-');
 		if (today == cooldown[0]) {
-			if (!cooldown[1] && userData.items.vault < 1) {
+			if (!cooldown[1] && (userData.items.vault || 0) < 1) {
 				interaction.followUp({ content: 'You have already claimed your daily reward!' });
 				return false;
 			}
 
-			if (cooldown[1] && userData.items.vault > 0) {
+			if (cooldown[1] == 'bonus') {
 				interaction.followUp({ content: 'You have already claimed your bonus daily reward!' });
 				return false;
 			}

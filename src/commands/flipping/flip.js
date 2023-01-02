@@ -1,6 +1,6 @@
 /* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const flips = require('./../../util/flips.js');
+const { flips } = require('./../../util/constants.js');
 const { gotItem, achievementAdd, database } = require('./../../util/functions.js');
 
 module.exports = {
@@ -26,9 +26,10 @@ module.exports = {
 	 * Flip a code or spice it up with an addon
 	 *
 	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} client - Discord bot client
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction }) => {
+	execute: async ({ interaction, client }) => {
 
 		/* Fetch the user's data */
 		let userData = await database.getValue('users', interaction.user.id);
@@ -37,7 +38,7 @@ module.exports = {
 
 			/* Increase coins flipped stats */
 			userData.stats.flips = Number(userData.stats.flips) + 1;
-			if (userData.stats.flips >= 1000) userData = achievementAdd(userData, 'ultimateFlipper');
+			if (userData.stats.flips >= 1000) userData = await achievementAdd(userData, 'ultimateFlipper', client);
 
 			/* Calculate amount won per flip */
 			let amount = Math.floor((Math.random() * 11) + 5);
@@ -56,8 +57,7 @@ module.exports = {
 				));
 
 			if (userData.items.label > 0 && userData.settings.evil != true) percent += 0.1;
-
-			userData.stats.balance = Number(userData.stats.balance) + Math.ceil(amount * percent);
+			userData.stats.bank = Number(userData.stats.bank || 0) + Math.ceil(amount * percent);
 
 			/* Did they win a briefcase? */
 			if (userData.settings.evil == true) briefcaseChance = 99;
@@ -69,7 +69,7 @@ module.exports = {
 				userData.items.briefcase = Number(userData.items.briefcase || 0) + 1;
 				message = message + 'You also got a 💼 Briefcase!';
 
-				userData = gotItem(userData);
+				userData = await gotItem(userData, client);
 			}
 
 			/* Allow for custom placeholders */

@@ -52,8 +52,8 @@ module.exports = {
 		for (const badge of badgelist) {
 			if (userData.badges[badge.id] == true) items.push(`${badge.prof}`);
 		}
-		if (userData.stats.donator == 1) badges.push(`${badgelist.filter(b => b.id == 'gold_tier')[0].prof} Gold Tier`);
-		if (userData.stats.donator == 2) badges.push(`${badgelist.filter(b => b.id == 'platinum_tier')[0].prof} Platinum Tier`);
+		if (userData.stats.donator == 1) badges.push(`${badgelist.filter(b => b.id == 'gold_tier')[0].prof}`);
+		if (userData.stats.donator == 2) badges.push(`${badgelist.filter(b => b.id == 'platinum_tier')[0].prof}`);
 		if (badges.length == 0) badges.push('There are no badges');
 
 
@@ -66,8 +66,8 @@ module.exports = {
 		if (items.length == 0) items.push('There\'s nothing here');
 
 		/* Do they have a job? */
-		const jobObject = joblist.filter(job => job.name.toLowerCase() == userData?.stats.job?.toLowerCase());
-		const job = jobObject.emoji ? `${jobObject.emoji} ${jobObject.name}` : 'none';
+		const jobObject = joblist.filter(job => job.name.toLowerCase() == userData?.stats.job?.toLowerCase())[0];
+		const job = jobObject?.emoji ? `${jobObject.emoji} ${jobObject.name}` : 'none';
 
 		if (userData?.stats?.bio) embed.setDescription(userData.stats.bio);
 		embed.addFields(

@@ -138,7 +138,7 @@ const formatTime = (seconds) => {
 
 
 /* Runs when the user gets a new achievement */
-const achievementAdd = (userData, prop) => {
+const achievementAdd = async (userData, prop, client) => {
 
 	/* Does the achivement ex */
 	const achievement = achievements.find(a => a.id == prop);
@@ -151,24 +151,26 @@ const achievementAdd = (userData, prop) => {
 		userData.achievements[prop] = true;
 
 		/* send them a notification */
-		const mail = userData?.newMail ? userData.newMail : [];
-		mail.push(`**Notification**\nYou got the achievement ${achievement.emoji} ${achievement.name}!`);
-		userData.newMail = mail;
+		const user = await client?.users?.fetch(userData.id).catch(() => false);
+		user?.send({ content: `**Notification**\nYou got the achievement ${achievement.emoji} ${achievement.name}!` })
+			.catch(() => false);
+
 	}
 
 	return userData;
 };
 
 /* Runs when a user gets a new item */
-const gotItem = (userData) => {
+const gotItem = async (userData, client) => {
 
+	let passed = true;
 	for (const item of itemlist) {
-		if (userData.inv[item.id] < 1) {
-			userData = achievementAdd(userData, 'trueCollector');
+		if ((userData.items[item.id] || 0) < 1) {
+			passed = false;
 		}
 	}
 
-	return userData;
+	return passed ? await achievementAdd(userData, 'trueCollector', client) : userData;
 };
 
 

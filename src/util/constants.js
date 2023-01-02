@@ -364,7 +364,7 @@ const achievements = [
 	},
 	{
 		name: 'Ultimate flipper',
-		emoji: `${emojis.avid_flipper || 'badge_avidFlipper'}`,
+		emoji: '<:badge_fliptician:956323335774552084>',
 		req: 'Flip at least 1000 coins',
 		id: 'ultimateFlipper',
 	},
@@ -846,7 +846,7 @@ const badges = [
 		prof: '<:badge_flipper:956323329688633354> Flipper',
 		emoji: '<:badge_flipper:956323329688633354>',
 		req: 'Flip 100 coins!',
-		condition: 'stats.flipped|>|99',
+		condition: 'stats.flips|>|99',
 	},
 	{
 		id: 'flip_plus',
@@ -854,23 +854,23 @@ const badges = [
 		prof: '<:badge_fliptician:956323335774552084> Avid Flipper',
 		emoji: '<:badge_fliptician:956323335774552084>',
 		req: 'Flip 300 coins!',
-		condition: 'stats.flipped|>|299',
+		condition: 'stats.flips|>|299',
 	},
 	{
 		id: 'minigame',
 		name: 'Gamer',
 		prof: '<:badge_minigamer:956323434265182288> Gamer',
 		emoji: '<:badge_minigamer:956323434265182288>',
-		req: 'Win 20 minigames!',
-		condition: 'stats.minigames_won|>|19',
+		req: 'Win 25 minigames!',
+		condition: 'stats.minigames|>|14',
 	},
 	{
 		id: 'minigame_plus',
 		name: 'Pro Gamer',
 		prof: '<:badge_pro_gamer:956323436286836826> Pro Gamer',
 		emoji: '<:badge_pro_gamer:956323436286836826>',
-		req: 'win 50 minigames!',
-		condition: 'stats.minigames_won|>|49',
+		req: 'win 75 minigames!',
+		condition: 'stats.minigames|>|74',
 	},
 	{
 		id: 'register',
@@ -878,7 +878,7 @@ const badges = [
 		prof: '<:badge_registered:956323523352231946> Registered',
 		emoji: '<:badge_registered:956323523352231946>',
 		req: 'Buy a key!',
-		condition: 'inv.key|>|0',
+		condition: 'items.key|>|0',
 	},
 	{
 		id: 'collector',
@@ -902,7 +902,7 @@ const badges = [
 		prof: '<:badge_rich:956323487847440425> Wealthy',
 		emoji: '<:badge_rich:956323487847440425>',
 		req: 'Have one hundred thousand cents!',
-		condition: 'currencies.cents|>|99_999',
+		condition: 'stats.balance|>|99_999',
 	},
 	{
 		id: 'rich_plus',
@@ -910,7 +910,7 @@ const badges = [
 		prof: '<:badge_wealthy:956323490137505872> Millionaire',
 		emoji: '<:badge_wealthy:956323490137505872>',
 		req: 'Have one million cents!',
-		condition: 'currencies.cents|>|999_999',
+		condition: 'stats.balance|>|999_999',
 	},
 	{
 		id: 'niceness',
@@ -926,7 +926,7 @@ const badges = [
 		prof: '<:badge_bug_hunter:956323559544872981> Bug Hunter',
 		emoji: '<:badge_bug_hunter:956323559544872981>',
 		req: 'Find and report 1 bug!',
-		condition: 'bugs|>|0',
+		condition: 'stats.bugs|>|0',
 	},
 	{
 		id: 'bughunter_plus',
@@ -934,7 +934,7 @@ const badges = [
 		prof: '<:badge_bug_poacher:956323564766757015> Bug Poacher',
 		emoji: '<:badge_bug_poacher:956323564766757015>',
 		req: 'Find and report 5 bugs!',
-		condition: 'bugs|>|4',
+		condition: 'stats.bugs|>|4',
 	},
 	{
 		id: 'gold_tier',

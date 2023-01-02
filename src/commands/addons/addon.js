@@ -84,16 +84,17 @@ module.exports = {
 
 		/* Addon Name validation */
 		const name = interaction.options.getString('name');
-		if (name.length > 50 || ['none', 'null', 'undefined', 'nan'].includes(name.toLowerCase()) || name.includes(' ')) {
-			return interaction.followUp({ content: 'That is an invalid addon name.' });
+		if (!(subCommandName == 'inputs') && (name?.length > 50 || ['none', 'null', 'undefined', 'nan'].includes(name?.toLowerCase()) || name?.includes(' '))) {
+			interaction.followUp({ content: 'That is an invalid addon name.' });
+			return false;
 		}
 
 		/* Fetch the user's data */
 		const userData = await database.getValue('users', interaction.user.id);
 
 		/* Locate Addon object */
-		const addon = userData.addons.filter((a) => a.name == name);
-		if (!addon && subCommandName !== 'create') {
+		const addon = userData.addons.filter((a) => a.name == name)[0];
+		if (!addon && !(subCommandName == 'create' || subCommandName == 'inputs')) {
 			interaction.followUp({ content: 'That is not a valid addon, use `/addon create` to create a new one.' });
 			return false;
 		}
@@ -160,7 +161,7 @@ module.exports = {
 
 		if (subCommandName == 'delete') {
 			/* delete the addon */
-			userData.addons.filter((a) => a.name != name);
+			userData.addons = userData.addons.filter((a) => a.name != name) ?? [];
 
 			/* Create the message to send */
 			embed.setColor('Red').setTitle('Deleted Addon!').setDescription(`You've successfully deleted **${name}**!\nThis action cannot be reversed.`);
@@ -210,6 +211,9 @@ module.exports = {
 			/* Create the message to send */
 			embed.setColor('#cd7f32').setTitle('Addon Inputs!').setFooter({ text: 'Remember these when you use "/addon addresponse"' })
 				.setDescription('**{cents}**  - The user\'s main balance\n**{register}**  - The user\'s balance within their register\n**{donator}**  - The user\'s donator status/tier (or \'none\')\n**{job}**  - The user\'s current job (or \'none\')\n**{flipped}**  - The number of coins the user flipped\n**{minigames}**  - The number of minigames the user has won');
+
+			interaction.followUp({ embeds: [embed] });
+			return true;
 		}
 
 		if (subCommandName == 'addresponse') {

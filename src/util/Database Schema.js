@@ -20,6 +20,8 @@ const UserSchema = {
 		job: '',
 
 		donator: 0,
+		bugs: 0,
+
 		balance: 0,
 		bank: 0,
 		lifeEarnings: 0,

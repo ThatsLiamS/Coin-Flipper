@@ -71,7 +71,7 @@ module.exports = {
 				return true;
 			});
 			if (!badges || badges == []) embed.setDescription('Looks like you have claimed all the badges!');
-			for (const badge of badges) embed.addFields({ name: badge.prof, value: badge.req });
+			for (const badge of badges) embed.addFields({ name: badge.prof, value: badge.req, inline: true });
 
 			/* Response to user, and return true to enable cooldown */
 			interaction.followUp({ embeds: [embed] });

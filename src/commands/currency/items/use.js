@@ -32,9 +32,10 @@ module.exports = {
 	 * Use an intem in your inventory.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} client - Discord bot client
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction }) => {
+	execute: async ({ interaction, client }) => {
 
 		/* Locate the selected item */
 		const itemName = interaction.options.getString('item');
@@ -47,7 +48,7 @@ module.exports = {
 		/* Fetch the user's data */
 		const userData = await database.getValue('users', interaction.user.id);
 
-		if (!userData?.item[item.id] || userData.item[item.id] < 1) {
+		if (!userData?.items[item.id] || (userData.items[item.id] || 0) < 1) {
 			interaction.followUp({ content: `You do not have ${item.prof}!` });
 			return false;
 		}
@@ -65,7 +66,7 @@ module.exports = {
 
 			interaction.followUp({ embeds: [embed] });
 
-			await database.setValue('users', interaction.user.id, achievementAdd(userData, 'kaboom'));
+			await database.setValue('users', interaction.user.id, await achievementAdd(userData, 'kaboom', client));
 			return true;
 		}
 
@@ -121,7 +122,7 @@ module.exports = {
 
 			interaction.followUp({ embeds: [embed] });
 
-			await database.setValue('users', interaction.user.id, achievementAdd(userData, 'whatAWaste', true));
+			await database.setValue('users', interaction.user.id, await achievementAdd(userData, 'whatAWaste', client));
 			return true;
 		}
 

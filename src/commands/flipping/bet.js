@@ -32,12 +32,13 @@ module.exports = {
 	 * Bet cents on a coin flip.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} client - Discord bot client
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction }) => {
+	execute: async ({ interaction, client }) => {
 
 		/* Fetch the user's data */
-		const userData = await database.getValue('user', interaction.user.id);
+		const userData = await database.getValue('users', interaction.user.id);
 
 		const bet = interaction.options.getString('side');
 		let amount = Number(interaction.options.getInteger('amount'));
@@ -71,7 +72,11 @@ module.exports = {
 			embed.setDescription('You lost ' + amount + ' cents!')
 				.setTitle('The coin landed on ' + (bet == 'heads' ? 'tails!' : 'heads!'));
 
-			await database.setValue('users', interaction.user.id, (userData.stats.balance == 0 ? achievementAdd(userData, 'justMyLuck') : userData));
+			await database.setValue(
+				'users',
+				interaction.user.id,
+				(userData.stats.balance == 0 ? await achievementAdd(userData, 'justMyLuck', client) : userData),
+			);
 
 		}
 

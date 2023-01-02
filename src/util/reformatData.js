@@ -57,6 +57,8 @@ const reformatUser = (data) => {
 		job: (data?.job && (joblist.filter(i => i.id == data?.job)[0])) ? data.job : '',
 
 		donator: (typeof data.donator == 'number') ? data.donator : 0,
+		bugs: (typeof data.bugs == 'number') ? data.bugs : 0,
+
 		balance: (typeof data.currencies.cents == 'number') ? data.currencies.cents : 0,
 		bank: (typeof data.currencies.cents == 'number') ? data.currencies.cents : 0,
 		lifeEarnings: Number(this.balance + this.bank) || 0,

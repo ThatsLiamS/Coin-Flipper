@@ -119,9 +119,9 @@ module.exports = {
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.guild.name}'s Settings!`)
 				.addFields(
-					{ name: 'Minigames', value: `${convert(guildData?.features?.minigames || true)}` },
-					{ name: 'Trash', value: `${convert(guildData?.features?.trash || true)}` },
-					{ name: 'Custom Addons', value: `${convert(guildData?.features?.addons || true)}` },
+					{ name: 'Minigames', value: `${convert(guildData?.features?.minigames ?? true)}` },
+					{ name: 'Trash', value: `${convert(guildData?.features?.trash ?? true)}` },
+					{ name: 'Custom Addons', value: `${convert(guildData?.features?.addons ?? true)}` },
 				)
 				.setTimestamp()
 				.setFooter({ text: 'Use "/server enable" and "/server disable" to change these settings' });

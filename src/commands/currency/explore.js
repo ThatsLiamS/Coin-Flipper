@@ -19,6 +19,7 @@ module.exports = {
 
 	error: false,
 	defer: true,
+	ephemeral: true,
 
 	/**
 	 * Explroe the wilderness and find some cents.
@@ -35,7 +36,7 @@ module.exports = {
 		const userData = await database.getValue('users', interaction.user.id);
 
 		/* How did they do */
-		const result = userData.item.compass > 0 ?
+		const result = userData.items.compass > 0 ?
 			(chance > 2 ? 'win' : 'draw') :
 			(chance > 4 ? 'win' : (chance > 2 ? 'draw' : 'loss'));
 

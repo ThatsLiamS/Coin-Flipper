@@ -24,9 +24,10 @@ module.exports = {
 	 * Work at your job and collect your pay cheque!
 	 *
 	 * @param {object} interaction - Discord Slash Command object
+	 * @param {object} client - Discord bot client
 	 * @returns {boolean}
 	**/
-	execute: async ({ interaction }) => {
+	execute: async ({ interaction, client }) => {
 
 		/* Fetch the values from the database */
 		const userData = await database.getValue('users', interaction.user.id);
@@ -60,7 +61,7 @@ module.exports = {
 		interaction.followUp({ content: `You got \`${randomAmt}\` cents by ${reason}!` });
 
 		/* Set the values in the database */
-		const newData = (userData.stats.worked >= 40) ? achievementAdd(userData, 'nineToFive') : userData;
+		const newData = (userData.stats.worked >= 40) ? await achievementAdd(userData, 'nineToFive', client) : userData;
 		await database.setValue('users', interaction.user.id, newData);
 		return true;
 

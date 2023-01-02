@@ -43,7 +43,7 @@ module.exports = {
 				.setTitle(cmd.name.charAt(0).toUpperCase() + cmd.name.slice(1) + ' Command')
 				.setDescription(cmd.description)
 				.setTimestamp()
-				.addField('__Usage:__', `${formatUsage(cmd.usage)}`, false);
+				.addFields({ name: '__Usage:__', value: `${formatUsage(cmd.usage)}`, inline: false });
 
 			if (cmd?.cooldown?.text) {
 				embed.addFields({ name: '__Cooldown:__', value: `**${cmd.cooldown.text}**`, inline: false });

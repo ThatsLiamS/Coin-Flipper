@@ -43,7 +43,7 @@ module.exports = {
 		/* Fetch values from the database */
 		const userData = await database.getValue('users', interaction.user.id);
 
-		if (userData?.items[item.id] < 1) {
+		if ((userData?.items[item.id] || 0) < 1) {
 			interaction.followUp({ content: 'You don\'t have that item to sell.' });
 			return false;
 		}
