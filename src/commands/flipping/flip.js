@@ -67,7 +67,7 @@ module.exports = {
 			let message = `You got ${amount} coins!`;
 			if ((Math.random() * 100) > briefcaseChance) {
 				userData.items.briefcase = Number(userData.items.briefcase || 0) + 1;
-				message = message + 'You also got a 💼 Briefcase!';
+				message = message + ' You also got a 💼 Briefcase!';
 
 				userData = await gotItem(userData, client);
 			}
@@ -115,6 +115,9 @@ module.exports = {
 		if (addon == 'dime' && userData.items.silvercoin > 0) return await flip(flips['dime']);
 		if (addon == 'dollar' && userData.items.goldcoin > 0) return await flip(flips['dollar'], 1.5);
 		if (addon == '24' && userData.items.kcoin > 0) return await flip(flips['24'], 1, 90);
+
+		const customAddons = userData.addons.filter((a) => a.name == addon);
+		if (customAddons[0]) return await flip(customAddons[0].responses);
 
 		return await flip(flips.normal);
 

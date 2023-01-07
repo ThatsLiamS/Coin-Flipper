@@ -82,7 +82,7 @@ module.exports = {
 			const badgeId = interaction.options.getString('badge');
 
 			/* Locate badge object */
-			const badge = badgelist.filter((b) => b.id == badgeId);
+			const badge = badgelist.filter((b) => b.id == badgeId)[0];
 			if (!badge || !badge.condition) {
 				interaction.followUp({ content: 'You can not claim this badge.' });
 				return false;

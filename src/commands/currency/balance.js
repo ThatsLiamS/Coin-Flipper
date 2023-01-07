@@ -50,7 +50,7 @@ module.exports = {
 		/* Sort and organise the user's badges */
 		const badges = [];
 		for (const badge of badgelist) {
-			if (userData.badges[badge.id] == true) items.push(`${badge.prof}`);
+			if (userData.badges[badge.id] == true && !(userData.badges[badge.id + '_plus'] == true)) badges.push(`${badge.prof}`);
 		}
 		if (userData.stats.donator == 1) badges.push(`${badgelist.filter(b => b.id == 'gold_tier')[0].prof}`);
 		if (userData.stats.donator == 2) badges.push(`${badgelist.filter(b => b.id == 'platinum_tier')[0].prof}`);
@@ -62,7 +62,7 @@ module.exports = {
 		for (const item of itemlist) {
 			if (userData?.items[item.id] > 0) items.push(`${item.prof}${userData?.items[item.id] > 1 ? ` (${userData?.items[item.id]})` : ''}`);
 		}
-		if (userData?.items?.toolbox) items.push('🧰 toolbox');
+		if (userData?.settings?.developer == true) items.push('🧰 toolbox');
 		if (items.length == 0) items.push('There\'s nothing here');
 
 		/* Do they have a job? */

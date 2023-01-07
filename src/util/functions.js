@@ -40,6 +40,7 @@ const database = {
 
 		/* Reformat firestoreData into the new Schema */
 		const formattedData = reformatData[collectionID](firestoreData, documentID);
+		formattedData.id = documentID;
 
 		/* Set the values in the cache */
 		cache[collectionID].set(documentID, formattedData);

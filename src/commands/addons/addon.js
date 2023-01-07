@@ -224,8 +224,14 @@ module.exports = {
 				return false;
 			}
 
-			/* Add it to the addon */
+			/* Is it already a response */
 			addon?.responses ? addon.responses : [];
+
+			const found = addon.responses.filter(a => a.toLowerCase() == response.toLowerCase())[0];
+			if (found) {
+				interaction.followUp({ content: 'That is already a response.' });
+				return false;
+			}
 			addon.responses.push(response);
 
 			/* Create the message to send */
@@ -236,7 +242,7 @@ module.exports = {
 		if (subCommandName == 'deleteresponse') {
 			/* is the response valid */
 			const index = Number(interaction.options.getInteger('response') - 1);
-			if (!index || index < 0 || !addon?.responses || !addon.responses[index]) {
+			if (index < 0 || !addon?.responses || !addon.responses[index]) {
 				interaction.followUp({ content: 'That is not a valid response.' });
 				return false;
 			}

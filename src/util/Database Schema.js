@@ -56,6 +56,8 @@ const UserSchema = {
 
 const GuildSchema = {
 
+	id: '',
+
 	features: {
 		trash: true,
 		minigames: true,
