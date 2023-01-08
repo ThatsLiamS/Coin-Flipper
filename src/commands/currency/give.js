@@ -8,9 +8,8 @@ module.exports = {
 	description: 'Help out and support another user!',
 	usage: '/give cents <user> <amount>\n/give item <user> <item>',
 
-	permissions: [],
-	guildOnly: true,
 	cooldown: { time: 60, text: '60 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('give')
@@ -31,9 +30,6 @@ module.exports = {
 			.addUserOption(option => option.setName('user').setDescription('Select a user').setRequired(true))
 			.addStringOption(option => option.setName('item').setDescription('Which item to give away?').setRequired(true)),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Help out and support another user.

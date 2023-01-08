@@ -8,9 +8,8 @@ module.exports = {
 	description: 'Use an item in your inventory!',
 	usage: '/use <item>',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 15, text: '15 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('use')
@@ -24,9 +23,6 @@ module.exports = {
 				{ 'name': 'Broken 8-ball', 'value': 'broken8ball' },
 			),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Use an intem in your inventory.

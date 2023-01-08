@@ -7,9 +7,8 @@ module.exports = {
 	description: 'View the shop and all the items in it!',
 	usage: '/shop [page] [item]',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 0, text: 'None (0)' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('shop')
@@ -18,9 +17,6 @@ module.exports = {
 
 		.addIntegerOption(option => option.setName('page').setDescription('Which item would you like to take:').setRequired(false))
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to take:').setRequired(false)),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * View the shop and all the items in it.

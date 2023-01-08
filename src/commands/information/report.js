@@ -8,17 +8,13 @@ module.exports = {
 	description: 'Submit a bug report to the developers!',
 	usage: '/report',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 10 * 60, text: '10 Minutes' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('report')
 		.setDescription('Submit a bug report to the developers!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: false,
 
 	/**
 	 * Submit a bug report to the developers.

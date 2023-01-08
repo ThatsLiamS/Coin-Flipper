@@ -4,7 +4,7 @@ const { formatTime } = require('./../util/functions.js');
 
 /* Global variable definitions */
 const cooldowns = new Collection();
-const quotaExceeded = false;
+
 
 module.exports = {
 	name: 'interactionCreate',
@@ -20,36 +20,27 @@ module.exports = {
 	**/
 	execute: async (interaction, client) => {
 
+		/* Is the database available? */
+		const quotaExceeded = false;
+		if (quotaExceeded == true) {
+			interaction.reply({ content: 'Sorry, we are experiencing some technical difficulties, please try again later.', ephemeral: true });
+			return;
+		}
+
 		/* Is interaction a command? */
 		if (interaction.type === InteractionType.ApplicationCommand) {
 
 			const cmd = client.commands.get(interaction.commandName);
-			if (!cmd) return;
-
-			/* Is the database available? */
-			if (quotaExceeded == true) {
-				interaction.reply({ content: 'Sorry, we are experiencing some technical difficulties, please try again later.', ephemeral: true });
-				return;
-			}
+			if (!cmd) return false;
 
 			/* Is the command working? */
 			if (cmd['error'] == true) {
 				interaction.reply({ content: 'Sorry, this command is currently unavailable. Please try again later.', ephemeral: true });
-				return;
-			}
-
-			if (cmd['permissions'] != []) {
-				for (const permission of cmd['permissions']) {
-					/* Loops through and check permissions agasint the user */
-					if (!interaction.member.permissions.has(permission)) {
-						interaction.reply({ content: 'Sorry, you do not have permission to run this command.', ephemeral: true });
-						return;
-					}
-				}
+				return false;
 			}
 
 			/* Does the command need referring? */
-			if (cmd['defer'] == true) await interaction.deferReply({ ephemeral: cmd['ephemeral'] ? true : false });
+			if (cmd?.defer?.defer == true) await interaction.deferReply({ ephemeral: cmd?.defer?.ephemeral ? true : false });
 
 
 			/* Work out the appropriate cooldown time */
@@ -63,7 +54,7 @@ module.exports = {
 				const expiration = Number(timestamps.get(interaction.user.id)) + Number(cooldownAmount);
 				const secondsLeft = Math.floor((Number(expiration) - Number(Date.now())) / 1000);
 
-				if (cmd['defer'] == true) await interaction.followUp({ content: `Please wait **${formatTime(secondsLeft > 1 ? secondsLeft : 1)}** to use that command again!` });
+				if (cmd?.defer?.defer == true) await interaction.followUp({ content: `Please wait **${formatTime(secondsLeft > 1 ? secondsLeft : 1)}** to use that command again!` });
 				else await interaction.reply({ content: `Please wait **${formatTime(secondsLeft > 1 ? secondsLeft : 1)}** to use that command again` });
 
 				return false;

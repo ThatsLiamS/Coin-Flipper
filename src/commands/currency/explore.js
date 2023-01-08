@@ -8,18 +8,13 @@ module.exports = {
 	description: 'Explore the wilderness and find some cents!',
 	usage: '/explore',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 60, text: '60 Seconds' },
+	defer: { defer: true, ephemeral: true },
 
 	data: new SlashCommandBuilder()
 		.setName('explore')
 		.setDescription('Explore the wilderness and find some cents!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: true,
-	ephemeral: true,
 
 	/**
 	 * Explroe the wilderness and find some cents.

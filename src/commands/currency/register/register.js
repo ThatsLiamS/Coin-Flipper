@@ -7,9 +7,8 @@ module.exports = {
 	description: 'View or edit your register balance!',
 	usage: '/register balance\n/register withdraw <amount>\n/register deposit <amount>',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 15, text: '15 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('register')
@@ -29,9 +28,6 @@ module.exports = {
 			.setName('deposit').setDescription('Deposits cents into your register!')
 			.addIntegerOption(option => option.setName('amount').setDescription('How much would you like to deposit?').setRequired(true)),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * View or edit your register balance.

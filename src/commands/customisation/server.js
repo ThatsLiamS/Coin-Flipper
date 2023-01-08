@@ -1,5 +1,5 @@
 /* Import required modules and files */
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 const { emojis } = require('./../../util/constants.js');
 const { database } = require('./../../util/functions.js');
 
@@ -17,13 +17,15 @@ module.exports = {
 	usage: '/server settings\n/server enable <feature>\n/server disable <feature>',
 
 	permissions: ['Manage Guild'],
-	guildOnly: true,
 	cooldown: { time: 30, text: '30 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('server')
 		.setDescription('View and customise server settings!')
+
 		.setDMPermission(false)
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('settings')
@@ -47,9 +49,6 @@ module.exports = {
 					{ name: 'Minigames', value: 'minigames' }, { name: 'Trash', value: 'trash' }, { name: 'Custom Addons', value: 'addons' },
 				)),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * View and customise server settings.

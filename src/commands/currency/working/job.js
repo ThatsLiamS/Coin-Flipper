@@ -12,9 +12,8 @@ module.exports = {
 	description: 'View and claim jobs!',
 	usage: '/job centre\n/job quit\n/job claim <job>',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 5, text: '5 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('job')
@@ -33,9 +32,6 @@ module.exports = {
 			.setName('claim').setDescription('Get a new job!')
 			.addStringOption(option => option.setName('job').setDescription('Which job would you like:').setRequired(true)),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * View and claim jobs.

@@ -8,9 +8,8 @@ module.exports = {
 	description: 'Buy an item from the shop!',
 	usage: '/buy <item>',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 30, text: '30 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('buy')
@@ -18,9 +17,6 @@ module.exports = {
 		.setDMPermission(true)
 
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to buy:').setRequired(true)),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Buy an item from the shop.

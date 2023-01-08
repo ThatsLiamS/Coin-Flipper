@@ -10,9 +10,8 @@ module.exports = {
 	description: 'Get a list of my commands',
 	usage: '/help [command]',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 0, text: 'None (0)' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('help')
@@ -20,9 +19,6 @@ module.exports = {
 		.setDMPermission(true)
 
 		.addStringOption(option => option.setName('command').setDescription('Which command or category?').setRequired(false)),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Get a list of my commands.
@@ -48,11 +44,8 @@ module.exports = {
 			if (cmd?.cooldown?.text) {
 				embed.addFields({ name: '__Cooldown:__', value: `**${cmd.cooldown.text}**`, inline: false });
 			}
-			if (cmd.permissions[0] && cmd.ownerOnly == false) {
+			if (cmd.permissions[0]) {
 				embed.addFields({ name: '__Permissions:__', value: '`' + cmd.permissions.join('` `') + '`', inline: false });
-			}
-			if (!cmd.permissions[0] && cmd.ownerOnly == true) {
-				embed.addFields({ name: '__Permissions:__', value: '**Server Owner Only**', inline: false });
 			}
 			if (cmd.error == true) {
 				embed.addFields({ name: '__Error:__', value: 'This command is currently unavailable, please try again later.', inline: false })

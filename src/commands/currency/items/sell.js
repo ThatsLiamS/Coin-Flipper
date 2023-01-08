@@ -8,9 +8,8 @@ module.exports = {
 	description: 'Sell an item to the shop!',
 	usage: '/sell <item>',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 10, text: '10 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('sell')
@@ -18,9 +17,6 @@ module.exports = {
 		.setDMPermission(true)
 
 		.addStringOption(option => option.setName('item').setDescription('Which item would you like to sell:').setRequired(true)),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Sell an item to the shop.

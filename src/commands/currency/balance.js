@@ -8,9 +8,8 @@ module.exports = {
 	description: 'View a user\'s balance!',
 	usage: '/balance [user]',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 5, text: '5 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('balance')
@@ -18,9 +17,6 @@ module.exports = {
 		.setDMPermission(true)
 
 		.addUserOption(option => option.setName('user').setDescription('Select a user').setRequired(false)),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * View a user's balance.

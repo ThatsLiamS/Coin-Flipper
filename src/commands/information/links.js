@@ -6,17 +6,13 @@ module.exports = {
 	description: 'Useful Coin Flipper links!',
 	usage: '/links',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 0, text: 'None (0)' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('links')
 		.setDescription('Useful Coin Flipper links!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Useful Coin Flipper links.

@@ -7,9 +7,8 @@ module.exports = {
 	description: 'Bet cents on a coinflip!',
 	usage: '/bet <side> <amount>',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 30, text: '30 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('bet')
@@ -24,9 +23,6 @@ module.exports = {
 			.setName('amount').setDescription('How much are you betting?').setRequired(true)
 			.setMaxValue(1_000_000).setMinValue(50),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Bet cents on a coin flip.

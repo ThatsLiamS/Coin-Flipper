@@ -7,17 +7,13 @@ module.exports = {
 	description: 'Claim your weekly donator cents!',
 	usage: '/weekly',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 0, text: '1 Week' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('weekly')
 		.setDescription('Claim your weekly donator cents!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Claim your weekly donator cents.

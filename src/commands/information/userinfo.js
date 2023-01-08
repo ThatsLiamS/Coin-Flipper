@@ -8,9 +8,8 @@ module.exports = {
 	description: 'View a user\'s stats!',
 	usage: '/userinfo [user]',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 15, text: '15 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('userinfo')
@@ -18,9 +17,6 @@ module.exports = {
 		.setDMPermission(true)
 
 		.addUserOption(option => option.setName('user').setDescription('Select a user').setRequired(false)),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Collection of user-based, custom addons.

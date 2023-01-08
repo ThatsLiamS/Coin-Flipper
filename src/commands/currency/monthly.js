@@ -7,17 +7,13 @@ module.exports = {
 	description: 'Claim your monthly cents!',
 	usage: '/monthly',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 0, text: '1 Month' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('monthly')
 		.setDescription('Claim your monthly cents!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Claim your monthly cents.

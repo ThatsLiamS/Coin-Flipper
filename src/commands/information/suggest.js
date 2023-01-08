@@ -8,17 +8,13 @@ module.exports = {
 	description: 'Suggest an improvement, command or feature!',
 	usage: '/suggest',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 10 * 60, text: '10 Minutes' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('suggest')
 		.setDescription('Suggest an improvement, command or feature!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: false,
 
 	/**
 	 * Submit a bug report to the developers.

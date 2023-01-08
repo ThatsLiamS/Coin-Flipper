@@ -8,17 +8,13 @@ module.exports = {
 	description: 'Work at your job and collect your pay cheque!',
 	usage: '/work',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 60 * 60, text: '1 Hour' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('work')
 		.setDescription('Work at your job and collect your pay cheque!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Work at your job and collect your pay cheque!

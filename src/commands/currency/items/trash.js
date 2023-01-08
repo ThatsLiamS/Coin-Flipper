@@ -9,9 +9,8 @@ module.exports = {
 	description: 'Place and take items from the trash!',
 	usage: '/trash items\n/trash take <item>\n/trash throw <item>',
 
-	permissions: [],
-	guildOnly: true,
 	cooldown: { time: 15, text: '15 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('trash')
@@ -31,9 +30,6 @@ module.exports = {
 			.setName('throw').setDescription('Throw an item in the trash!')
 			.addStringOption(option => option.setName('item').setDescription('Which item would you like to throw:').setRequired(true)),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Place and take items from the trash.

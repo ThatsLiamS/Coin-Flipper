@@ -8,19 +8,15 @@ module.exports = {
 	description: 'Flip a coin, or spice it up with an addon!',
 	usage: '/flip [addon]',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 5, text: '5 Seconds' },
+	defer: { defer: true, ephemeral: true },
 
 	data: new SlashCommandBuilder()
 		.setName('flip')
 		.setDescription('Flip a coin, or spice it up with an addon!')
 		.setDMPermission(true)
 
-		.addStringOption(option => option.setName('addon').setDescription('What\'s the addon\'s name?').setRequired(false)),
-
-	error: false,
-	defer: true,
+		.addStringOption(option => option.setName('addon').setDescription('What\'s the addon\'s name?').setRequired(false).setMaxLength(50)),
 
 	/**
 	 * Flip a code or spice it up with an addon

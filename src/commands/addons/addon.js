@@ -7,9 +7,8 @@ module.exports = {
 	description: 'Collection of user-based, custom addons.',
 	usage: '/addon view <name>\n/addon create <name>\n/addon rename <name> <newName>\n/addon delete <name>\n/addon setcost <name> <cost>\n/addon setdescription <name> <description>\n/addon inputs\n/addon addresponse <name> <response>\n/addon deleteresponse <name> <response>',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 15, text: '15 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('addon')
@@ -18,34 +17,34 @@ module.exports = {
 
 		.addSubcommand(subcommand => subcommand
 			.setName('view').setDescription('View an addon and it\'s responses!')
-			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true)),
+			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true).setMaxLength(50)),
 		)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('create').setDescription('Create a new custom addon!')
-			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true)),
+			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true).setMaxLength(50)),
 		)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('rename').setDescription('Rename a custom addon!')
-			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true))
-			.addStringOption(option => option.setName('new_name').setDescription('What do you want the new name to be?').setRequired(true)),
+			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true).setMaxLength(50))
+			.addStringOption(option => option.setName('new_name').setDescription('What do you want the new name to be?').setRequired(true).setMaxLength(50)),
 		)
 		.addSubcommand(subcommand => subcommand
 			.setName('delete').setDescription('Delete a custom addon!')
-			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true)),
+			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true).setMaxLength(50)),
 		)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('setcost').setDescription('Set the price of a custom addon!')
-			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true))
-			.addIntegerOption(option => option.setName('cost').setDescription('How much for?').setRequired(true)),
+			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true).setMaxLength(50))
+			.addIntegerOption(option => option.setName('cost').setDescription('How much for?').setRequired(true).setMaxValue(1500)),
 		)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('setdescription').setDescription('Set the description of a custom addon!')
-			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true))
-			.addStringOption(option => option.setName('description').setDescription('What is the description?').setRequired(true)),
+			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true).setMaxLength(50))
+			.addStringOption(option => option.setName('description').setDescription('What is the description?').setRequired(true).setMaxLength(200)),
 		)
 
 		.addSubcommand(subcommand => subcommand
@@ -54,18 +53,15 @@ module.exports = {
 
 		.addSubcommand(subcommand => subcommand
 			.setName('addresponse').setDescription('Add a new response to a custom addon')
-			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true))
-			.addStringOption(option => option.setName('response').setDescription('What do you want the response to be?').setRequired(true)),
+			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true).setMaxLength(50))
+			.addStringOption(option => option.setName('response').setDescription('What do you want the response to be?').setRequired(true).setMaxLength(200)),
 		)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('deleteresponse').setDescription('Delete a response of a custom addon')
-			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true))
+			.addStringOption(option => option.setName('name').setDescription('What is the addon\'s name?').setRequired(true).setMaxLength(50))
 			.addIntegerOption(option => option.setName('response').setDescription('Which response number?').setRequired(true)),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Collection of user-based, custom addons.

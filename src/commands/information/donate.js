@@ -7,17 +7,13 @@ module.exports = {
 	description: 'Information about our donator tiers!',
 	usage: '/donate',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 0, text: 'None (0)' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('donate')
 		.setDescription('Information about our donator tiers!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Information about our donator tiers.

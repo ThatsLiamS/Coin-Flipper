@@ -7,17 +7,13 @@ module.exports = {
 	description: 'Claim your daily cents!',
 	usage: '/daily',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 0, text: '1 Day' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('daily')
 		.setDescription('Claim your daily cents!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Claim your daily cents.

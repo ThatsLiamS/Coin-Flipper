@@ -16,9 +16,8 @@ module.exports = {
 	description: 'View and customise user settings!',
 	usage: '/user settings\n/user enable <feature>\n/user disable <feature>',
 
-	permissions: [],
-	guildOnly: true,
 	cooldown: { time: 30, text: '30 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('user')
@@ -47,9 +46,6 @@ module.exports = {
 					{ name: 'Evil Mode', value: 'evil' }, { name: 'Compact Mode', value: 'compact' },
 				)),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * View and customise user settings.

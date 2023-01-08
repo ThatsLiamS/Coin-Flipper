@@ -8,9 +8,8 @@ module.exports = {
 	description: 'View and claim badges!',
 	usage: '/badges list\n/badges claim <badge>',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 5, text: '5 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('badges')
@@ -31,9 +30,6 @@ module.exports = {
 				{ 'name': 'Wealthy', 'value': 'rich' }, { 'name': 'Millionaire', 'value': 'rich_pro' },
 			)),
 		),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * View and claim badges.

@@ -8,18 +8,13 @@ module.exports = {
 	description: 'Dropship an item and try to earn some cents!',
 	usage: '/dropship',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 60, text: '60 Seconds' },
+	defer: { defer: true, ephemeral: true },
 
 	data: new SlashCommandBuilder()
 		.setName('dropship')
 		.setDescription('Dropship an item and try to earn some cents!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: true,
-	ephemeral: true,
 
 	/**
 	 * Dropship an item and try to earn some cents.

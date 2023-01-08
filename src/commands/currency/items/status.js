@@ -7,17 +7,13 @@ module.exports = {
 	description: 'Check your status and see how your items help you!',
 	usage: '/status',
 
-	permissions: [],
-	guildOnly: false,
 	cooldown: { time: 5, text: '5 Seconds' },
+	defer: { defer: true, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('status')
 		.setDescription('Check your status and see how your items help you!')
 		.setDMPermission(true),
-
-	error: false,
-	defer: true,
 
 	/**
 	 * Check your status and see how your items help you.
