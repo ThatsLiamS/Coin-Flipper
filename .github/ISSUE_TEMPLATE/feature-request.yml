@@ -1,0 +1,35 @@
+name: Feature Request
+description: Create a feature request to help improve Coin Flipper
+labels: [enhancement]
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: A clear and concise description of what the feature is.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Is it linked to a known problem?
+      description: A clear and concise description of what the problem is.
+      placeholder: |
+        I'm always frustrated when [...]
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Describe alternatives you've considered.
+      description: A clear and concise description of any alternative solutions or features you've considered.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Relevant Assets/Logs
+      description: |
+        A list of assets (logs, screenshots, etc) relevant to this feature.
+
+        Tip: You can attach image(s) or log file(s) by clicking this area to highlight it and then dragging files in.
+      placeholder: |
+        Drag and drop them into this text area.
+    validations:
+      required: true

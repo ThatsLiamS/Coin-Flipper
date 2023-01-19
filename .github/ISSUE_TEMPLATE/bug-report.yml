@@ -1,0 +1,50 @@
+name: Bug Report
+description: Create a bug report to help improve Coin Flipper!
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps To Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+          1. Run '/....'
+          2. Click on '....'
+          3. Scroll down to '....'
+          4. See the error
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Discord Version
+      description: Which device and version are you using?
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Shard Id
+      description: The shard Id from '/about'
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Relevant Assets/Logs
+      description: |
+          A list of assets (logs, screenshots, etc) relevant to this bug.
+
+          Tip: You can attach image(s) or log file(s) by clicking this area to highlight it and then dragging files in.
+      placeholder: |
+          Drag and drop them into this text area.
+    validations:
+      required: false
