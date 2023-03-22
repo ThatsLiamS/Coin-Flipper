@@ -24,10 +24,10 @@ module.exports = {
 			.setName('claim').setDescription('Claim a badge to show off on your profile!')
 			.addStringOption(option => option.setName('badge').setDescription('Select a badge').setRequired(true).addChoices(
 				{ 'name': 'Supporter', 'value': 'support' }, { 'name': 'Flipper', 'value': 'flip' },
-				{ 'name': 'Avid Flipper', 'value': 'flip_pro' }, { 'name': 'Gamer', 'value': 'minigame' },
+				{ 'name': 'Avid Flipper', 'value': 'flip_plus' }, { 'name': 'Gamer', 'value': 'minigame' },
 				{ 'name': 'Pro Gamer', 'value': 'minigame_plus' }, { 'name': 'Registered', 'value': 'register' },
-				{ 'name': 'Collector', 'value': 'collector' }, { 'name': 'Scavenger', 'value': 'collector_pro' },
-				{ 'name': 'Wealthy', 'value': 'rich' }, { 'name': 'Millionaire', 'value': 'rich_pro' },
+				{ 'name': 'Collector', 'value': 'collector' }, { 'name': 'Scavenger', 'value': 'collector_plus' },
+				{ 'name': 'Wealthy', 'value': 'rich' }, { 'name': 'Millionaire', 'value': 'rich_plus' },
 			)),
 		),
 
@@ -80,7 +80,7 @@ module.exports = {
 			/* Locate badge object */
 			const badge = badgelist.filter((b) => b.id == badgeId)[0];
 			if (!badge || !badge.condition) {
-				interaction.followUp({ content: 'You can not claim this badge.' });
+				interaction.followUp({ content: `You can not claim this badge. ${badge.condition}` });
 				return false;
 			}
 
@@ -91,7 +91,7 @@ module.exports = {
 			}
 
 			/* Compare badge requirements */
-			const [type, compare, value] = badge.condition;
+			const [type, compare, value] = badge.condition.split('|');
 			let allowed = false;
 			if (type == 'support') {
 				if (interaction?.guild?.id != '821152669141565480') {
@@ -110,13 +110,16 @@ module.exports = {
 				allowed = (userData.stats.given > 5 && userData.stats.given > 100_000);
 			}
 			else {
-				if (compare == '>') allowed = (userData[type] > value);
-				if (compare == '=') allowed = (userData[type] == value);
-				if (compare == '<') allowed = (userData[type] < value);
+
+				let ConditionData = userData; type.split('.').map(field => ConditionData = ConditionData[field]);
+
+				if (compare == '>') allowed = (ConditionData > Number(value));
+				if (compare == '=') allowed = (ConditionData == Number(value));
+				if (compare == '<') allowed = (ConditionData < Number(value));
 			}
 			/* Reject the claim */
 			if (allowed != true) {
-				interaction.followUp({ content: `You do not meet the requirements for this badge.${badge.req}!` });
+				interaction.followUp({ content: `You do not meet the requirements for this badge. ${badge.req}!` });
 				return false;
 			}
 

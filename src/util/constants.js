@@ -820,7 +820,7 @@ const items = [
 const badges = [
 	{
 		id: 'dev',
-		name: 'Developr',
+		name: 'Developer',
 		prof: '<:badge_developer:956323651941183488> Developer',
 		emoji: '<:badge_developer:956323651941183488>',
 		req: 'Be a Coin Flipper Developer!',
@@ -869,7 +869,7 @@ const badges = [
 		name: 'Pro Gamer',
 		prof: '<:badge_pro_gamer:956323436286836826> Pro Gamer',
 		emoji: '<:badge_pro_gamer:956323436286836826>',
-		req: 'win 75 minigames!',
+		req: 'Win 75 minigames!',
 		condition: 'stats.minigames|>|74',
 	},
 	{

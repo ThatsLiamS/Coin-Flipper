@@ -57,7 +57,6 @@ module.exports = {
 		interaction.followUp({ content: `You claimed your weekly ${amt} cents! Thanks for donating to Coin Flipper!` });
 		await database.setValue('users', interaction.user.id, userData);
 
-		/* Returns true */
 		return true;
 
 	},

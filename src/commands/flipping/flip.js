@@ -87,6 +87,9 @@ module.exports = {
 			}
 
 
+			/* Update the userData */
+			await database.setValue('users', interaction.user.id, userData);
+
 			/* Create and send the embed */
 			const embed = new EmbedBuilder()
 				.setColor('Orange')
@@ -95,9 +98,8 @@ module.exports = {
 
 			interaction.followUp({ embeds: [embed] });
 
-			/* Update the userData */
-			await database.setValue('users', interaction.user.id, userData);
-			return;
+			/* Enable the cooldown */
+			return true;
 
 		};
 

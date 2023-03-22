@@ -125,7 +125,7 @@ module.exports = {
 
 		/* Sets the new values in the database */
 		await database.setValue('users', interaction.user.id, userData);
-		return false;
+		return true;
 
 	},
 };
