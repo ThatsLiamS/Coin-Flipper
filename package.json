@@ -8,14 +8,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Coin-Flipper/Coin-Flipper.git"
+		"url": "git+https://github.com/ThatsLiamS/Coin-Flipper.git"
 	},
 	"author": "",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/Coin-Flipper/Coin-Flipper/issues"
+		"url": "https://github.com/ThatsLiamS/Coin-Flipper/issues"
 	},
-	"homepage": "https://github.com/Coin-Flipper/Coin-Flipper#readme",
+	"homepage": "https://github.com/ThatsLiamS/Coin-Flipper#readme",
 	"dependencies": {
 		"discord.js": "^14.8.0",
 		"dotenv": "^16.0.3",

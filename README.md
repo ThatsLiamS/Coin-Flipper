@@ -29,7 +29,7 @@ We currently support two separate ways to report any issues and bugs with Coin-F
 
 1. The first is the **/report** command within the support server. The command will ask for a description of the error and then promptly alert the developers. 
 
-2. The second is to open an [issue](https://github.com/Coin-Flipper/Coin-Flipper/issues) on the GitHub repository. Upon opening a new GitHub Issue, fill out all the relevant fields and submit the report.
+2. The second is to open an [issue](https://github.com/ThatsLiamS/Coin-Flipper/issues) on the GitHub repository. Upon opening a new GitHub Issue, fill out all the relevant fields and submit the report.
 
 
 ## Contributing
@@ -49,4 +49,4 @@ key contributors of Coin Flipper
 
 - [Invite](https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands)
 - [Support Server](https://discord.gg/2je9aJynqt)
-- [GitHub](https://github.com/Coin-Flipper/Coin-Flipper)
+- [GitHub](https://github.com/ThatsLiamS/Coin-Flipper)
