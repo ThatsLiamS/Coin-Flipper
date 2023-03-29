@@ -23,6 +23,6 @@
 		"firebase-admin": "^11.5.0"
 	},
 	"devDependencies": {
-		"eslint": "^8.36.0"
+		"eslint": "^8.37.0"
 	}
 }
