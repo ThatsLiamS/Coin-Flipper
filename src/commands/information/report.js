@@ -9,7 +9,7 @@ module.exports = {
 	usage: '/report',
 
 	cooldown: { time: 10 * 60, text: '10 Minutes' },
-	defer: { defer: true, ephemeral: false },
+	defer: { defer: false, ephemeral: false },
 
 	data: new SlashCommandBuilder()
 		.setName('report')
