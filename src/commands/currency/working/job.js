@@ -118,7 +118,9 @@ module.exports = {
 
 			/* Set the new value ('') in the database */
 			userData.stats.job = '';
-			userData.stats.balance = userData.stats.balance > 50 ? Number(userData.stats.balance) - 50 : 0;
+			if (!(userData.items.icecube > 0)) {
+				userData.stats.balance = (userData.stats.balance > 50) ? Number(userData.stats.balance) - 50 : 0;
+			}
 
 			interaction.followUp({ content: 'You have successfully quit your job.' });
 		}

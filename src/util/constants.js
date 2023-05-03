@@ -648,7 +648,7 @@ const items = [
 		id: 'icecube',
 		prof: '🧊 ice cube',
 		emote: '🧊',
-		cost: 25,
+		cost: 75,
 		description: 'Pour this on your bosses head and stop losing cents when quitting your job!',
 		use: 'When you quit your job you won\'t lose any cents!',
 		shop: true,
