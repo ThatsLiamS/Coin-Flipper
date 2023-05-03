@@ -36,7 +36,7 @@ module.exports = {
 		const embed = new EmbedBuilder()
 			.setTitle('My Information')
 			.setColor('Green')
-			.setDescription('Hey, I\'m **[' + client.user.tag + '](https://discord.gg/2je9aJynqt)**!\n```\n' + makeGrid(results) + '\n```')
+			.setDescription('Hey, I\'m **[' + client.user.tag + '](https://coinflipper.liamskinner.co.uk/)**!\n```\n' + makeGrid(results) + '\n```')
 			.addFields(
 				{ name: '**Total Servers:**', value: results[1].reduce((acc, guildCount) => acc + guildCount, 0).toString(), inline: true },
 				{ name: '**Total Users:**', value: results[2].reduce((acc, memberCount) => acc + memberCount, 0).toString(), inline: true },

@@ -21,7 +21,7 @@ Coin Flipper has a variety of fun and interactive commands that can keep your se
 
 #### General Support
 
-If you are ever unsure about Coin-Flipper or have any questions, please do not hesitate to join our [Discord Support Server](https://discord.gg/2je9aJynqt) and we will be happy to answer any concerns.
+If you are ever unsure about Coin-Flipper or have any questions, please do not hesitate to join our [Discord Support Server](https://coinflipper.liamskinner.co.uk/support) and we will be happy to answer any concerns.
 
 #### Reporting Issues
 
@@ -41,12 +41,12 @@ See `contributing.md` for ways to get started. Please adhere to this project's `
 
 ## Authors
 key contributors of Coin Flipper
-- [@ThatsLiamS](https://github.com/ThatsLiamS)
+- [**@ThatsLiamS**](https://github.com/ThatsLiamS)
 - [@SuperPhantomUser](https://github.com/SuperPhantomUser)
 
 
 ## Links
 
-- [Invite](https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands)
-- [Support Server](https://discord.gg/2je9aJynqt)
-- [GitHub](https://github.com/ThatsLiamS/Coin-Flipper)
+- [Invite](https://coinflipper.liamskinner.co.uk/invite)
+- [Support Server](https://coinflipper.liamskinner.co.uk/support)
+- [GitHub](https://coinflipper.liamskinner.co.uk/code)
