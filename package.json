@@ -18,7 +18,7 @@
 	"homepage": "https://github.com/ThatsLiamS/Coin-Flipper#readme",
 	"dependencies": {
 		"discord.js": "^14.11.0",
-		"dotenv": "^16.1.4",
+		"dotenv": "^16.3.1",
 		"express": "^4.18.2",
 		"firebase-admin": "^11.9.0"
 	},
