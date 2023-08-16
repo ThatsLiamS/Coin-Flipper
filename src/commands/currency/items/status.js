@@ -1,4 +1,4 @@
-/* Impot required modules and files */
+/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { database } = require('./../../../util/functions.js');
 

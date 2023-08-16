@@ -63,7 +63,7 @@ module.exports = {
 
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username}'s cash register`)
-				.setColor('Black')
+				.setColor('#000000')
 				.setDescription(`There are ${userData.stats.bank} cents in this register!\nEvery time you flip a coin, **${percent}%** of the amount goes into this register!`)
 				.addFields(
 					{ name: 'Useful commands', value: '`/register deposit` - Deposits cents into your register\n`/register withdraw` - Withdraw cents from your register', inline: false },

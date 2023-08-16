@@ -75,7 +75,7 @@ module.exports = {
 			})
 			/* If they didn't response */
 			.catch(async () => {
-				await interaction.followUp({ content: 'Sorry, you took too long to repond.' });
+				await interaction.followUp({ content: 'Sorry, you took too long to respond.' });
 				return false;
 			});
 

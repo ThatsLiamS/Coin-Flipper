@@ -17,7 +17,7 @@ module.exports = {
 		.setDMPermission(true),
 
 	/**
-	 * Explroe the wilderness and find some cents.
+	 * Explore the wilderness and find some cents.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @returns {boolean}
@@ -46,7 +46,7 @@ module.exports = {
 			userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(amount);
 
 			embed.setTitle('You explored and found..')
-				.setDescription(`You explored the ${area.name}, and ${area.got.replace('{earned}', amount)}`)
+				.setDescription(`You explored ${area.name}, and ${area.got.replace('{earned}', amount)}`)
 				.setColor('Green');
 		}
 		if (result == 'draw') {

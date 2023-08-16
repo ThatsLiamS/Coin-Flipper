@@ -48,7 +48,7 @@ module.exports = {
 
 		randomAmt = Math.ceil(randomAmt * jobFound.multi);
 
-		/* Add the money to their acount */
+		/* Add the money to their account */
 		userData.stats.balance = Number(userData.stats.balance) + Number(randomAmt);
 		userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(randomAmt);
 		userData.stats.worked = Number(userData.stats.worked) + Number(1);

@@ -34,7 +34,7 @@ We currently support two separate ways to report any issues and bugs with Coin-F
 
 ## Contributing
 
-Contributions are always welcome! A massive benefit of being an open-source bot is the whole community coming togetherto contribute and improve Coin Flipper.
+Contributions are always welcome! A massive benefit of being an open-source bot is the whole community coming together to contribute and improve Coin Flipper.
 
 See `contributing.md` for ways to get started. Please adhere to this project's `code of conduct`.
 

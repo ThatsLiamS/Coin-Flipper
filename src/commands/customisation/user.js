@@ -127,7 +127,7 @@ module.exports = {
 			return true;
 		}
 
-		/* Unknown issue occured, return false */
+		/* Unknown issue occurred, return false */
 		return false;
 
 	},

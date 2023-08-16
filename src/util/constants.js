@@ -111,7 +111,7 @@ const exploreAreas = [
 	{
 		name: 'the forest',
 		got: 'found {earned} cents in a tree!',
-		lost: 'you got trapped in a branch and had to use {lost} cents to pry youself out!',
+		lost: 'you got trapped in a branch and had to use {lost} cents to pry yourself out!',
 	},
 	{
 		name: 'the temple',
@@ -1094,7 +1094,7 @@ const flips = {
 		'The coin broke apart and rearranged itself into a statue ||of a coin||',
 		'The coin coded a coin bot that got more famous than this one',
 		'The coin bought Breath Of The Wild',
-		'The coin had a battle royael',
+		'The coin had a battle royale',
 		'The coin used an uno reverse card and flipped you',
 		'The coin got a pet and killed it',
 		'The coin broke down your door',
@@ -1162,7 +1162,7 @@ const flips = {
 		'The coin killed a wasp somehow',
 		'The coin won a giveaway in a discord server',
 		'The coin flipped 6 feet away (social distancing)',
-		'The coin speedrunned a corn maze any% and beat the world record',
+		'The coin speedran a corn maze and beat the world record',
 		'The coin created its own news program',
 		'The coin flipped a coin flipped a coin flipped a coin flipped a coin',
 		'The coin got its friend Nickel a christmas gift',

@@ -25,7 +25,7 @@ module.exports = {
 		),
 
 	/**
-	 * Use an intem in your inventory.
+	 * Use an item in your inventory.
 	 *
 	 * @param {object} interaction - Discord Slash Command object
 	 * @param {object} client - Discord bot client
@@ -44,7 +44,7 @@ module.exports = {
 		/* Fetch the user's data */
 		const userData = await database.getValue('users', interaction.user.id);
 
-		if (!userData?.items[item.id] || (userData.items[item.id] || 0) < 1) {
+		if (((userData?.items[item.id] ?? 0) > 0) == false) {
 			interaction.followUp({ content: `You do not have ${item.prof}!` });
 			return false;
 		}

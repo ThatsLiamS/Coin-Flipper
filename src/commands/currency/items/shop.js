@@ -30,7 +30,7 @@ module.exports = {
 		const pageNumber = interaction.options.getInteger('page') || 1;
 		const itemName = interaction.options.getString('item')?.toLowerCase();
 
-		/* Shows information on a specifc item */
+		/* Shows information on a specific item */
 		if (itemName) {
 			/* Find the selected item */
 			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];

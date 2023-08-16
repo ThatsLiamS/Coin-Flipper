@@ -141,7 +141,7 @@ const formatTime = (seconds) => {
 /* Runs when the user gets a new achievement */
 const achievementAdd = async (userData, prop, client) => {
 
-	/* Does the achivement ex */
+	/* Does the achievement ex */
 	const achievement = achievements.find(a => a.id == prop);
 	if (!achievement) return userData;
 

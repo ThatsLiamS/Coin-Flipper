@@ -52,7 +52,7 @@ module.exports = {
 					.setColor('Red');
 			}
 
-			/* Send the command-specfic embed and return true */
+			/* Send the command-specific embed and return true */
 			interaction.followUp({ embeds: [embed], ephemeral: false });
 			return true;
 		}
