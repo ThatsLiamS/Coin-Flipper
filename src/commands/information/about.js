@@ -1,14 +1,21 @@
-/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { makeGrid } = require('./../../util/functions.js');
+
+const { makeGrid } = require('./../../util/functions');
+
 
 module.exports = {
 	name: 'about',
 	description: 'Shows lots of cool information about the bot!',
 	usage: '/about',
 
-	cooldown: { time: 0, text: 'None (0)' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 0,
+		text: 'None (0)',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('about')
@@ -46,20 +53,29 @@ module.exports = {
 				{ name: '**Shard ID:**', value: `\`#${Number(interaction.guild.shardId) + 1} out of ${client.shard.count}\``, inline: true },
 				{ name: '**Developers:**', value: '**[ThatsLiamS#6950](https://discord.gg/2je9aJynqt)**\n[SuperPhantomUser#0441](https://github.com/SuperPhantomUser)', inline: true },
 			)
-			.setFooter({ text: 'Do /help to get started.' });
+			.setFooter({
+				text: 'Do /help to get started.',
+			});
 
 		/* Create row of buttons */
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Invite').setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Invite')
+					.setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Support Server')
+					.setURL('https://discord.gg/2je9aJynqt'),
 			);
 
 		/* returns true to enable the cooldown */
-		interaction.followUp({ embeds: [embed], components: [row] });
-		return true;
+		interaction.followUp({
+			embeds: [embed],
+			components: [row],
+		});
 
+		return true;
 	},
 };

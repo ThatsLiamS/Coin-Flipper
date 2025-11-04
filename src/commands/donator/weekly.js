@@ -1,14 +1,21 @@
-/* Import required modules and files */
 const { SlashCommandBuilder } = require('discord.js');
-const { database } = require('./../../util/functions.js');
+
+const { database } = require('./../../util/functions');
+
 
 module.exports = {
 	name: 'weekly',
 	description: 'Claim your weekly donator cents!',
 	usage: '/weekly',
 
-	cooldown: { time: 0, text: '1 Week' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 0,
+		text: '1 Week',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('weekly')
@@ -27,13 +34,17 @@ module.exports = {
 		const userData = await database.getValue('users', interaction.user.id);
 
 		/* Are they a donator? */
-		if (userData.stats.donator == 0) {
-			interaction.followUp({ content: 'You must be a donator to use this command!' });
+		if (userData.stats.donator === 0) {
+			interaction.followUp({
+				content: 'You must be a donator to use this command!',
+			});
 			return false;
 		}
 
 		/* How much do they get? */
-		const amt = userData.stats.donator == 1 ? 25_000 : 75_000;
+		const amt = userData.stats.donator === 1
+			? 25_000
+			: 75_000;
 
 		/* Get the date */
 		const dateConstruct = {
@@ -44,8 +55,10 @@ module.exports = {
 		const weeksPassed = Math.ceil(daysPassed / 7);
 
 		const today = `${weeksPassed}|${dateConstruct.now.getFullYear()}`;
-		if (userData.cooldowns.weekly == today) {
-			interaction.followUp({ content: 'You can only claim your weekly reward once per week! You can claim it on Sunday.' });
+		if (userData.cooldowns.weekly === today) {
+			interaction.followUp({
+				content: 'You can only claim your weekly reward once per week! You can claim it on Sunday.',
+			});
 			return false;
 		}
 		userData.cooldowns.weekly = today;
@@ -54,10 +67,11 @@ module.exports = {
 		userData.stats.balance = Number(userData.stats.balance) + Number(amt);
 		userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(amt);
 
-		interaction.followUp({ content: `You claimed your weekly ${amt} cents! Thanks for donating to Coin Flipper!` });
+		interaction.followUp({
+			content: `You claimed your weekly ${amt} cents! Thanks for donating to Coin Flipper!`,
+		});
 		await database.setValue('users', interaction.user.id, userData);
 
 		return true;
-
 	},
 };

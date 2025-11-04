@@ -1,15 +1,22 @@
-/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
-const { dropshipItems } = require('./../../util/constants.js');
-const { database } = require('./../../util/functions.js');
+
+const { dropshipItems } = require('./../../util/constants');
+const { database } = require('./../../util/functions');
+
 
 module.exports = {
 	name: 'dropship',
 	description: 'Dropship an item and try to earn some cents!',
 	usage: '/dropship',
 
-	cooldown: { time: 60, text: '60 Seconds' },
-	defer: { defer: true, ephemeral: true },
+	cooldown: {
+		time: 60,
+		text: '60 Seconds',
+	},
+	defer: {
+		defer: true,
+		ephemeral: true,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('dropship')
@@ -32,24 +39,39 @@ module.exports = {
 		const smallWinTwo = Math.floor(Math.random() * (100 - 20 + 1)) + 20;
 
 		let list = [];
-		if (chance > 20) list = [largeWin, smallWinOne, smallWinTwo];
-		else if (chance > 10) list = [smallWinOne, largeWin, smallWinTwo];
-		else list = [smallWinOne, smallWinTwo, largeWin];
+		if (chance > 20) {
+			list = [largeWin, smallWinOne, smallWinTwo];
+		}
+		else if (chance > 10) {
+			list = [smallWinOne, largeWin, smallWinTwo];
+		}
+		else {
+			list = [smallWinOne, smallWinTwo, largeWin];
+		}
 
 		/* Create the buttons to choose from */
 		const row = new ActionRowBuilder();
 		for (const value of list) {
 			const item = dropshipItems[Math.floor(Math.random() * dropshipItems.length)];
 			row.addComponents(
-				new ButtonBuilder().setStyle(ButtonStyle.Primary).setLabel(item).setCustomId(`dropship-${value}-${item}`),
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Primary)
+					.setLabel(item)
+					.setCustomId(`dropship-${value}-${item}`),
 			);
 		}
 		const embed = new EmbedBuilder()
 			.setTitle('Dropship!')
 			.setDescription('Select one of the items below.');
 
-		const sentMessage = await interaction.followUp({ embeds: [embed], components: [row] });
-		if (!sentMessage) return false;
+		const sentMessage = await interaction.followUp({
+			embeds: [embed],
+			components: [row],
+		});
+
+		if (!sentMessage) {
+			return false;
+		}
 
 		/* Await for a button to be pressed */
 		const filter = (button) => button.customId.startsWith('dropship-') && button.user.id === interaction.user.id;
@@ -64,18 +86,33 @@ module.exports = {
 				userData.stats.balance = Number(userData.stats.balance) + Number(values[1]);
 				userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(values[1]);
 
-				await interaction.deleteReply().catch(() => false);
-				await button.reply({ ephemeral: true, embeds: [new EmbedBuilder().setTitle('Dropship!').setDescription(`You dropshipped the ${values[2]} for \`${values[1]}\` cents!`)] });
+				await interaction
+					.deleteReply()
+					.catch();
+
+				const buttonEmbed = new EmbedBuilder()
+					.setTitle('Dropship!')
+					.setDescription(`You dropshipped the ${values[2]} for \`${values[1]}\` cents!`);
+				await button.reply({
+					ephemeral: true,
+					embeds: [buttonEmbed],
+				});
 
 				await database.setValue('users', interaction.user.id, userData);
 				return true;
 			})
 			.catch(async () => {
-				await interaction.editReply({ embeds: [new EmbedBuilder().setTitle('Dropship!').setDescription('Whoa, you took too long to respond!').setColor('Red')] });
+				const timeoutEmbed = new EmbedBuilder()
+					.setTitle('Dropship!')
+					.setDescription('Whoa, you took too long to respond!')
+					.setColor('Red');
+
+				await interaction.editReply({
+					embeds: [timeoutEmbed],
+				});
 				return false;
 			});
 
 		return (accepted ? true : false);
-
 	},
 };

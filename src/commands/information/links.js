@@ -1,13 +1,19 @@
-/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+
 
 module.exports = {
 	name: 'links',
 	description: 'Useful Coin Flipper links!',
 	usage: '/links',
 
-	cooldown: { time: 0, text: 'None (0)' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 0,
+		text: 'None (0)',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('links')
@@ -36,16 +42,25 @@ module.exports = {
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Support Server')
+					.setURL('https://discord.gg/2je9aJynqt'),
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Invite').setURL('https://coinflipper.liamskinner.co.uk/invite'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Invite')
+					.setURL('https://coinflipper.liamskinner.co.uk/invite'),
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Website').setURL('https://coinflipper.liamskinner.co.uk/'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Website')
+					.setURL('https://coinflipper.liamskinner.co.uk/'),
 			);
 
 		/* Returns true to enable the cooldown */
-		interaction.followUp({ embeds: [embed], components: [row] });
-		return true;
+		interaction.followUp({
+			embeds: [embed],
+			components: [row],
+		});
 
+		return true;
 	},
 };

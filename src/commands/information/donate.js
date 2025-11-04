@@ -1,14 +1,21 @@
-/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
-const { emojis } = require('./../../util/constants.js');
+
+const { emojis } = require('./../../util/constants');
+
 
 module.exports = {
 	name: 'donate',
 	description: 'Information about our donator tiers!',
 	usage: '/donate',
 
-	cooldown: { time: 0, text: 'None (0)' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 0,
+		text: 'None (0)',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('donate')
@@ -38,14 +45,21 @@ module.exports = {
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('PayPal').setURL('https://paypal.me/ThatsLiamS'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('PayPal')
+					.setURL('https://paypal.me/ThatsLiamS'),
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Patreon').setURL('https://www.patreon.com/CoinFlipper'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Patreon')
+					.setURL('https://www.patreon.com/CoinFlipper'),
 			);
 
 		/* Returns true to enable the cooldown */
-		interaction.followUp({ embeds: [embed], components: [row] });
-		return true;
+		interaction.followUp({
+			embeds: [embed],
+			components: [row],
+		});
 
+		return true;
 	},
 };

@@ -1,14 +1,21 @@
-/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { database } = require('./../../../util/functions.js');
+
+const { database } = require('./../../../util/functions');
+
 
 module.exports = {
 	name: 'register',
 	description: 'View or edit your register balance!',
 	usage: '/register balance\n/register withdraw <amount>\n/register deposit <amount>',
 
-	cooldown: { time: 15, text: '15 Seconds' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 15,
+		text: '15 Seconds',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('register')
@@ -16,17 +23,30 @@ module.exports = {
 		.setDMPermission(true)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('balance').setDescription('View the cents in your register!'),
+			.setName('balance')
+			.setDescription('View the cents in your register!'),
 		)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('withdraw').setDescription('Withdraw cents into your register!')
-			.addIntegerOption(option => option.setName('amount').setDescription('How much would you like to withdraw?').setRequired(true)),
+			.setName('withdraw')
+			.setDescription('Withdraw cents into your register!')
+
+			.addIntegerOption(option => option
+				.setName('amount')
+				.setDescription('How much would you like to withdraw?')
+				.setRequired(true),
+			),
 		)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('deposit').setDescription('Deposits cents into your register!')
-			.addIntegerOption(option => option.setName('amount').setDescription('How much would you like to deposit?').setRequired(true)),
+			.setName('deposit')
+			.setDescription('Deposits cents into your register!')
+
+			.addIntegerOption(option => option
+				.setName('amount')
+				.setDescription('How much would you like to deposit?')
+				.setRequired(true),
+			),
 		),
 
 	/**
@@ -40,7 +60,9 @@ module.exports = {
 		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
 		if (!subCommandName) {
-			interaction.followUp({ content: 'Woah, an unexpected error has occurred. Please try again!' });
+			interaction.followUp({
+				content: 'Woah, an unexpected error has occurred. Please try again!',
+			});
 			return false;
 		}
 
@@ -49,17 +71,31 @@ module.exports = {
 
 		/* Can they use this command? */
 		if (!userData?.items?.key || userData.items.key < 1) {
-			interaction.followUp({ content: 'Woah, you need a key for this command!' });
+			interaction.followUp({
+				content: 'Woah, you need a key for this command!',
+			});
 			return false;
 		}
 
 		/* Subcommand specific code */
-		if (subCommandName == 'balance') {
+		if (subCommandName === 'balance') {
 
 			/* Work out flip percentage */
-			let percent = userData.stats.donator > 0 ? (userData.stats.donator == 1 ? 15 : 25) : 10;
-			if (userData.items.label && userData.items.label > 0) percent += 10;
-			if (userData.settings.evil == true) percent = 7.5;
+			let percent = 10;
+			if (userData.stats.donator > 0) { 
+				if (userData.stats.donator === 1) {
+					percent = 15;
+				} else {
+					percent = 25;
+				}
+			}
+
+			if (userData.items.label && userData.items.label > 0) {
+				percent += 10;
+			}
+			if (userData.settings.evil === true) {
+				percent = 7.5;
+			}
 
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.user.username}'s cash register`)
@@ -69,43 +105,52 @@ module.exports = {
 					{ name: 'Useful commands', value: '`/register deposit` - Deposits cents into your register\n`/register withdraw` - Withdraw cents from your register', inline: false },
 				);
 
-			interaction.followUp({ embeds: [embed] });
+			interaction.followUp({
+				embeds: [embed],
+			});
 			return true;
 		}
 
-		if (subCommandName == 'withdraw') {
+		if (subCommandName === 'withdraw') {
 
 			/* How much to withdraw? */
 			const amount = interaction.options.getInteger('amount');
 			if (amount > userData.stats.bank) {
-				interaction.followUp({ content: 'You don\'t have that much in your register.' });
+				interaction.followUp({
+					content: 'You don\'t have that much in your register.',
+				});
 				return false;
 			}
 
 			userData.stats.balance = Number(userData.stats.balance) + amount;
 			userData.stats.bank = Number(userData.stats.bank) - amount;
 
-			interaction.followUp({ content: `You successfully withdrew ${amount} cents.` });
+			interaction.followUp({
+				content: `You successfully withdrew ${amount} cents.`,
+			});
 		}
 
-		if (subCommandName == 'deposit') {
+		if (subCommandName === 'deposit') {
 
 			/* How much to deposit? */
 			const amount = interaction.options.getInteger('amount');
 			if (amount > userData.stats.balance) {
-				interaction.followUp({ content: 'You don\'t have that much in your balance.' });
+				interaction.followUp({
+					content: 'You don\'t have that much in your balance.',
+				});
 				return false;
 			}
 
 			userData.stats.balance = Number(userData.stats.balance) - amount;
 			userData.stats.bank = Number(userData.stats.bank) + amount;
 
-			interaction.followUp({ content: `You successfully deposited ${amount} cents.` });
+			interaction.followUp({
+				content: `You successfully deposited ${amount} cents.`,
+			});
 		}
 
 		/* Set the values in the database */
 		await database.setValue('users', interaction.user.id, userData);
 		return true;
-
 	},
 };

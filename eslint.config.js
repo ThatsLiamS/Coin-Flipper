@@ -61,7 +61,6 @@ module.exports = [
 			}],
 
 			// ----- Security Rules (balanced) -----
-			'security/detect-object-injection': 'warn',
 			'security/detect-non-literal-require': 'error',
 
 			// ----- Unicorn Rules -----

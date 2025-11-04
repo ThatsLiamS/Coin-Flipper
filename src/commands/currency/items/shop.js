@@ -1,22 +1,37 @@
-/* Import required modules and files */
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const { itemlist } = require('./../../../util/constants.js');
+
+const { itemlist } = require('./../../../util/constants');
+
 
 module.exports = {
 	name: 'shop',
 	description: 'View the shop and all the items in it!',
 	usage: '/shop [page] [item]',
 
-	cooldown: { time: 0, text: 'None (0)' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 0,
+		text: 'None (0)',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('shop')
 		.setDescription('View the shop and all the items in it!')
 		.setDMPermission(true)
 
-		.addIntegerOption(option => option.setName('page').setDescription('Which item would you like to take:').setRequired(false))
-		.addStringOption(option => option.setName('item').setDescription('Which item would you like to take:').setRequired(false)),
+		.addIntegerOption(option => option
+			.setName('page')
+			.setDescription('Which item would you like to take:')
+			.setRequired(false),
+		)
+		.addStringOption(option => option
+			.setName('item')
+			.setDescription('Which item would you like to take:')
+			.setRequired(false),
+		),
 
 	/**
 	 * View the shop and all the items in it.
@@ -33,9 +48,11 @@ module.exports = {
 		/* Shows information on a specific item */
 		if (itemName) {
 			/* Find the selected item */
-			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
+			const item = itemlist.filter((i) => i.name === itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
 			if (!item) {
-				interaction.followUp({ content: `\`${itemName}\` is not a valid item.` });
+				interaction.followUp({
+					content: `\`${itemName}\` is not a valid item.`,
+				});
 				return false;
 			}
 
@@ -50,7 +67,9 @@ module.exports = {
 				);
 
 			/* Reply and enable cooldown */
-			interaction.followUp({ embeds: [embed] });
+			interaction.followUp({
+				embeds: [embed],
+			});
 			return true;
 		}
 
@@ -72,7 +91,9 @@ module.exports = {
 					{ name: '🧊 Ice Cube', value: '`Cost:` 25 cents `Usage:` Protects you from paying 50 cents when you leave your job\n`Description:` an ice cube that somehow doesn\'t melt', inline: false },
 					{ name: '🔑 Key', value: '`Cost:` 1000 cents `Usage:` ???', inline: false },
 				)
-				.setFooter({ text: 'Platinum Donators get everything 25% off!\nUse "/shop <page>" to switch to a different page' }),
+				.setFooter({
+					text: 'Platinum Donators get everything 25% off!\nUse "/shop <page>" to switch to a different page',
+				}),
 
 			new EmbedBuilder()
 				.setTitle('Shop - page 2/2')
@@ -90,12 +111,19 @@ module.exports = {
 					{ name: '📌 Pin', value: '`Cost:` 2000 cents `Usage:` Use it to give another user a special surprise\n`Description:` A sharp pin that looks really painful and distracting', inline: false },
 					{ name: '🧨 Dynamite', value: '`Cost:` 1 million cents `Usage:` Blow up the chat\n`Description:` a piece of dynamite that can blow up anything', inline: false },
 				)
-				.setFooter({ text: 'Platinum Donators get everything 25% off!\nUse "/shop <page>" to switch to a different page' }),
+				.setFooter({
+					text: 'Platinum Donators get everything 25% off!\nUse "/shop <page>" to switch to a different page',
+				}),
 		];
 
 		/* Select the correct page and send */
-		interaction.followUp({ embeds: [embed[pageNumber > 2 ? 0 : pageNumber - 1]] });
-		return true;
+		const page = pageNumber > 2 
+			? 0 
+			: pageNumber - 1;
 
+		interaction.followUp({
+			embeds: [embed[page]],
+		});
+		return true;
 	},
 };

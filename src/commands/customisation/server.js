@@ -1,15 +1,19 @@
-/* Import required modules and files */
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
-const { emojis } = require('./../../util/constants.js');
-const { database } = require('./../../util/functions.js');
+
+const { emojis } = require('./../../util/constants');
+const { database } = require('./../../util/functions');
+
 
 /* Convert boolean to emoji */
 const convert = (boolean) => boolean ? emojis.true : emojis.false;
 
 /* Allow for dynamic customisation */
 const features = {
-	'minigames': 'Minigame', 'trash': 'Trash', 'addons': 'Custom Addon',
+	'minigames': 'Minigame',
+	'trash': 'Trash',
+	'addons': 'Custom Addon',
 };
+
 
 module.exports = {
 	name: 'server',
@@ -17,8 +21,14 @@ module.exports = {
 	usage: '/server settings\n/server enable <feature>\n/server disable <feature>',
 
 	permissions: ['Manage Guild'],
-	cooldown: { time: 30, text: '30 Seconds' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 30,
+		text: '30 Seconds',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('server')
@@ -35,19 +45,31 @@ module.exports = {
 		.addSubcommand(subcommand => subcommand
 			.setName('enable')
 			.setDescription('Select a feature to enable!')
-			.addStringOption(option => option.setName('feature').setDescription('Select a feature to enable').setRequired(true)
+			.addStringOption(option => option
+				.setName('feature')
+				.setDescription('Select a feature to enable')
+				.setRequired(true)
 				.addChoices(
-					{ name: 'Minigames', value: 'minigames' }, { name: 'Trash', value: 'trash' }, { name: 'Custom Addons', value: 'addons' },
-				)),
+					{ name: 'Minigames', value: 'minigames' },
+					{ name: 'Trash', value: 'trash' },
+					{ name: 'Custom Addons', value: 'addons' },
+				),
+			),
 		)
 
 		.addSubcommand(subcommand => subcommand
 			.setName('disable')
 			.setDescription('Select a feature to disable!')
-			.addStringOption(option => option.setName('feature').setDescription('Select a feature to disable').setRequired(true)
+			.addStringOption(option => option
+				.setName('feature')
+				.setDescription('Select a feature to disable')
+				.setRequired(true)
 				.addChoices(
-					{ name: 'Minigames', value: 'minigames' }, { name: 'Trash', value: 'trash' }, { name: 'Custom Addons', value: 'addons' },
-				)),
+					{ name: 'Minigames', value: 'minigames' },
+					{ name: 'Trash', value: 'trash' },
+					{ name: 'Custom Addons', value: 'addons' },
+				),
+			),
 		),
 
 	/**
@@ -61,7 +83,9 @@ module.exports = {
 		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
 		if (!subCommandName) {
-			interaction.followUp({ content: 'Woah, an unexpected error has occurred. Please try again!' });
+			interaction.followUp({
+				content: 'Woah, an unexpected error has occurred. Please try again!',
+			});
 			return false;
 		}
 
@@ -69,51 +93,63 @@ module.exports = {
 		const guildData = await database.getValue('guilds', interaction.guild.id);
 
 		/* Which subcommand was selected */
-		if (subCommandName == 'enable') {
+		if (subCommandName === 'enable') {
 			/* Is the feature valid */
 			const feature = interaction.options.getString('feature');
-			if (!feature || feature == undefined) {
-				interaction.followUp({ content: 'Sorry, that is not a valid feature.' });
+			if (!feature || feature === undefined) {
+				interaction.followUp({
+					content: 'Sorry, that is not a valid feature.',
+				});
 				return false;
 			}
 
 			/* Is it already enabled? */
-			if (guildData?.features[feature] == true) {
-				interaction.followUp({ content: 'That feature is already enabled' });
+			if (guildData?.features[feature] === true) {
+				interaction.followUp({
+					content: 'That feature is already enabled',
+				});
 				return false;
 			}
 
 			guildData.features[feature] = true;
-			interaction.followUp({ content: `Successfully enabled the **${features[feature]} System!**` });
+			interaction.followUp({
+				content: `Successfully enabled the **${features[feature]} System!**`,
+			});
 
 			/* Save the new setting in the database */
 			await database.setValue('guilds', interaction.guild.id, guildData);
 			return true;
 		}
 
-		if (subCommandName == 'disable') {
+		if (subCommandName === 'disable') {
 			/* Is the feature valid */
 			const feature = interaction.options.getString('feature');
-			if (!feature || feature == undefined) {
-				interaction.followUp({ content: 'Sorry, that is not a valid feature.' });
+			if (!feature || feature === undefined) {
+				interaction.followUp({
+					content: 'Sorry, that is not a valid feature.',
+				});
 				return false;
 			}
 
 			/* Is it already enabled? */
-			if (guildData?.features[feature] == false) {
-				interaction.followUp({ content: 'That feature is already disabled' });
+			if (guildData?.features[feature] === false) {
+				interaction.followUp({
+					content: 'That feature is already disabled',
+				});
 				return false;
 			}
 
 			guildData.features[feature] = false;
-			interaction.followUp({ content: `Successfully disabled the **${features[feature]} System!**` });
+			interaction.followUp({
+				content: `Successfully disabled the **${features[feature]} System!**`,
+			});
 
 			/* Save the new setting in the database */
 			await database.setValue('guilds', interaction.guild.id, guildData);
 			return true;
 		}
 
-		if (subCommandName == 'settings') {
+		if (subCommandName === 'settings') {
 			/* Create an embed to send */
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.guild.name}'s Settings!`)
@@ -123,11 +159,15 @@ module.exports = {
 					{ name: 'Custom Addons', value: `${convert(guildData?.features?.addons ?? true)}` },
 				)
 				.setTimestamp()
-				.setFooter({ text: 'Use "/server enable" and "/server disable" to change these settings' });
+				.setFooter({
+					text: 'Use "/server enable" and "/server disable" to change these settings',
+				});
 
 
 			/* return true to enable the cooldown */
-			interaction.followUp({ embeds: [embed] });
+			interaction.followUp({
+				embeds: [embed],
+			});
 			return true;
 		}
 

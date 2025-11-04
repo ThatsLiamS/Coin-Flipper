@@ -1,24 +1,35 @@
-/* Import required modules and files */
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const { readdirSync } = require('fs');
+
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 
 /* Formats command usage */
 const formatUsage = (string) => string.split('\n').map((str) => '`' + str + '`').join('\n');
+
 
 module.exports = {
 	name: 'help',
 	description: 'Get a list of my commands',
 	usage: '/help [command]',
 
-	cooldown: { time: 0, text: 'None (0)' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 0,
+		text: 'None (0)',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('help')
 		.setDescription('Get a list of my commands!')
 		.setDMPermission(true)
 
-		.addStringOption(option => option.setName('command').setDescription('Which command or category?').setRequired(false)),
+		.addStringOption(option => option
+			.setName('command')
+			.setDescription('Which command or category?')
+			.setRequired(false),
+		),
 
 	/**
 	 * Get a list of my commands.
@@ -47,13 +58,16 @@ module.exports = {
 			if (cmd.permissions[0]) {
 				embed.addFields({ name: '__Permissions:__', value: '`' + cmd.permissions.join('` `') + '`', inline: false });
 			}
-			if (cmd.error == true) {
+			if (cmd.error === true) {
 				embed.addFields({ name: '__Error:__', value: 'This command is currently unavailable, please try again later.', inline: false })
 					.setColor('Red');
 			}
 
 			/* Send the command-specific embed and return true */
-			interaction.followUp({ embeds: [embed], ephemeral: false });
+			interaction.followUp({
+				embeds: [embed],
+				ephemeral: false,
+			});
 			return true;
 		}
 
@@ -64,6 +78,7 @@ module.exports = {
 
 			const commandFiles = readdirSync(`${__dirname}/../../commands/${cmdName}`).filter(file => file.endsWith('.js'));
 			for (const file of commandFiles) {
+				// eslint-disable-next-line security/detect-non-literal-require
 				const command = require(`${__dirname}/../../commands/${cmdName}/${file}`);
 				description = description + `${formatUsage(command.usage)}\n`;
 			}
@@ -76,6 +91,7 @@ module.exports = {
 					description = description + `\n**__${subCommandFolders.charAt(0).toUpperCase() + subCommandFolders.slice(1)}__**\n`;
 
 					for (const file of cmdFiles) {
+						// eslint-disable-next-line security/detect-non-literal-require
 						const command = require(`${__dirname}/../../commands/${cmdName}/${subCommandFolders}/${file}`);
 						description = description + `${formatUsage(command.usage)}\n`;
 					}
@@ -90,7 +106,10 @@ module.exports = {
 				.setColor('#D3D3D3');
 
 			/* Send the category's commands, and return true */
-			interaction.followUp({ embeds: [embed], ephemeral: false });
+			interaction.followUp({
+				embeds: [embed],
+				ephemeral: false,
+			});
 			return true;
 		}
 
@@ -111,14 +130,21 @@ module.exports = {
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Invite').setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Invite')
+					.setURL('https://discord.com/oauth2/authorize?client_id=668850031012610050&permissions=274945395792&scope=bot%20applications.commands'),
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Support Server')
+					.setURL('https://discord.gg/2je9aJynqt'),
 			);
 
 		/* Returns true to enable the cooldown */
-		interaction.followUp({ embeds: [embed], components: [row] });
-		return true;
+		interaction.followUp({
+			embeds: [embed],
+			components: [row],
+		});
 
+		return true;
 	},
 };

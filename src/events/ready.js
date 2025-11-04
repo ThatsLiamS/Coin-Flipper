@@ -1,6 +1,7 @@
-/* Import required modules and files */
-const { Collection } = require('discord.js');
 const fs = require('fs');
+
+const { Collection } = require('discord.js');
+
 
 module.exports = {
 	name: 'ready',
@@ -20,7 +21,10 @@ module.exports = {
 		/* Set client status */
 		client.user.setPresence({
 			status: 'online',
-			activities: [{ type: 3, name: `coins flip in ${client.shard.count} shards` }],
+			activities: [{
+				type: 3,
+				name: `coins flip in ${client.shard.count} shards`,
+			}],
 		});
 
 		/* Registering slash commands */
@@ -35,6 +39,7 @@ module.exports = {
 					const commandFiles = fs.readdirSync(`${__dirname}/../commands/${category}/${subCommandFolders}`).filter(file => file.endsWith('.js'));
 
 					for (const file of commandFiles) {
+						// eslint-disable-next-line security/detect-non-literal-require
 						const command = require(`${__dirname}/../commands/${category}/${subCommandFolders}/${file}`);
 						client.commands.set(command.name, command);
 						data.push(command.data.toJSON());
@@ -45,6 +50,7 @@ module.exports = {
 			const commandFiles = fs.readdirSync(`${__dirname}/../commands/${category}`).filter(file => file.endsWith('.js'));
 			for (const file of commandFiles) {
 
+				// eslint-disable-next-line security/detect-non-literal-require
 				const command = require(`${__dirname}/../commands/${category}/${file}`);
 				client.commands.set(command.name, command);
 				data.push(command.data.toJSON());
@@ -55,6 +61,6 @@ module.exports = {
 
 		/* Set ApplicationCommand data */
 		await client.application.commands.set(data);
-
+		return true;
 	},
 };

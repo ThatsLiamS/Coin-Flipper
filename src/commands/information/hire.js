@@ -1,13 +1,19 @@
-/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+
 
 module.exports = {
 	name: 'hire',
 	description: 'Information: how to hire my developer',
 	usage: '/hire',
 
-	cooldown: { time: 0, text: 'None (0)' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 0,
+		text: 'None (0)',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('hire')
@@ -31,14 +37,21 @@ module.exports = {
 		const row = new ActionRowBuilder()
 			.addComponents(
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Website').setURL('https://liamskinner.co.uk'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Website')
+					.setURL('https://liamskinner.co.uk'),
 				new ButtonBuilder()
-					.setStyle(ButtonStyle.Link).setLabel('Support Server').setURL('https://discord.gg/2je9aJynqt'),
+					.setStyle(ButtonStyle.Link)
+					.setLabel('Support Server')
+					.setURL('https://discord.gg/2je9aJynqt'),
 			);
 
 		/* Returns true to enable the cooldown */
-		interaction.followUp({ embeds: [embed], components: [row] });
-		return true;
+		interaction.followUp({
+			embeds: [embed],
+			components: [row],
+		});
 
+		return true;
 	},
 };

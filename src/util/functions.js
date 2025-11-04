@@ -1,15 +1,18 @@
-/* Import required modules and files */
 const { Collection } = require('discord.js');
-const { GuildSchema, UserSchema } = require('./Database Schema.js');
-const { achievements, itemlist } = require('./constants.js');
-const reformatData = require('./reformatData.js');
+const firebaseAdmin = require('firebase-admin');
+
+const { achievements, itemlist } = require('./constants');
+const { GuildSchema, UserSchema } = require('./Database Schema');
+
 
 /* Connection to the Firestore Database */
-const admin = require('firebase-admin');
-admin.initializeApp({
-	credential: admin.credential.cert(JSON.parse(process.env['Database'])),
+firebaseAdmin.initializeApp({
+	credential: firebaseAdmin.credential.cert(
+		JSON.parse(process.env['Database']),
+	),
 });
-const firestore = admin.firestore();
+const firestore = firebaseAdmin.firestore();
+
 
 /* Create the Database's cache */
 const cache = {
@@ -32,19 +35,20 @@ const database = {
 
 		/* Is the data in the cache? */
 		const cacheData = cache[collectionID].get(documentID);
-		if (cacheData) return cacheData;
+		if (cacheData) {
+			return cacheData;
+		}
 
 		/* Fetch the data from Firestore */
-		const collection = await firestore.collection(collectionID).doc(documentID).get();
-		const firestoreData = collection.data() || (collectionID == 'users' ? UserSchema : GuildSchema);
-
-		/* Reformat firestoreData into the new Schema */
-		const formattedData = reformatData[collectionID](firestoreData, documentID);
-		formattedData.id = documentID;
+		const collection = await firestore
+			.collection(collectionID)
+			.doc(documentID)
+			.get();
+		const firestoreData = collection.data() || (collectionID === 'users' ? UserSchema : GuildSchema);
 
 		/* Set the values in the cache */
-		cache[collectionID].set(documentID, formattedData);
-		return formattedData;
+		cache[collectionID].set(documentID, firestoreData);
+		return firestoreData;
 	},
 
 	/**
@@ -65,14 +69,17 @@ const database = {
 		cache[collectionID].set(documentID, data);
 
 		/* Update the database */
-		await firestore.collection(collectionID).doc(documentID).set(data);
+		await firestore
+			.collection(collectionID)
+			.doc(documentID)
+			.set(data);
 		return true;
 	},
 };
 
 
 /**
- * Change a strings length with 2 way padding
+ * Change a strings length with right-end padding
  * @function
  * @author Liam Skinner <me@liamskinner.co.uk>
  *
@@ -81,7 +88,7 @@ const database = {
  *
  * @returns {string}
 **/
-const fitString = (str, length) => (str + ' '.repeat(length -= str.length));
+const fitString = (str, length) => (str + ' '.repeat(length - str.length));
 
 /**
  * Form a grid of values from a 2D Array
@@ -99,11 +106,13 @@ const makeGrid = (results) => {
 		const values = [y + 1];
 
 		for (let x = 0; x < 3; x++) {
-			if (x == '0') {
+			if (x === 0) {
 				const num = results[x][y].toString();
-				values.push(`${num.length == 2 ? 0 + num.toString() : num.toString()} ms  `);
+				values.push(`${num.length === 2 ? 0 + num.toString() : num.toString()} ms  `);
 			}
-			else { values.push(fitString(results[x][y].toString(), [8, 7, 7][x])); }
+			else {
+				values.push(fitString(results[x][y].toString(), [8, 7, 7][x]));
+			}
 		}
 		rows[y] = `| ${values[0]}  |  ${values[1]}|   ${values[2]}|  ${values[3]}|`;
 	}
@@ -131,10 +140,16 @@ const formatTime = (seconds) => {
 		[60, 'Minute'],
 		[60 * 60, 'Hour'],
 	];
-	const type = (seconds < 61 ? 0 : (seconds < 3600 ? 1 : 2));
+
+	const getDenominationType = (seconds) => {
+		if (seconds < 61) { return 0; }
+		if (seconds < 3600) { return 1; }
+		return 2;
+	};
+	const type = getDenominationType(seconds);
 	const num = Math.floor(seconds / denominations[type][0]);
 
-	return `${num} ${denominations[type][1]}${num != 1 ? 's' : ''}`;
+	return `${num} ${denominations[type][1]}${num !== 1 ? 's' : ''}`;
 };
 
 
@@ -142,8 +157,12 @@ const formatTime = (seconds) => {
 const achievementAdd = async (userData, prop, client) => {
 
 	/* Does the achievement ex */
-	const achievement = achievements.find(a => a.id == prop);
-	if (!achievement) return userData;
+	const achievement = achievements
+		.find(a => a.id === prop);
+
+	if (!achievement) {
+		return userData;
+	}
 
 	userData?.achievements ? userData.achievements : {};
 	if (!userData.achievements[prop]) {
@@ -152,10 +171,13 @@ const achievementAdd = async (userData, prop, client) => {
 		userData.achievements[prop] = true;
 
 		/* send them a notification */
-		const user = await client?.users?.fetch(userData.id).catch(() => false);
-		user?.send({ content: `**Notification**\nYou got the achievement ${achievement.emoji} ${achievement.name}!` })
-			.catch(() => false);
-
+		const user = await client?.users
+			.fetch(userData.id)
+			.catch();
+	
+		user?.send({
+			content: `**Notification**\nYou got the achievement ${achievement.emoji} ${achievement.name}!`,
+		}).catch();
 	}
 
 	return userData;
@@ -171,7 +193,9 @@ const gotItem = async (userData, client) => {
 		}
 	}
 
-	return passed ? await achievementAdd(userData, 'trueCollector', client) : userData;
+	return passed
+		? await achievementAdd(userData, 'trueCollector', client)
+		: userData;
 };
 
 

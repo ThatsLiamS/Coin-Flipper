@@ -1,15 +1,22 @@
-/* Import required modules and files */
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { achievementAdd, database } = require('./../../util/functions.js');
-const { itemlist } = require('./../../util/constants.js');
+
+const { itemlist } = require('./../../util/constants');
+const { achievementAdd, database } = require('./../../util/functions');
+
 
 module.exports = {
 	name: 'give',
 	description: 'Help out and support another user!',
 	usage: '/give cents <user> <amount>\n/give item <user> <item>',
 
-	cooldown: { time: 60, text: '60 Seconds' },
-	defer: { defer: true, ephemeral: false },
+	cooldown: {
+		time: 60,
+		text: '60 Seconds',
+	},
+	defer: {
+		defer: true,
+		ephemeral: false,
+	},
 
 	data: new SlashCommandBuilder()
 		.setName('give')
@@ -17,18 +24,37 @@ module.exports = {
 		.setDMPermission(false)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('cents').setDescription('Give cents to another user!')
+			.setName('cents')
+			.setDescription('Give cents to another user!')
 
-			.addUserOption(option => option.setName('user').setDescription('Select a user').setRequired(true))
-			.addIntegerOption(option => option.setName('amount').setDescription('How much would you like to give?')
-				.setRequired(true).setMinValue(5).setMaxValue(50_000)),
+			.addUserOption(option => option
+				.setName('user')
+				.setDescription('Select a user')
+				.setRequired(true),
+			)
+			.addIntegerOption(option => option
+				.setName('amount')
+				.setDescription('How much would you like to give?')
+				.setRequired(true)
+				.setMinValue(5)
+				.setMaxValue(50_000),
+			),
 		)
 
 		.addSubcommand(subcommand => subcommand
-			.setName('item').setDescription('Give an item to another user!')
+			.setName('item')
+			.setDescription('Give an item to another user!')
 
-			.addUserOption(option => option.setName('user').setDescription('Select a user').setRequired(true))
-			.addStringOption(option => option.setName('item').setDescription('Which item to give away?').setRequired(true)),
+			.addUserOption(option => option
+				.setName('user')
+				.setDescription('Select a user')
+				.setRequired(true),
+			)
+			.addStringOption(option => option
+				.setName('item')
+				.setDescription('Which item to give away?')
+				.setRequired(true),
+			),
 		),
 
 	/**
@@ -49,16 +75,20 @@ module.exports = {
 		/* Retrieve sub command option */
 		const subCommandName = interaction.options.getSubcommand();
 		if (!subCommandName) {
-			interaction.followUp({ content: 'Woah, an unexpected error has occurred. Please try again!' });
+			interaction.followUp({
+				content: 'Woah, an unexpected error has occurred. Please try again!',
+			});
 			return false;
 		}
 
-		if (subCommandName == 'cents') {
+		if (subCommandName === 'cents') {
 
 			/* How much money to give */
 			const amount = interaction.options.getInteger('amount');
 			if (amount > userData.stats.balance) {
-				interaction.followUp({ content: 'You don\'t have that much!' });
+				interaction.followUp({
+					content: 'You don\'t have that much!',
+				});
 				return false;
 			}
 
@@ -73,45 +103,59 @@ module.exports = {
 				.setDescription(`You gave <@${target.id}> **${amount}** cents!\n\nYou now have ${userData.stats.balance} and ${target.username} has ${targetData.stats.balance}.`);
 
 			/* Return true to enable the cooldown */
-			interaction.followUp({ embeds: [embed] });
+			interaction.followUp({
+				embeds: [embed],
+			});
 
 			/* Set the new balances in the database */
-			await database.setValue('users', interaction.user.id, (
-				amount >= 10000 ? await achievementAdd(userData, 'generous', client) : (
-					amount == 5 ? await achievementAdd(userData, 'ungenerous', client) : userData
-				)
-			));
+			let newData = {};
+			if (amount >= 10000) { 
+				newData = await achievementAdd(userData, 'generous', client);
+			} else if (amount === 5) {
+				newData = await achievementAdd(userData, 'ungenerous', client);
+			} else { 
+				newData = userData;
+			}
+
+			await database.setValue('users', interaction.user.id, newData);
 			await database.setValue('users', target.id, targetData);
 			return true;
 		}
 
-		if (subCommandName == 'item') {
+		if (subCommandName === 'item') {
 
 			/* Locate the selected item */
 			const itemName = interaction.options.getString('item');
-			const item = itemlist.filter((i) => i.name == itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
+			const item = itemlist.filter((i) => i.name === itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
 
 			/* Do they have that item */
 			if (userData.items[item.id] < 1) {
-				interaction.followUp({ content: 'You do not have that item.' });
+				interaction.followUp({
+					content: 'You do not have that item.',
+				});
 				return false;
 			}
 
 			/* swap the items over */
 			userData.items[item.id] = Number(userData.items[item.id]) - 1;
 
-			if (item.id == 'pin') targetData.items['pingiven'] = Number(targetData.items['pingiven'] || 0) + 1;
-			else targetData.items[item.id] = Number(targetData.items[item.id] || 0) + 1;
+			if (item.id === 'pin') {
+				targetData.items['pingiven'] = Number(targetData.items['pingiven'] || 0) + 1;
+			}
+			else {
+				targetData.items[item.id] = Number(targetData.items[item.id] || 0) + 1;
+			}
 
 			await database.setValue('users', interaction.user.id, userData);
 			await database.setValue('users', target.id, targetData);
 
 			/* returns true to enable the cooldown */
-			interaction.followUp({ content: `You gave **${target.username}** 1x ${item.prof}!` });
+			interaction.followUp({
+				content: `You gave **${target.username}** 1x ${item.prof}!`,
+			});
 			return true;
 		}
 
 		return false;
-
 	},
 };
