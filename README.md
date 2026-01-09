@@ -1,52 +1,44 @@
-# Coin Flipper
-Coin Flipper is a fun and customizable Discord bot that can flip coins, start minigames, and do much more! From minigames and lottery tickets to jobs and registers, there are plenty of fun commands that will liven up your server!
+# Coin Flipper [Archived]
+
+> **Note:** This project was officially archived in **January 2026**. This documentation is preserved for historical purposes; the bot is no longer actively maintained or hosted.
+
+Coin Flipper **was** a fun and customizable Discord bot that **could** flip coins, start minigames, and **did** much more! From minigames and lottery tickets to jobs and registers, there **were** plenty of fun commands that **livened** up servers.
 
 #### Flipping Coins
-As the name implies, coin flipping is the main purpose of the bot. Not only is there classic flipping - you can use addons to have more fun flipping. For example, the extra addon includes over 100 responses to flipping your coin!
+As the name **implied**, coin flipping **was** the main purpose of the bot. Not only **was** there classic flipping, but users **could** also use addons to make the experience more engaging. For example, the extra addon **included** over 100 unique responses to flipping a coin.
 
 #### Awesome Currency
-Coin Flipper includes a currency cents Cents. With cents, you can buy items, addons, and more! There are plenty of ways to get them, such as flipping coins, getting lottery tickets, working, and more!
+Coin Flipper **included** a currency called **Cents**. With Cents, users **could** buy items, addons, and more. There **were** plenty of ways to earn them, such as flipping coins, purchasing lottery tickets, working virtual jobs, and more.
 
 #### Unique Features
-There are some very unique features that Coin Flipper has that you won't find anywhere else! Some of these include:
-- Special items that do unique things, such as opening a register or having access to a monthly command
-- A unique trash can for the server - throw items in and take items out of it!
-- 7 badges that, once you get them, display on your profile for all to see
+There **were** several unique features that Coin Flipper **offered** which **were** difficult to find anywhere else:
+- **Special items** that performed unique actions, such as opening a register or granting access to a monthly command.
+- A **unique trash can** for the server where users **could** throw items in and take items out.
+- **7 collectible badges** that, once earned, **displayed** on a user's profile for all to see.
 
-#### Lots of fun
-Coin Flipper has a variety of fun and interactive commands that can keep your server active and make it a cooler place! So, what are you waiting for? Invite Coin Flipper and start your flipping adventure today!
+#### Lots of Fun
+Coin Flipper **featured** a variety of interactive commands that **kept** servers active and made them a cooler place to hang out. It **served** as a central hub for many communities during its time online.
 
 
 ## Support
 
 #### General Support
-
-If you are ever unsure about Coin-Flipper or have any questions, please do not hesitate to join our [Discord Support Server](https://coinflipper.liamskinner.co.uk/support) and we will be happy to answer any concerns.
+While the bot **was** active, general support **was** provided through the [Discord Support Server](https://coinflipper.liamskinner.co.uk/support). Developers and community members **were** available to answer concerns and help users navigate the bot's features.
 
 #### Reporting Issues
+During its lifecycle, two separate ways **were** supported to report issues and bugs:
 
-We currently support two separate ways to report any issues and bugs with Coin-Flipper. 
-
-1. The first is the **/report** command within the support server. The command will ask for a description of the error and then promptly alert the developers. 
-
-2. The second is to open an [issue](https://github.com/ThatsLiamS/Coin-Flipper/issues) on the GitHub repository. Upon opening a new GitHub Issue, fill out all the relevant fields and submit the report.
-
-
-## Contributing
-
-Contributions are always welcome! A massive benefit of being an open-source bot is the whole community coming together to contribute and improve Coin Flipper.
-
-See `contributing.md` for ways to get started. Please adhere to this project's `code of conduct`.
+1. The **/report** command within the support server, which **alerted** the developers immediately.
+2. Opening an **issue** on the GitHub repository, where users **could** fill out relevant fields to submit a report.
 
 
 ## Authors
-key contributors of Coin Flipper
+Key contributors who built and maintained Coin Flipper:
 - [**@ThatsLiamS**](https://github.com/ThatsLiamS)
 - [@SuperPhantomUser](https://github.com/SuperPhantomUser)
 
 
 ## Links
-
-- [Invite](https://coinflipper.liamskinner.co.uk/invite)
+- [Invite (Legacy)](https://coinflipper.liamskinner.co.uk/invite)
 - [Support Server](https://coinflipper.liamskinner.co.uk/support)
-- [GitHub](https://coinflipper.liamskinner.co.uk/code)
+- [GitHub Codebase](https://coinflipper.liamskinner.co.uk/code)
