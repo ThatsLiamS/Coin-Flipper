@@ -1,4 +1,5 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, SlashCommandBuilder, CommandInteraction } = require('discord.js');
 
 const { itemlist, joblist, badgelist } = require('./../../util/constants');
 const { database } = require('./../../util/functions');
@@ -30,10 +31,17 @@ module.exports = {
 		),
 
 	/**
-	 * View a user's balance.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Balance - view someone's balance
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction }) => {
 
@@ -78,7 +86,7 @@ module.exports = {
 		const items = [];
 		for (const item of itemlist) {
 			if (userData?.items[item.id] > 0) {
-				items.push(`${item.prof}${userData?.items[item.id] > 1 ? ` (${userData?.items[item.id]})` : ''}`);
+				items.push(`${item.prof}${userData?.items[item.id] > 1? ` (${userData?.items[item.id]})` : ''}`);
 			}
 		}
 		if (userData?.settings?.developer === true) {

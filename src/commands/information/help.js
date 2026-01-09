@@ -1,6 +1,7 @@
 const { readdirSync } = require('fs');
 
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, CommandInteraction, Client } = require('discord.js');
 
 /* Formats command usage */
 const formatUsage = (string) => string.split('\n').map((str) => '`' + str + '`').join('\n');
@@ -32,11 +33,18 @@ module.exports = {
 		),
 
 	/**
-	 * Get a list of my commands.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} client - Discord Client object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Information
+	 * @summary Help management - overview, or specific command
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * @param {Client} param.client - DiscordJS Bot Client Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction, client }) => {
 

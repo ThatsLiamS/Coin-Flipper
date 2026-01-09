@@ -1,4 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { SlashCommandBuilder, CommandInteraction } = require('discord.js');
 
 const { joblist } = require('./../../../util/constants');
 const { achievementAdd, database } = require('./../../../util/functions');
@@ -24,11 +25,17 @@ module.exports = {
 		.setDMPermission(true),
 
 	/**
-	 * Work at your job and collect your pay cheque!
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} client - Discord bot client
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Work - earn money
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction, client }) => {
 

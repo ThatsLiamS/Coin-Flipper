@@ -1,4 +1,5 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, SlashCommandBuilder, CommandInteraction } = require('discord.js');
 
 const { itemlist } = require('./../../../util/constants');
 const { achievementAdd, gotItem, database } = require('./../../../util/functions');
@@ -45,17 +46,23 @@ module.exports = {
 
 			.addStringOption(option => option
 				.setName('item')
-				.setDescription('Which item would you like to throw:')
+				.setDescription('Which item would you like to throw out:')
 				.setRequired(true),
 			),
 		),
 
 	/**
-	 * Place and take items from the trash.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} client - Discord bot client
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Trash management - throw, and take items
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction, client }) => {
 
@@ -83,12 +90,21 @@ module.exports = {
 			const trash = [];
 			for (const item of itemlist) {
 				if (guildData.trash[item.id] > 0) {
-					trash.push(`${item.prof}${guildData.trash[item.id] > 1 ? ` (${guildData.trash[item.id]})` : ''}`);
+					const amount = guildData.trash[item.id] > 1 
+						? ` (${guildData.trash[item.id]})`
+						: '';
+
+					trash.push(`${item.prof}${amount}`);
 				}
 			}
+
+			const description = trash.length === 0
+				? 'Nothing\'s here ;-;'
+				: trash.join('\n');
+
 			const embed = new EmbedBuilder()
 				.setTitle(`${interaction.guild.name}'s Trash:`)
-				.setDescription(trash?.join('\n') || 'Nothing\'s here ;-;')
+				.setDescription(description)
 				.setFooter({
 					text: 'Use /trash take <item> to take an item out!',
 				})
@@ -103,12 +119,14 @@ module.exports = {
 
 		/* Fetch the user's stats */
 		const userData = await database.getValue('users', interaction.user.id);
+		
+		/* Locate the selected item */
+		const itemName = interaction.options.getString('item');
+		const item = itemlist.filter((i) => i.name === itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
+		
 
 		if (subCommandName === 'take') {
-
-			/* Locate the selected item */
-			const itemName = interaction.options.getString('item');
-			const item = itemlist.filter((i) => i.name === itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
+			
 			if (!item || !guildData?.trash[item.id]) {
 				interaction.followUp({
 					content: 'That is not a valid item in the trash.',
@@ -119,7 +137,10 @@ module.exports = {
 			/* Adds the item to the user */
 			guildData.trash[item.id] = Number(Number(guildData.trash[item.id]) - 1) || 0;
 			userData.items[item.id] = Number(userData.items[item.id] || 0) + 1;
-			interaction.followUp({ content: `You took a ${item.prof} out of the trash!` });
+
+			interaction.followUp({
+				content: `You took a ${item.prof} out of the trash!`,
+			});
 
 			/* Sets the value in the database */
 			await database.setValue('users', interaction.user.id, await gotItem(userData, client));
@@ -130,8 +151,6 @@ module.exports = {
 		if (subCommandName === 'throw') {
 
 			/* Locate the selected item */
-			const itemName = interaction.options.getString('item');
-			const item = itemlist.filter((i) => i.name === itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
 			if (!item) {
 				interaction.followUp({
 					content: 'That is not a valid item name.',
@@ -148,6 +167,7 @@ module.exports = {
 			/* Adds the item to the user */
 			guildData.trash[item.id] = Number(Number(guildData.trash[item.id] || 0) + 1) || 1;
 			userData.items[item.id] = (Number(userData.items[item.id]) - 1) || 0;
+
 			interaction.followUp({
 				content: `You threw away your ${item.prof}! Use \`/trash take\` if you want to get it back!`,
 			});
@@ -159,6 +179,5 @@ module.exports = {
 		}
 
 		return false;
-
 	},
 };

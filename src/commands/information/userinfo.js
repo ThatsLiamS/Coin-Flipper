@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { SlashCommandBuilder, EmbedBuilder, CommandInteraction } = require('discord.js');
 
 const { emojis } = require('./../../util/constants');
 const { database } = require('./../../util/functions');
@@ -30,10 +31,17 @@ module.exports = {
 		),
 
 	/**
-	 * Collection of user-based, custom addons.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Information
+	 * @summary User management - displays information
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction }) => {
 
@@ -49,11 +57,19 @@ module.exports = {
 			donorStatus = 'platinum tier';
 		}
 
+		const evilToggle = userData.settings.evil
+			? emojis.true
+			: emojis.false;
+
+		const compactToggle = userData.settings.compact
+			? emojis.true
+			: emojis.false;
+
 		const embed = new EmbedBuilder()
 			.setTitle(`${user.username}'s information`)
 			.setColor('#cd7f32')
 			.addFields(
-				{ name: '**Settings**', value: `Evil mode: ${userData.settings.evil ? emojis.true : emojis.false }\nCompact mode: ${userData.settings.compact ? emojis.true : emojis.false }\nOnline mode: ${emojis.false}`, inline: false },
+				{ name: '**Settings**', value: `Evil mode: ${evilToggle}\nCompact mode: ${compactToggle}\nOnline mode: ${emojis.false}`, inline: false },
 				{ name: '**Stats**', value: `Coins flipped: \`${userData.stats.flips}\`\nMinigames won: \`${userData.stats.minigames}\`\nTimes worked: \`${userData.stats.worked}\``, inline: false },
 				{ name: '**Donator Status**', value: `${donorStatus}`, inline: false },
 			);

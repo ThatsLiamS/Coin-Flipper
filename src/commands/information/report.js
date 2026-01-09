@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, WebhookClient, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { SlashCommandBuilder, EmbedBuilder, WebhookClient, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, CommandInteraction, Client } = require('discord.js');
 
 const format = (string) => string.split('\n').map((line) => '> ' + line).join('\n');
 
@@ -23,11 +24,18 @@ module.exports = {
 		.setDMPermission(true),
 
 	/**
-	 * Submit a bug report to the developers.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} client - Discord Client object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Information
+	 * @summary Submit bug report
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * @param {Client} param.client - DiscordJS Bot Client Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction, client }) => {
 
@@ -74,10 +82,13 @@ module.exports = {
 
 				await modal.deferReply({ ephemeral: true });
 
+				const formattedDescription = format(modal.fields.getTextInputValue('reportDescription'));
+				const formattedSteps = format(modal.fields.getTextInputValue('reportReproduce'));
+
 				const embed = new EmbedBuilder()
 					.setColor('#0099ff')
 					.setTitle(`${modal.fields.getTextInputValue('reportTitle')}`)
-					.setDescription(`**Description:**\n${format(modal.fields.getTextInputValue('reportDescription'))}\n\n**Steps to Reproduce:**\n${format(modal.fields.getTextInputValue('reportReproduce'))}`)
+					.setDescription(`**Description:**\n${formattedDescription}\n\n**Steps to Reproduce:**\n${formattedSteps}`)
 					.setAuthor({
 						name: modal.user.username,
 						iconURL: modal.user.displayAvatarURL(),

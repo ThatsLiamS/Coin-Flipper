@@ -1,4 +1,5 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, SlashCommandBuilder, CommandInteraction, Client } = require('discord.js');
 
 const { achievementAdd, database } = require('./../../util/functions');
 
@@ -40,11 +41,18 @@ module.exports = {
 		),
 
 	/**
-	 * Bet cents on a coin flip.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} client - Discord bot client
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Flipping
+	 * @summary Bet - earn money
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * @param {Client} param.client - DiscordJS Bot Client Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction, client }) => {
 
@@ -75,8 +83,7 @@ module.exports = {
 			userData.stats.balance = Number(userData.stats.balance) + Number(amount);
 			userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(amount);
 
-			embed
-				.setDescription('You won ' + amount + ' cents!')
+			embed.setDescription('You won ' + amount + ' cents!')
 				.setTitle('The coin landed on ' + bet + '!');
 
 			await database.setValue('users', interaction.user.id, userData);
@@ -85,8 +92,7 @@ module.exports = {
 		else {
 			/* Remove the money from their account */
 			userData.stats.balance = Number(userData.stats.balance) - Number(amount);
-			embed
-				.setDescription('You lost ' + amount + ' cents!')
+			embed.setDescription('You lost ' + amount + ' cents!')
 				.setTitle('The coin landed on ' + (bet === 'heads' ? 'tails!' : 'heads!'));
 
 			await database.setValue(

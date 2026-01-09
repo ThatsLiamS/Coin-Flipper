@@ -31,11 +31,18 @@ module.exports = {
 		),
 
 	/**
-	 * Flip a code or spice it up with an addon
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} client - Discord bot client
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Flipping
+	 * @summary Flip - earn money
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * @param {Client} param.client - DiscordJS Bot Client Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction, client }) => {
 

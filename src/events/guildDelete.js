@@ -1,16 +1,22 @@
-const { EmbedBuilder, WebhookClient } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, WebhookClient, Guild, Client } = require('discord.js');
 
 module.exports = {
 	name: 'guildDelete',
 	once: false,
 
 	/**
-	 * Triggered when the bot leaves a server.
-	 *
-	 * @param {object} guild - Discord Server object
-	 * @param {object} client - Discord Client object
-	 *
-	 * @returns {void}
+	 * @async @function
+	 * @group Events
+	 * @summary Logs upon leaving a guild
+	 * 
+	 * @param {Guild} guild - DiscordJS Guild Object
+	 * @param {Client} client - DiscordJS Bot Client Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success)
+	 * @returns {Promise<boolean>} False (Error)
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async (guild, client) => {
 		/* Is the guild available */

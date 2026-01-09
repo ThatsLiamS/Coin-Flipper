@@ -1,4 +1,5 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, SlashCommandBuilder, CommandInteraction } = require('discord.js');
 
 const { itemlist, badgelist } = require('./../../../util/constants');
 const { database } = require('./../../../util/functions');
@@ -52,10 +53,17 @@ module.exports = {
 		),
 
 	/**
-	 * View and claim badges.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Badge management - view, and claim
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction }) => {
 
@@ -75,7 +83,9 @@ module.exports = {
 			const embed = new EmbedBuilder()
 				.setTitle('Badges:')
 				.setColor('#54fff1')
-				.setFooter({ text: 'Use "/badges claim <badge>" to claim a badge!\nThanks to X-Boy742#8981 for making the badges.' });
+				.setFooter({
+					text: 'Use "/badges claim <badge>" to claim a badge!\nThanks to X-Boy742#8981 for making the badges.',
+				});
 
 			/* Filter all unclaimed badges */
 			const badges = badgelist.filter((b) => {
@@ -96,7 +106,11 @@ module.exports = {
 				embed.setDescription('Looks like you have claimed all the badges!');
 			}
 			for (const badge of badges) {
-				embed.addFields({ name: badge.prof, value: badge.req, inline: true });
+				embed.addFields({
+					name: badge.prof,
+					value: badge.req,
+					inline: true,
+				});
 			}
 
 			/* Response to user, and return true to enable cooldown */
@@ -141,7 +155,7 @@ module.exports = {
 			else if (type === 'collection') {
 
 				let total = 0;
-				itemlist.map((i) => total = total + (userData.items[i.id] || 0));
+				itemlist.forEach((i) => total = total + (userData.items[i.id] || 0));
 				allowed = (total > value);
 			}
 			else if (type === 'niceness') {

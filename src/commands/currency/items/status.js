@@ -1,4 +1,5 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, SlashCommandBuilder, CommandInteraction } = require('discord.js');
 
 const { database } = require('./../../../util/functions');
 
@@ -23,10 +24,17 @@ module.exports = {
 		.setDMPermission(true),
 
 	/**
-	 * Check your status and see how your items help you.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Item management - view item effects
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction }) => {
 
@@ -53,7 +61,11 @@ module.exports = {
 			embed.addFields({ name: '📀 Gold Disk', value: 'Gives 2x more cents when flipping' });
 		}
 		if (userData.items.platinumdisk > 0) {
-			embed.addFields({ name: '💿 Platinum Disk', value: `Gives 3x more cents when flipping${userData.items.golddisk > 0 ? ' (does not add onto the gold disk)' : ''}` });
+			const hasGoldDisk = userData.items.golddisk > 0
+				? ' (does not add onto the gold disk)' 
+				: '';
+
+			embed.addFields({ name: '💿 Platinum Disk', value: `Gives 3x more cents when flipping${hasGoldDisk}` });
 		}
 
 		if (userData.items.luckypenny > 0) {

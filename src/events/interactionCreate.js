@@ -1,4 +1,5 @@
-const { Collection, InteractionType } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { Collection, InteractionType, Interaction, Client } = require('discord.js');
 
 const { formatTime } = require('./../util/functions');
 
@@ -11,12 +12,17 @@ module.exports = {
 	once: false,
 
 	/**
-	 * Triggered when an interaction is used.
-	 *
-	 * @param {object} interaction - Discord interaction object
-	 * @param {object} client - Discord Client object
-	 *
-	 * @returns {void}
+	 * @async @function
+	 * @group Events
+	 * @summary Handles all interations
+	 * 
+	 * @param {Interaction} interaction - DiscordJS Guild Object
+	 * @param {Client} client - DiscordJS Bot Client Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success)
+	 * @returns {Promise<boolean>} False (Error)
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async (interaction, client) => {
 

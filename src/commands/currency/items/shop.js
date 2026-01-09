@@ -1,4 +1,5 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, SlashCommandBuilder, CommandInteraction } = require('discord.js');
 
 const { itemlist } = require('./../../../util/constants');
 
@@ -24,21 +25,29 @@ module.exports = {
 
 		.addIntegerOption(option => option
 			.setName('page')
-			.setDescription('Which item would you like to take:')
-			.setRequired(false),
+			.setDescription('Which page would you like to view (default 1):')
+			.setRequired(false)
+			.setMinValue(1)
+			.setMaxValue(2),
 		)
 		.addStringOption(option => option
 			.setName('item')
-			.setDescription('Which item would you like to take:')
+			.setDescription('Which item would you like to view:')
 			.setRequired(false),
 		),
 
 	/**
-	 * View the shop and all the items in it.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 *
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Item management - view shop
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction }) => {
 
@@ -56,14 +65,25 @@ module.exports = {
 				return false;
 			}
 
+
+			const cost = item.cost
+				? `${item.cost} cents`
+				: 'This item cannot be bought';
+
+			const sell = item.sell
+				? item.sell
+				: Math.ceil(item.cost / 2);
+
+			const found = item.found;
+
 			const embed = new EmbedBuilder()
 				.setTitle(item.prof.slice(0, 2) + ' ' + item.prof.charAt(3).toUpperCase() + item.prof.slice(4))
 				.setColor('Yellow')
 				.setDescription(item.description)
 				.addFields(
-					{ name: '__Cost__', value: `${item.cost ? `${item.cost} cents` : 'This item cannot be bought'}`, inline: false },
-					{ name: '__Sell For__', value: `${item.sell ? item.sell : Math.ceil(item.cost / 2)} cents`, inline: false },
-					{ name: '__Found In__', value: `${item.found}`, inline: false },
+					{ name: '__Cost__', value: `${cost}`, inline: false },
+					{ name: '__Sell For__', value: `${sell} cents`, inline: false },
+					{ name: '__Found In__', value: `${found}`, inline: false },
 				);
 
 			/* Reply and enable cooldown */

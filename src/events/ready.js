@@ -1,6 +1,7 @@
 const fs = require('fs');
 
-const { Collection } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { Collection, Client } = require('discord.js');
 
 
 module.exports = {
@@ -8,11 +9,16 @@ module.exports = {
 	once: true,
 
 	/**
-	 * Triggered when the client is ready
-	 *
-	 * @param {object} client - Discord Client object
-	 *
-	 * @returns {void}
+	 * @async @function
+	 * @group Events
+	 * @summary Automatic bot set up (triggered once)
+	 * 
+	 * @param {Client} client - DiscordJS Bot Client Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success)
+	 * @returns {Promise<boolean>} False (Error)
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async (client) => {
 

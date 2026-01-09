@@ -1,6 +1,18 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, SlashCommandBuilder, CommandInteraction } = require('discord.js');
 
 const { database } = require('./../../util/functions');
+
+
+const isNameInvalid = (name) => {
+	const FORBIDDEN_NAMES = new Set(['none', 'null', 'undefined', 'nan']);
+
+	const isTooLong = name?.length > 50;
+	const hasSpaces = name?.includes(' ');
+	const isForbidden = FORBIDDEN_NAMES.has(name?.toLowerCase());
+
+	return isTooLong || hasSpaces || isForbidden;
+};
 
 
 module.exports = {
@@ -108,7 +120,7 @@ module.exports = {
 				.setName('description')
 				.setDescription('What is the description?')
 				.setRequired(true)
-				.setMaxLength(200),
+				.setMaxLength(100),
 			),
 		)
 
@@ -153,10 +165,17 @@ module.exports = {
 		),
 
 	/**
-	 * Collection of user-based, custom addons.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Addons
+	 * @summary Flip addon management - CRUD methods
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction }) => {
 
@@ -171,7 +190,7 @@ module.exports = {
 
 		/* Addon Name validation */
 		const name = interaction.options.getString('name');
-		if (!(subCommandName === 'inputs') && (name?.length > 50 || ['none', 'null', 'undefined', 'nan'].includes(name?.toLowerCase()) || name?.includes(' '))) {
+		if (subCommandName !== 'inputs' && isNameInvalid(name)) {
 			interaction.followUp({
 				content: 'That is an invalid addon name.',
 			});
@@ -190,43 +209,51 @@ module.exports = {
 			return false;
 		}
 
-		const embed = new EmbedBuilder().setTimestamp();
+		const embed = new EmbedBuilder()
+			.setTimestamp();
 
 		if (subCommandName === 'view') {
+
+			const addonName = addon.name;
+			const addonDescription = addon.description || 'this addon has no description';
+			const addonCost = addon.cost || 0;
+			const addonPublished = addon.published
+				? 'yes'
+				: 'no';
+
 			/* Create the message to send */
 			const embeds = [embed];
-			embed
-				.setColor('Green')
-				.setTitle(`Addon ${addon.name}!`)
-				.setDescription(`**Description:** ${addon.description || 'this addon has no description'}\n**Cost:** ${addon.cost || 0} cents\n**Published:** ${addon.published ? 'yes' : 'no'}`);
+			embed.setColor('Green')
+				.setTitle(`Addon ${addonName}!`)
+				.setDescription(`**Description:** ${addonDescription}\n**Cost:** ${addonCost} cents\n**Published:** ${addonPublished}`);
 
 			/* Format responses */
-			let responses = [];
-			for (let index = 0; index < addon.responses.length; index++) {
-				responses.push(`\`${index + 1}\`. ${addon.responses[index]}`);
-			}
-			if (!responses) {
-				responses = ['This addon has no responses'];
+			const responses = (addon.responses ?? []).map((response, index) => `\`${index + 1}\`. ${response}`);
+			if (responses.length === 0) {
+				responses.push('This addon has no responses');
 			}
 
 			/* Format Pages */
 			const embedData = [];
 
-			for (let x = 0; x < responses.length; x += 20) {
-				embedData.push(responses.slice(x, x + 20));
+			for (let index = 0; index < responses.length; index += 20) {
+				embedData.push(responses.slice(index, index + 20));
 			}
-			for (let x = 0; x < embedData.length; x++) {
+			for (let index = 0; index < embedData.length; index++) {
 				const viewEmbed = new EmbedBuilder()
-					.setTitle(`Responses ${x + 1}/${embedData.length}`)
+					.setTitle(`Responses ${index + 1}/${embedData.length}`)
 					.setColor('Green')
 					.setTimestamp()
-					.setDescription(`${embedData[x].join('\n')}`);
+					.setDescription(`${embedData[index].join('\n')}`);
 
 				embeds.push(viewEmbed);
 			}
 
 			/* Returns true to enable the cooldown */
-			interaction.followUp({ embeds, ephemeral: true });
+			interaction.followUp({
+				embeds,
+				ephemeral: true,
+			});
 			return true;
 		}
 
@@ -255,8 +282,7 @@ module.exports = {
 			userData.addons.push(newAddon);
 
 			/* Create the message to send */
-			embed
-				.setColor('Green')
+			embed.setColor('Green')
 				.setTitle('New Addon Created!')
 				.setDescription(`You've successfully created the **${name}** addon!`)
 				.setFooter({
@@ -267,30 +293,28 @@ module.exports = {
 		if (subCommandName === 'rename') {
 			/* Is the new name valid */
 			const newName = interaction.options.getString('new_name');
-			if (newName.length > 50 || ['none', 'null', 'undefined', 'nan'].includes(newName.toLowerCase()) || newName.includes(' ')) {
+			if (isNameInvalid(newName)) {
 				interaction.followUp({
 					content: 'That is an invalid addon name.',
 				});
-				return true;
+				return false;
 			}
 
 			/* Set the new name */
 			addon.name = newName;
 
 			/* Create the message to send */
-			embed
-				.setColor('Green')
+			embed.setColor('Green')
 				.setTitle('Renamed Addon!')
 				.setDescription(`You've successfully renamed **${name}** to **${newName}**!`);
 		}
 
 		if (subCommandName === 'delete') {
 			/* delete the addon */
-			userData.addons = userData.addons.filter((a) => a.name !== name) ?? [];
+			userData.addons = userData.addons.filter((a) => a.name !== name);
 
 			/* Create the message to send */
-			embed
-				.setColor('Red')
+			embed.setColor('Red')
 				.setTitle('Deleted Addon!')
 				.setDescription(`You've successfully deleted **${name}**!\nThis action cannot be reversed.`);
 		}
@@ -318,8 +342,7 @@ module.exports = {
 			addon.cost = newCost;
 
 			/* Create the message to send */
-			embed
-				.setColor('Green')
+			embed.setColor('Green')
 				.setTitle('Changed the Addon Price!')
 				.setDescription(`You've successfully changed **${name}**'s price from \`${oldCost}\` to **${newCost} cents**.`);
 		}
@@ -341,16 +364,14 @@ module.exports = {
 			addon.description = newDesc;
 
 			/* Create the message to send */
-			embed
-				.setColor('Green')
+			embed.setColor('Green')
 				.setTitle('Changed the Addon Description!')
 				.setDescription(`You've successfully changed **${name}**'s description from \`${oldDesc}\` to **${newDesc}**.`);
 		}
 
 		if (subCommandName === 'inputs') {
 			/* Create the message to send */
-			embed
-				.setColor('#cd7f32')
+			embed.setColor('#cd7f32')
 				.setTitle('Addon Inputs!')
 				.setFooter({
 					text: 'Remember these when you use "/addon addresponse"',
@@ -374,7 +395,9 @@ module.exports = {
 			}
 
 			/* Is it already a response */
-			addon?.responses ? addon.responses : [];
+			addon.responses = addon?.responses
+				? addon.responses
+				: [];
 
 			const found = addon.responses.filter(a => a.toLowerCase() === response.toLowerCase())[0];
 			if (found) {
@@ -386,8 +409,7 @@ module.exports = {
 			addon.responses.push(response);
 
 			/* Create the message to send */
-			embed
-				.setColor('Green')
+			embed.setColor('Green')
 				.setTitle('New Response Added!')
 				.setDescription(`You successfully added **${response}** to **${name}**!\nIt now has ${addon.responses.length} responses.`)
 				.setFooter({
@@ -410,8 +432,7 @@ module.exports = {
 			addon.responses.splice(index, 1);
 
 			/* Create a message to send */
-			embed
-				.setColor('Red')
+			embed.setColor('Red')
 				.setTitle('Response Deleted')
 				.setDescription(`Successfully deleted the response: **${response}**.\nThis action cannot be reversed.`);
 		}

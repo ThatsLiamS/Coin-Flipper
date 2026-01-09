@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, CommandInteraction } = require('discord.js');
 
 const { dropshipItems } = require('./../../util/constants');
 const { database } = require('./../../util/functions');
@@ -24,10 +25,17 @@ module.exports = {
 		.setDMPermission(true),
 
 	/**
-	 * Dropship an item and try to earn some cents.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Minigame - earn money
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction }) => {
 
@@ -93,6 +101,7 @@ module.exports = {
 				const buttonEmbed = new EmbedBuilder()
 					.setTitle('Dropship!')
 					.setDescription(`You dropshipped the ${values[2]} for \`${values[1]}\` cents!`);
+
 				await button.reply({
 					ephemeral: true,
 					embeds: [buttonEmbed],
@@ -113,6 +122,9 @@ module.exports = {
 				return false;
 			});
 
-		return (accepted ? true : false);
+		return (accepted
+			? true
+			: false
+		);
 	},
 };

@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, Client } = require('discord.js');
 
 const { makeGrid } = require('./../../util/functions');
 
@@ -23,11 +24,18 @@ module.exports = {
 		.setDMPermission(false),
 
 	/**
-	 * Shows lots of cool information about the bot.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} client - Discord Client object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Information
+	 * @summary Shares details about the bot
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * @param {Client} param.client - DiscordJS Bot Client Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction, client }) => {
 

@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { SlashCommandBuilder, EmbedBuilder, CommandInteraction } = require('discord.js');
 
 const { exploreAreas } = require('./../../util/constants');
 const { database } = require('./../../util/functions');
@@ -24,10 +25,17 @@ module.exports = {
 		.setDMPermission(true),
 
 	/**
-	 * Explore the wilderness and find some cents.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Minigame - earn money
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction }) => {
 
@@ -60,21 +68,19 @@ module.exports = {
 		/* Create the embed based on the result */
 		if (result === 'win') {
 			let amount = Math.floor(Math.random() * (80 - 40 + 1)) + 40;
-			if (userData?.settings.evil === true) {
+			if (userData.settings.evil === true) {
 				amount = Math.ceil(amount * 0.5);
 			}
 
 			userData.stats.balance = Number(userData.stats.balance) + Number(amount);
 			userData.stats.lifeEarnings = Number(userData.stats.lifeEarnings) + Number(amount);
 
-			embed
-				.setTitle('You explored and found..')
+			embed.setTitle('You explored and found..')
 				.setDescription(`You explored ${area.name}, and ${area.got.replace('{earned}', amount)}`)
 				.setColor('Green');
 		}
 		if (result === 'draw') {
-			embed
-				.setTitle('Better luck next time')
+			embed.setTitle('Better luck next time')
 				.setDescription(`You explored ${area.name} but got no cents...`)
 				.setColor('White');
 		}
@@ -82,8 +88,7 @@ module.exports = {
 			const amount = Math.floor(Math.random() * (40 - 10 + 1)) + 10;
 			userData.stats.balance = Number(userData.stats.balance) - Number(amount);
 
-			embed
-				.setTitle('Aw, you lost cents')
+			embed.setTitle('Aw, you lost cents')
 				.setDescription(`You explored ${area.name}, but ${area.lost.replace('{lost}', amount)}`)
 				.setColor('Red');
 		}

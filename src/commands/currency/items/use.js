@@ -1,4 +1,5 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, SlashCommandBuilder, CommandInteraction } = require('discord.js');
 
 const { itemlist } = require('./../../../util/constants');
 const { achievementAdd, database } = require('./../../../util/functions');
@@ -25,6 +26,7 @@ module.exports = {
 		.addStringOption(option => option
 			.setName('item')
 			.setDescription('Which item would you like to use')
+
 			.setRequired(true)
 			.addChoices(
 				{ 'name': 'Dynamite', 'value': 'dynamite' },
@@ -36,11 +38,17 @@ module.exports = {
 		),
 
 	/**
-	 * Use an item in your inventory.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} client - Discord bot client
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Item management - use
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction, client }) => {
 
@@ -57,7 +65,7 @@ module.exports = {
 		/* Fetch the user's data */
 		const userData = await database.getValue('users', interaction.user.id);
 
-		if (((userData?.items[item.id] ?? 0) > 0) === false) {
+		if (((userData?.items[item.id] || 0) > 0) === false) {
 			interaction.followUp({
 				content: `You do not have ${item.prof}!`,
 			});
@@ -79,7 +87,8 @@ module.exports = {
 				embeds: [embed],
 			});
 
-			await database.setValue('users', interaction.user.id, await achievementAdd(userData, 'kaboom', client));
+			const newData = await achievementAdd(userData, 'kaboom', client);
+			await database.setValue('users', interaction.user.id, newData);
 			return true;
 		}
 
@@ -154,9 +163,12 @@ module.exports = {
 				'50% yes, 50% no',
 			];
 
+			const randomIndex = Math.floor(Math.random() * responses.length);
+			const randomResponse = responses[randomIndex];
+
 			const embed = new EmbedBuilder()
 				.setTitle('The magic 8ball says...')
-				.setDescription(responses[Math.floor(Math.random() * responses.length)])
+				.setDescription(randomResponse)
 				.setFooter({
 					text: 'Well what do you expect its a broken 8ball',
 				})
@@ -166,7 +178,8 @@ module.exports = {
 				embeds: [embed],
 			});
 
-			await database.setValue('users', interaction.user.id, await achievementAdd(userData, 'whatAWaste', client));
+			const newData = await achievementAdd(userData, 'whatAWaste', client);
+			await database.setValue('users', interaction.user.id, newData);
 			return true;
 		}
 

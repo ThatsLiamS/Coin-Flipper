@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder, WebhookClient, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { SlashCommandBuilder, EmbedBuilder, WebhookClient, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, CommandInteraction, Client } = require('discord.js');
 
 const format = (string) => string.split('\n').map((line) => '> ' + line).join('\n');
 
@@ -23,11 +24,18 @@ module.exports = {
 		.setDMPermission(true),
 
 	/**
-	 * Submit a bug report to the developers.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @param {object} client - Discord Client object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Information
+	 * @summary Submit suggestion report
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * @param {Client} param.client - DiscordJS Bot Client Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction, client }) => {
 

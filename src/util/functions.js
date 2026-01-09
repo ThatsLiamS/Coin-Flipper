@@ -1,4 +1,5 @@
-const { Collection } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { Collection, Client } = require('discord.js');
 const firebaseAdmin = require('firebase-admin');
 
 const { achievements, itemlist } = require('./constants');
@@ -22,14 +23,16 @@ const cache = {
 const database = {
 
 	/**
-	 * Get a value from the cache or fetch from the database
 	 * @async @function
+	 * @group Utility
+	 * @summary Database management - read
+	 * 
+	 * @param {String} collectionID
+	 * @param {String} documentID
+	 * 
+	 * @returns {Promise<Object>} Database object
+	 * 
 	 * @author Liam Skinner <me@liamskinner.co.uk>
-	 *
-	 * @param {string} collectionID The Collection ID
-	 * @param {string} documentID The document ID
-	 *
-	 * @returns {object} Database Object
 	**/
 	getValue: async (collectionID, documentID) => {
 
@@ -52,15 +55,18 @@ const database = {
 	},
 
 	/**
-	 * Set a value in the database and cache
 	 * @async @function
+	 * @group Utility
+	 * @summary Database management - set
+	 * 
+	 * @param {String} collectionID
+	 * @param {String} documentID
+	 * @param {Object} data
+	 * 
+	 * @returns {Promise<boolean>} True (Success)
+	 * @returns {Promise<boolean>} False (Error)
+	 * 
 	 * @author Liam Skinner <me@liamskinner.co.uk>
-	 *
-	 * @param {string} collectionID The Collection ID
-	 * @param {string} documentID The document ID
-	 * @param {object} data The new data to set
-	 *
-	 * @returns {boolean} Whether it was successful
 	**/
 	setValue: async (collectionID, documentID, data) => {
 
@@ -79,25 +85,29 @@ const database = {
 
 
 /**
- * Change a strings length with right-end padding
  * @function
+ * @group Utility
+ * @summary Right-end string padding
+ * 
+ * @param {String} str
+ * @param {Integer} length
+ * 
+ * @returns {String}
+ * 
  * @author Liam Skinner <me@liamskinner.co.uk>
- *
- * @param {string} str
- * @param {number} length - Idea length of the string
- *
- * @returns {string}
 **/
 const fitString = (str, length) => (str + ' '.repeat(length - str.length));
 
 /**
- * Form a grid of values from a 2D Array
  * @function
+ * @group Utility
+ * @summary Database management - set
+ * 
+ * @param {Integer[][]} results
+ * 
+ * @returns {String} Correctly formatted results grid
+ * 
  * @author Liam Skinner <me@liamskinner.co.uk>
- *
- * @param {array<array<string>>} results - 2d array of string values
- *
- * @returns {string}
 **/
 const makeGrid = (results) => {
 	const rows = [];
@@ -125,13 +135,15 @@ const makeGrid = (results) => {
 
 
 /**
- * Format seconds in it's highest denomination
  * @function
+ * @group Utility
+ * @summary Convert seconds into highest denomination
+ * 
+ * @param {Integer} seconds
+ * 
+ * @returns {String}
+ * 
  * @author Liam Skinner <me@liamskinner.co.uk>
- *
- * @param {number} seconds - time in seconds
- *
- * @returns {string}
 **/
 const formatTime = (seconds) => {
 
@@ -153,7 +165,19 @@ const formatTime = (seconds) => {
 };
 
 
-/* Runs when the user gets a new achievement */
+/**
+ * @function
+ * @group Utility
+ * @summary Awards achievements
+ * 
+ * @param {Object} userData
+ * @param {String} prop
+ * @param {Client} client DiscordJS Bot Client Object
+ * 
+ * @returns {String}
+ * 
+ * @author Liam Skinner <me@liamskinner.co.uk>
+**/
 const achievementAdd = async (userData, prop, client) => {
 
 	/* Does the achievement ex */
@@ -183,7 +207,18 @@ const achievementAdd = async (userData, prop, client) => {
 	return userData;
 };
 
-/* Runs when a user gets a new item */
+/**
+ * @function
+ * @group Utility
+ * @summary Checks item-related achievement requirement 
+ * 
+ * @param {Object} userData
+ * @param {Client} client DiscordJS Bot Client Object
+ * 
+ * @returns {String}
+ * 
+ * @author Liam Skinner <me@liamskinner.co.uk>
+**/
 const gotItem = async (userData, client) => {
 
 	let passed = true;
@@ -199,7 +234,6 @@ const gotItem = async (userData, client) => {
 };
 
 
-/* Export all functions */
 module.exports = {
 	database,
 	achievementAdd,

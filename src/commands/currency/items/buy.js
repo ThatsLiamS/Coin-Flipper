@@ -1,4 +1,5 @@
-const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
+// eslint-disable-next-line no-unused-vars
+const { EmbedBuilder, SlashCommandBuilder, CommandInteraction } = require('discord.js');
 
 const { itemlist } = require('./../../../util/constants');
 const { database } = require('./../../../util/functions');
@@ -30,10 +31,17 @@ module.exports = {
 		),
 
 	/**
-	 * Buy an item from the shop.
-	 *
-	 * @param {object} interaction - Discord Slash Command object
-	 * @returns {boolean}
+	 * @async @function
+	 * @group Commands @subgroup Currency
+	 * @summary Item management - buy
+	 * 
+	 * @param {Object} param
+	 * @param {CommandInteraction} param.interaction - DiscordJS Slash Command Object
+	 * 
+	 * @returns {Promise<boolean>} True (Success) - triggers cooldown.
+	 * @returns {Promise<boolean>} False (Error) - skips cooldown.
+	 * 
+	 * @author Liam Skinner <me@liamskinner.co.uk>
 	**/
 	execute: async ({ interaction }) => {
 
@@ -42,7 +50,7 @@ module.exports = {
 		const item = itemlist.filter((i) => i.name === itemName.toLowerCase() || i.aliases.includes(itemName.toLowerCase()))[0];
 
 		/* Can you get the item from the shop? */
-		if (!item || item?.found !== 'shop' && item?.found !== 'market') {
+		if (!item || (item?.found !== 'shop' && item?.found !== 'market')) {
 			interaction.followUp({
 				content: 'That is not a valid item to buy.',
 			});
